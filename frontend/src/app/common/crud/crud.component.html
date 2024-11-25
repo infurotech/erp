@@ -1,0 +1,110 @@
+<div class="card">
+
+  <!-- Top sectoins with actions -->
+  <div class="surface-section mb-3">
+    <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
+      <div>
+        <div class="font-medium text-3xl text-900">{{displayName}}</div>
+        <div class="flex align-items-center text-700 flex-wrap">
+          <div class="mr-5 flex align-items-center mt-3">
+            <i class="pi pi-users mr-2"></i>
+            <span>332 Active</span>
+          </div>
+          <div class="mr-5 flex align-items-center mt-3">
+            <i class="pi pi-globe mr-2"></i>
+            <span>9402 Sessions</span>
+          </div>
+          <div class="flex align-items-center mt-3">
+            <i class="pi pi-clock mr-2"></i>
+            <span>2.32m Avg. Duration</span>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3 gap-2 lg:mt-0">
+        <button pButton pRipple label="New" class="p-button" (click)="openDialog(false)" icon="pi pi-plus"></button>
+        <button pButton class="p-button-outlined ml-2" icon="fa fa-table-cells" (click)="gridView = true">
+        </button>
+        <button class="p-element p-button-outlined ml-2 p-button p-component p-button-icon-only"
+          (click)="gridView = false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M6 4C3.79086 4 2 5.79086 2 8V16C2 18.2091 3.79086 20 6 20H18C20.2091 20 22 18.2091 22 16V8C22 5.79086 20.2091 4 18 4H6ZM14 6H10V18H14V6ZM16 6V18H18C19.1046 18 20 17.1046 20 16V8C20 6.89543 19.1046 6 18 6H16ZM6 18H8V6H6C4.89543 6 4 6.89543 4 8V16C4 17.1046 4.89543 18 6 18Z"
+              fill="currentColor" />
+          </svg>
+        </button>
+        <p-button (onClick)="moreActions.toggle($event)" [outlined]="true" class="ml-2"
+          icon="pi pi-ellipsis-v"></p-button>
+      </div>
+    </div>
+  </div>
+  <p-tieredMenu #moreActions [model]="moreActionItems" [popup]="true" />
+
+  <!-- Toolbar with filters and bulk operations -->
+  <p-toolbar>
+    <div class="flex flex-column sm:flex-row">
+      <span class="p-input-icon-left mb-2">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" #filter placeholder="Search Keyword" class="w-full" />
+      </span>
+      <div *ngFor="let field of filteredFields">
+        <p-dropdown styleClass="ml-2" [options]="field.options" *ngIf="field.type === 'select'"></p-dropdown>
+        <p-dropdown styleClass="ml-2" [options]="field.options" *ngIf="field.type === 'tag'"></p-dropdown>
+        <p-calendar styleClass="ml-2" *ngIf="field.type === 'date'"></p-calendar>
+      </div>
+      <button pButton class="p-button-outlined mb-2 ml-2" icon="pi pi-filter-slash"></button>
+      <button pButton class="p-button-outlined mb-2 ml-2" label="Save" icon="pi pi-save"></button>
+    </div>
+  </p-toolbar>
+
+  <!-- <p-tabView>
+    <p-tabPanel header="All"> -->
+  <!-- Data Table for Displaying Items -->
+
+  <crud-grid  *ngIf="gridView" [data]="data" [fields]="options.fields"></crud-grid>
+  <crud-board *ngIf="!gridView" [data]="data" [fields]="options.fields"></crud-board>
+  <!-- </p-tabPanel>
+  </p-tabView> -->
+
+  <!-- Dialog for Add/Edit -->
+  <p-dialog [(visible)]="isDialogVisible" [modal]="true" header="Product Details" class="p-fluid" [draggable]="false"
+    [closable]="true" [style]="{'width': '50rem'}" (onHide)="resetForm()" [maximizable]="true">
+    <!-- <ng-template pTemplate="header">
+      <div class="custom-dialog-header">
+        <span>{{ isEditing ? 'Edit Item' : 'Add New Item' }}</span>
+        <button type="button" class="p-dialog-header-close" (click)="resetForm()">×</button>
+      </div>
+    </ng-template> -->
+    <ng-template pTemplate="content">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="field" *ngFor="let field of fields">
+          <label for="name">{{ field.label }}</label>
+          <!-- Input field for text-based fields -->
+          <input *ngIf="field.type === 'text'" formControlName="{{ field.field }}" pInputText />
+          <!-- Dropdown for select fields -->
+          <p-dropdown *ngIf="field.type === 'select'" formControlName="{{ field.field }}" [options]="field.options"
+            optionLabel="label" optionValue="value"></p-dropdown>
+          <!-- More field types can be added as needed -->
+        </div>
+      </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times"
+        class="p-element p-ripple p-button-outlined p-button p-component" (click)="resetForm()"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-element p-ripple p-button p-component"
+        type="submit"></button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Confirm delete dialog -->
+  <!-- <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+      <span *ngIf="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+        (click)="deleteProductDialog = false"></button>
+      <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+    </ng-template>
+  </p-dialog> -->
+</div>
