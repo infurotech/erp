@@ -18,16 +18,17 @@ import { JobItem } from './services/job-item/entities/job-item.entity';
 import { Vehicle } from './services/vehicle/entities/vehicle.entity';
 import { User } from './services/user/entities/user.entity';
 import { ScheduleModule } from './services/schedule/schedule.module';
+import config from './config/config';
 
 @Module({
   imports: [TypeOrmModule.forRoot(
     {
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'root',
-      database: 'swank-service',
+      type: config.DB.type,
+      host: config.DB.host,
+      port: config.DB.port,
+      username: config.DB.username,
+      password: config.DB.password,
+      database: config.DB.database,
       entities: [
         Customer,
         Product,
@@ -36,7 +37,7 @@ import { ScheduleModule } from './services/schedule/schedule.module';
         Vehicle,
         User
       ],
-      synchronize: true
+      synchronize: config.DB.synchronize
     }
   ), CustomerModule, ProductModule, JobModule, JobItemModule, VehicleModule, UserModule, ScheduleModule, AuthModule],
   controllers: [AppController],
