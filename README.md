@@ -161,11 +161,11 @@ yo erp:component inventory-table --module inventory
 
 ### Best Practices
 
-**Modular Design:** Use the module structure for both frontend and backend to ensure scalability.
-**PrimeNG Components:** Leverage PrimeNG's powerful UI components for tables, forms, and charts.
-**Localization:** Use Angular's @angular/localize for multilingual support.
-**Backend Validation:** Use class-validator decorators in DTOs for backend input validation.
-**TypeORM Relations:** Define proper entity relationships for database consistency.
+* **Modular Design:** Use the module structure for both frontend and backend to ensure scalability.
+* **PrimeNG Components:** Leverage PrimeNG's powerful UI components for tables, forms, and charts.
+* **Localization:** Use Angular's @angular/localize for multilingual support.
+* **Backend Validation:** Use class-validator decorators in DTOs for backend input validation.
+* **TypeORM Relations:** Define proper entity relationships for database consistency.
 
 ### Roadmap
 Add more Yeoman templates for frequently used features.
@@ -177,7 +177,8 @@ Add real-time notifications using WebSockets.
 We welcome contributions! Please follow these steps:
 
 #### Fork the repository.
-Create a feature branch.
-Commit your changes.
-Submit a pull request.
+* Create a feature branch.
+* Commit your changes.
+* Submit a pull request.
+
 For any queries or suggestions, please contact erp@infurotech.com
