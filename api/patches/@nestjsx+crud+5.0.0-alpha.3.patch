@@ -1,0 +1,13 @@
+diff --git a/node_modules/@nestjsx/crud/lib/crud/reflection.helper.js b/node_modules/@nestjsx/crud/lib/crud/reflection.helper.js
+index 718199f..957542a 100644
+--- a/node_modules/@nestjsx/crud/lib/crud/reflection.helper.js
++++ b/node_modules/@nestjsx/crud/lib/crud/reflection.helper.js
+@@ -20,7 +20,7 @@ class R {
+     }
+     static createCustomRouteArg(paramtype, index, pipes = [], data = undefined) {
+         return {
+-            [`${paramtype}${constants_1.CUSTOM_ROUTE_AGRS_METADATA}:${index}`]: {
++            [`${paramtype}${constants_1.CUSTOM_ROUTE_ARGS_METADATA}:${index}`]: {
+                 index,
+                 factory: (_, ctx) => R.getContextRequest(ctx)[paramtype],
+                 data,
