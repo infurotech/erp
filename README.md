@@ -1,6 +1,6 @@
-# ERP System Boilerplate (MEAN Stack)
+# ERP Boilerplate (MEAN Stack)
 
-Welcome to the ERP System Boilerplate! This project provides a scalable and modular foundation for building ERP systems using the MEAN stack (MongoDB, Express, Angular, NestJS). It includes PrimeNG for the UI and TypeORM for backend ORM. Additionally, it uses Yeoman generators to streamline code generation and customization.
+Welcome to the ERP Boilerplate! This project provides a scalable and modular foundation for building ERP using the MEAN stack (MongoDB, Express, Angular, NestJS). It includes PrimeNG for the UI and TypeORM for backend ORM. Additionally, it uses Yeoman generators to streamline code generation and customization.
 
 ![CRM](./document/contacts.png)
 
