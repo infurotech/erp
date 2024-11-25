@@ -1,0 +1,52 @@
+<p-table [value]="data" [rows]="10" [rowHover]="true" [scrollable]="true" styleClass="table-compact"
+    [paginator]="true">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th style="min-width:150px" *ngFor="let field of fields" [pSortableColumn]="field.name">
+                <div class="flex justify-content-between align-items-center">
+                    {{ field.label }}
+                    <!-- <p-columnFilter [type]="field.type" [field]="field.name" display="menu"></p-columnFilter> -->
+                </div>
+            </th>
+            <th style="width: 3rem" alignFrozen="right" pFrozenColumn [frozen]="true">
+                <p-button icon="pi pi-sliders-v" [text]="true" severity="secondary"
+                    (click)="editTableColumns = true"></p-button>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            <td style="width: 3rem">
+                <p-tableCheckbox [value]="product"></p-tableCheckbox>
+            </td>
+            <td *ngFor="let field of fields">
+                <ng-container *ngIf="field.type != 'tag'">{{ item[field.field] }}</ng-container>
+                <p-tag *ngIf="field.type === 'tag'" [value]="getTagLabel(field, item[field.field])"
+                    [severity]="getTagSeverity(field, item[field.field])" />
+            </td>
+            <td style="width: 3rem" alignFrozen="right" pFrozenColumn [frozen]="true">
+                <p-button (onClick)="tableActions.toggle($event)" [text]="true" icon="pi pi-ellipsis-v"
+                    severity="secondary" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-tieredMenu #tableActions [model]="tableActionItems" [popup]="true" />
+
+<p-sidebar [(visible)]="editTableColumns" position="right">
+  <h5>Columns</h5>
+  <div *ngFor="let field of fields" class="field-checkbox">
+    <p-checkbox [value]="field.field" inputId="ny" />
+    <label for="ny">{{field.label}}</label>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple icon="pi pi-times" class="p-element p-ripple p-button-outlined p-button p-component mr-2"
+      label="Cancel" (click)="editTableColumns = false"></button>
+    <button pButton pRipple icon="pi pi-check" class="p-element p-ripple p-button p-component" label="Save"
+      (click)="editTableColumns = false"></button>
+  </ng-template>
+</p-sidebar>
