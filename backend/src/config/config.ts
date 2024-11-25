@@ -4,6 +4,9 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export const config = {
+    JWT:{
+        secret: process.env.JWT_SECRET || "your_jwt_secret"
+    },
     DB: {
         type: process.env.DATABASE_TYPE as 'mysql' | 'postgres' | 'sqlite' | 'mongodb',
         host: process.env.DATABASE_HOST || 'localhost',
