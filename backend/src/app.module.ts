@@ -19,27 +19,21 @@ import { Vehicle } from './services/vehicle/entities/vehicle.entity';
 import { User } from './services/user/entities/user.entity';
 import { ScheduleModule } from './services/schedule/schedule.module';
 import config from './config/config';
+import { CoreModule } from './core/core.module';
+import { TenantTypeOrmProvider } from './core/tenant/tenant.typeorm';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(
-    {
-      type: config.DB.type,
-      host: config.DB.host,
-      port: config.DB.port,
-      username: config.DB.username,
-      password: config.DB.password,
-      database: config.DB.database,
-      entities: [
-        Customer,
-        Product,
-        Job,
-        JobItem,
-        Vehicle,
-        User
-      ],
-      synchronize: config.DB.synchronize
-    }
-  ), CustomerModule, ProductModule, JobModule, JobItemModule, VehicleModule, UserModule, ScheduleModule, AuthModule],
+  imports: [
+    CoreModule,
+    CustomerModule, 
+    ProductModule, 
+    JobModule, 
+    JobItemModule, 
+    VehicleModule, 
+    UserModule, 
+    ScheduleModule, 
+    AuthModule
+  ],
   controllers: [AppController],
   providers: [AppService,
     {
