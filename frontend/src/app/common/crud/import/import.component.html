@@ -1,0 +1,71 @@
+<p-dialog [(visible)]="isDialogVisible" [modal]="true" header="Import" class="p-fluid" [draggable]="false"
+    [closable]="true" [style]="{'width': '50rem'}" (onHide)="resetForm()" [maximizable]="true">
+    <ng-template pTemplate="content">
+        <p-fileUpload
+            *ngIf="!uploadedHeaders.length"
+            #fileUploader
+            name="file"
+            chooseIcon="pi pi-upload" 
+            url="https://www.primefaces.org/cdn/api/upload.php" 
+            accept=".xlsx,.xls" maxFileSize="5000000" 
+            (onUpload)="onDocumentUpload($event)" 
+            [auto]="true" 
+            chooseLabel="Upload">
+            <ng-template let-file pTemplate="file">
+            <div class="flex justify-content-between gap-2">
+                <span class="text-overflow-ellipse">{{ file.name }}</span>
+                <i pRipple
+                class="pi pi-trash"
+                ></i>
+            </div>
+            </ng-template>
+        </p-fileUpload>
+        <div *ngIf="uploadedHeaders.length > 0" class="mb-3">
+            <h3>Map the uploaded headers to the default fields:</h3>
+            <form [formGroup]="mappingForm" (ngSubmit)="confirmMapping()">
+                <div formArrayName="mappings">
+                    <div *ngFor="let mapping of mappingForm.get('mappings').controls; let i = index" [formGroupName]="i">
+                        <div class="p-field mt-2">
+                            <label>{{ fields[i].label }} {{fields[i]?.required ? "*" : ''}}</label>
+                            <p-dropdown 
+                            styleClass="mt-2"
+                            formControlName="mappedField"
+                            [options]="crudOptions.fields" 
+                            optionLabel="label"
+                            optionValue="field">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <button [disabled]="mappingForm.invalid" class="mt-3 p-element p-ripple p-button"
+                    type="submit">
+                    Confirm Mapping
+                </button>
+            </form>
+        </div>
+        <p-table *ngIf="showGrid" [value]="showTableData" [rows]="10" [rowHover]="true" [scrollable]="true" styleClass="table-compact" [paginator]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="min-width:150px" *ngFor="let field of fields" [pSortableColumn]="field.name">
+                        <div class="flex justify-content-between align-items-center">
+                            {{ field.label }}
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr>
+                    <td *ngFor="let field of fields">
+                        <ng-container>{{ item[field.field] }}</ng-container>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times"
+        class="p-element p-ripple p-button-outlined p-button p-component" (click)="resetForm()"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-element p-ripple p-button p-component"
+        type="submit" (click)="submitForm()"></button>
+    </ng-template>
+</p-dialog>
