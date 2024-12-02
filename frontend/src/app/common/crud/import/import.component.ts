@@ -3,6 +3,7 @@ import * as XLSX from 'xlsx';
 import { CrudField } from '../crud-field';
 import { CrudOptions } from '../crud-options';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MenuItem } from 'primeng/api';
 
 @Component({
     selector: 'crud-import',
@@ -25,10 +26,24 @@ export class ImportComponent implements OnInit {
     boardView: false,
     fields: []
   };
+  items: MenuItem[];
+  activeIndex: number = 0;
 
   mappingForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
+    this.items = [
+      {
+          label: 'Upload File'
+      },
+      {
+          label: 'Data Mapping'
+      },
+      {
+          label: 'Display'
+      }
+  ];
+
     this.mappingForm = this.fb.group({
       mappings: this.fb.array([]) 
     });
@@ -41,6 +56,26 @@ export class ImportComponent implements OnInit {
       this.files = [];
   }
 
+  onActiveIndexChange(event: number) {
+    this.activeIndex = event;
+  }
+
+  navigateBack() {
+    this.activeIndex--;
+  }
+
+  navigateForward() {
+    if(this.activeIndex == 0 && this.files.length) {
+      this.activeIndex++;
+    }
+    else if(this.activeIndex == 1) {
+      this.confirmMapping();
+    }
+    else if(this.activeIndex==2) {
+      this.submitForm();
+    }
+  }
+
    async onDocumentUpload(event: any) {
     this.files = event.files;
     if (this.files && this.files.length) {
@@ -48,6 +83,7 @@ export class ImportComponent implements OnInit {
       await this.parseExcel(file).then((res) => {
          if(res) {
             this.initializeMappingForm();
+            this.activeIndex = 1;
          }
          else {
           console.log("error",res)
@@ -83,14 +119,21 @@ export class ImportComponent implements OnInit {
   initializeMappingForm(): void {
     const mappingsFormArray = this.mappingForm.get('mappings') as FormArray;
     mappingsFormArray.clear();
-
     this.fields.forEach(header => {
       mappingsFormArray.push(
         this.fb.group({
           requiredHeader: [header.field],
-          mappedField: [null, header.required ? Validators.required : null]
+          mappedField: [ this.searchFieldValue(header.field), header.required ? Validators.required : null]
         })
       );
+    });
+  }
+
+  searchFieldValue(value: string):string {
+    return this.uploadedHeaders.find(ele => {
+        if(value.toLowerCase() == ele.toLowerCase()) {
+          return ele;
+        }
     });
   }
 
@@ -108,6 +151,7 @@ export class ImportComponent implements OnInit {
     });
 
     this.mapDataToFields(mappedHeaders);
+    this.activeIndex = 2;
   }
 
   // Method to map the data to the selected fields
@@ -166,11 +210,23 @@ export class ImportComponent implements OnInit {
     this.uploadedHeaders = [];
     this.showTableData = []
     this.isDialogVisible = false;
+    this.activeIndex = 0;
   }
 
   submitForm() {
       if(this.showTableData.length > 0) {
          this.notifyParent.emit("File uploaded successfully");
       }
+  }
+
+  isSaveDisabled(): boolean {
+    for (const item of this.showTableData) {
+        for (const field of this.fields) {
+            if (field.required && (!item[field.field] || item[field.field] === '')) {
+                return true;
+            }
+        }
+    }
+    return false;
   }
 }
