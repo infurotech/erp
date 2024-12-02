@@ -62,6 +62,7 @@
 
   <crud-grid  *ngIf="gridView" [data]="data" [fields]="options.fields"></crud-grid>
   <crud-board *ngIf="!gridView" [data]="data" [fields]="options.fields"></crud-board>
+  <crud-import [data]="data" [fields]="options.fields" (notifyParent)="getNotification($event)"/>
   <!-- </p-tabPanel>
   </p-tabView> -->
 
