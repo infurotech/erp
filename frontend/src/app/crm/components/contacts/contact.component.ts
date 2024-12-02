@@ -65,4 +65,12 @@ export class ContactComponent implements OnInit{
     { name: 'Stephen Shaw', image: 'stephenshaw.png' },
     { name: 'Xuxue Feng', image: 'xuxuefeng.png' }
   ];
+
+  onAction(actionData: any): void {
+    console.log('Received form data ----->', actionData);
+  }
+
+  onFilterChange(event){
+    console.log("Filtered Data ----->",event);
+  }
 }
