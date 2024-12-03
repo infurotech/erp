@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { CrudField } from '../crud-field';
 import { CrudOptions } from '../crud-options';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MenuItem } from 'primeng/api';
+import { Form, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     selector: 'crud-import',
@@ -13,14 +13,12 @@ import { MenuItem } from 'primeng/api';
 export class ImportComponent implements OnInit {
   @Input() fields: Array<CrudField> = []; // Field definitions
   @Input() data: any[] = [];
-  @Output() notifyParent: EventEmitter<any> = new EventEmitter();
+  @Output() eventActionImport: EventEmitter<any> = new EventEmitter();
 
   showData = [];
   showTableData = [];
-  showGrid = false;
   files: any[] = [];
   uploadedHeaders = [];
-  isDialogVisible: boolean;
   crudOptions: CrudOptions = {
     gridEditing: false,
     boardView: false,
@@ -30,8 +28,9 @@ export class ImportComponent implements OnInit {
   activeIndex: number = 0;
 
   mappingForm: FormGroup;
+  gridForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private messageService: MessageService) {
     this.items = [
       {
           label: 'Upload File'
@@ -44,16 +43,33 @@ export class ImportComponent implements OnInit {
       }
   ];
 
+  }
+  ngOnInit(): void {
     this.mappingForm = this.fb.group({
       mappings: this.fb.array([]) 
     });
-  }
-  ngOnInit(): void {}
 
-  // Method to open the dialog
-  openDialog(): void {
-      this.isDialogVisible = true;
-      this.files = [];
+    this.gridForm = this.fb.group({
+      gridRows: this.fb.array([])
+    });
+  }
+
+  getGridRows() {
+    return (this.gridForm.get('gridRows') as FormArray);
+  }
+
+  getRowData(field: CrudField,i: number) {
+    return (this.getGridRows()?.controls?.[i] as FormGroup)?.controls[field.field]?.value;
+  }
+
+  setGridFormData() {
+    this.showTableData.forEach((item) => {
+      const row = this.fb.group({});
+      this.fields.forEach(field => {
+        row.addControl(field.field, this.fb.control(item[field.field] || '', field.required ? Validators.required : []));
+      });
+      this.getGridRows().push(row);
+    });
   }
 
   onActiveIndexChange(event: number) {
@@ -71,7 +87,7 @@ export class ImportComponent implements OnInit {
     else if(this.activeIndex == 1) {
       this.confirmMapping();
     }
-    else if(this.activeIndex==2) {
+    else if(this.activeIndex == 2) {
       this.submitForm();
     }
   }
@@ -166,7 +182,7 @@ export class ImportComponent implements OnInit {
     });
 
     this.showTableData = mappedData;
-    this.showGrid = true;
+    this.setGridFormData();
   }
 
   mapFields(jsonData: any[]): CrudField[] {
@@ -206,27 +222,31 @@ export class ImportComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.showGrid = false;
     this.uploadedHeaders = [];
     this.showTableData = []
-    this.isDialogVisible = false;
     this.activeIndex = 0;
   }
 
   submitForm() {
-      if(this.showTableData.length > 0) {
-         this.notifyParent.emit("File uploaded successfully");
+      let isValid = this.validateImportedData();
+      
+      this.showTableData = this.getGridRows().controls.map((rowControl: FormGroup) => {
+        const rowData = {};
+        this.fields.forEach(field => {
+          rowData[field.field] = rowControl.get(field.field)?.value;
+        });
+        return rowData;
+      });
+
+      if(!isValid && this.showTableData.length > 0) {
+         this.eventActionImport.emit(this.showTableData);
+         this.messageService.add({ severity:'success', detail: 'Data Imported' });
+      } else {
+        this.messageService.add({ severity:'error', detail: 'Invalid Data' });
       }
   }
 
-  isSaveDisabled(): boolean {
-    for (const item of this.showTableData) {
-        for (const field of this.fields) {
-            if (field.required && (!item[field.field] || item[field.field] === '')) {
-                return true;
-            }
-        }
-    }
-    return false;
+  validateImportedData(): boolean {
+    return this.gridForm.invalid;
   }
 }

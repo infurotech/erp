@@ -23,6 +23,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   isEditing: boolean = false;
   editingItem: T | null = null;
   isDialogVisible: boolean = false;
+  isImportVisible: boolean = false;
   editTableColumns: boolean = false;
   gridView: boolean = true;
   moreActionItems: MenuItem[] | undefined;
@@ -43,7 +44,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
         label: 'Import',
         icon: 'pi pi-file-import',
         command: () => {
-          this.importComponent.openDialog();
+          this.isImportVisible = true;
         }
       }
     ]
@@ -144,12 +145,14 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   resetForm(): void {
     this.form.reset();
     this.isDialogVisible = false;
+    this.isImportVisible = false;
+    this.importComponent.resetForm();
   }
 
   // Getter for easy access to form controls in the template
   get f() { return this.form.controls; }
 
-  getNotification(event: any) {
+  notifyEventImport(event: any) {
     console.log("import event",event)
   }
 
