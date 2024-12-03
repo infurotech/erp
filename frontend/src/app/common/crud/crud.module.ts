@@ -7,6 +7,8 @@ import { CrudRoutingModule } from './crud-routing.module';
 import { CrudComponent } from './crud.component';
 import { BoardComponent } from './board/board.component';
 import { GridComponent } from './grid/grid.component';
+import { ImportComponent } from './import/import.component';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
     imports: [
@@ -19,9 +21,11 @@ import { GridComponent } from './grid/grid.component';
     declarations: [
         CrudComponent, 
         BoardComponent,
-        GridComponent
+        GridComponent,
+        ImportComponent
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-    exports: [CrudComponent]
+    exports: [CrudComponent],
+    providers: [MessageService]
 })
 export class CrudModule { }

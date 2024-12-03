@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CrudField } from './crud-field';
 import { MenuItem } from 'primeng/api';
 import { CrudOptions } from './crud-options';
+import { ImportComponent } from './import/import.component';
 
 @Component({
   selector: 'app-crud',
@@ -10,6 +11,7 @@ import { CrudOptions } from './crud-options';
   styleUrl: './crud.component.less'
 })
 export class CrudComponent<T extends Record<string, any>> implements OnInit {
+  @ViewChild(ImportComponent) importComponent: ImportComponent;
 
   @Input() displayName: string;
   @Input() options: CrudOptions;  // Field definitions
@@ -21,9 +23,9 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   isEditing: boolean = false;
   editingItem: T | null = null;
   isDialogVisible: boolean = false;
+  isImportVisible: boolean = false;
   editTableColumns: boolean = false;
   gridView: boolean = true;
-
   moreActionItems: MenuItem[] | undefined;
 
   constructor(private fb: FormBuilder) {
@@ -41,6 +43,9 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
       {
         label: 'Import',
         icon: 'pi pi-file-import',
+        command: () => {
+          this.isImportVisible = true;
+        }
       }
     ]
   }
@@ -140,8 +145,15 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   resetForm(): void {
     this.form.reset();
     this.isDialogVisible = false;
+    this.isImportVisible = false;
+    this.importComponent.resetForm();
   }
 
   // Getter for easy access to form controls in the template
   get f() { return this.form.controls; }
+
+  notifyEventImport(event: any) {
+    console.log("import event",event)
+  }
+
 }
