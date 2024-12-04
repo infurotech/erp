@@ -11,7 +11,7 @@
     name="file"
     chooseIcon="pi pi-upload" 
     url="https://www.primefaces.org/cdn/api/upload.php"
-    accept=".xlsx,.xls" maxFileSize="5000000" 
+    accept=".xlsx,.xls,.csv" maxFileSize="5000000" 
     (onUpload)="onDocumentUpload($event)" 
     [auto]="true"
     chooseLabel="Upload">
@@ -83,8 +83,9 @@
     </p-table>
 </form>
 <div class="flex justify-content-end">
-    <p-button *ngIf="activeIndex != 0" styleClass="mt-4 w-auto mr-2" pRipple label="Prev" icon="pi pi-angle-left" (click)="navigateBack()"/>
-    <p-button styleClass="mt-4 w-auto" pRipple label="{{ activeIndex == 2 ? 'Save' : 'Next'}}" icon="pi pi-angle-right" (click)="navigateForward()"/>
+    <p-button pRipple label="Export" icon="pi pi-upload" class="mt-4 mr-2" (click)="exportCSV()"></p-button>
+    <p-button *ngIf="activeIndex != 0" class="mt-4 w-auto mr-2" pRipple label="Prev" icon="pi pi-angle-left" (click)="navigateBack()"/>
+    <p-button class="mt-4 w-auto" pRipple label="{{ activeIndex == 2 ? 'Submit' : 'Next'}}" [icon]="activeIndex == 2 ? '' : 'pi pi-angle-right'" (click)="navigateForward()" iconPos="right" />
 </div>
 <p-toast
   position="top-center"

@@ -229,7 +229,7 @@ export class ImportComponent implements OnInit {
 
   submitForm() {
       let isValid = this.validateImportedData();
-      
+      this.showTableData = [];
       this.showTableData = this.getGridRows().controls.map((rowControl: FormGroup) => {
         const rowData = {};
         this.fields.forEach(field => {
@@ -239,8 +239,8 @@ export class ImportComponent implements OnInit {
       });
 
       if(!isValid && this.showTableData.length > 0) {
-         this.eventActionImport.emit(this.showTableData);
          this.messageService.add({ severity:'success', detail: 'Data Imported' });
+         this.eventActionImport.emit(this.showTableData);
       } else {
         this.messageService.add({ severity:'error', detail: 'Invalid Data' });
       }
@@ -248,5 +248,23 @@ export class ImportComponent implements OnInit {
 
   validateImportedData(): boolean {
     return this.gridForm.invalid;
+  }
+
+  exportCSV() {
+    const csvData = this.generateCSVData(this.fields);
+    this.downloadCSV(csvData);
+  }
+
+  generateCSVData(fields: Array<CrudField>): string {
+    const headers = fields.map(field => field.label).join(',');
+    return headers;
+  }
+
+  downloadCSV(csvData: string): void {
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'export.csv';
+    link.click();
   }
 }

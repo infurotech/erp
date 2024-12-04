@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CrudField } from './crud-field';
 import { MenuItem } from 'primeng/api';
@@ -17,7 +17,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   @Input() options: CrudOptions;  // Field definitions
   @Input() data: T[] = [];           // List of items
   @Input() filteredFields: Array<CrudField> = [];  // Field definitions
-
+  @Output() bulkActionEvent: EventEmitter<any> = new EventEmitter();
 
   form: FormGroup;
   isEditing: boolean = false;
@@ -154,6 +154,8 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
 
   notifyEventImport(event: any) {
     console.log("import event",event)
+    this.data = this.data.concat(event);
+    this.bulkActionEvent.emit({type: 'Edit' , data: this.data});
   }
 
 }

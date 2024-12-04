@@ -65,4 +65,8 @@ export class ContactComponent implements OnInit{
     { name: 'Stephen Shaw', image: 'stephenshaw.png' },
     { name: 'Xuxue Feng', image: 'xuxuefeng.png' }
   ];
+
+  getBulkActionEvent(event) {
+    console.log("Bulk Action Event : ",event.type , event.data);
+  }
 }
