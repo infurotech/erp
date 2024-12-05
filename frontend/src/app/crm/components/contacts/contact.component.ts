@@ -17,9 +17,9 @@ export class ContactComponent implements OnInit{
       { field: 'id', label: 'ID', type: 'number', required: true, key: true },
       { field: 'name', label: 'Name', type: 'text', required: true },
       { field: 'email', label: 'Email', type: 'text', required: true },
-      { field: 'phone', label: 'Phone', type: 'text', required: true },
-      { field: 'company', label: 'Company', type: 'text', required: true },
-      { field: 'status', label: 'Status', type: 'tag', options: [
+      { field: 'phone', label: 'Phone', type: 'custom', filter: true, required: true },
+      { field: 'company', label: 'Company', type: 'text', filter: true,  required: true },
+      { field: 'status', label: 'Status', type: 'tag', filter: true, options: [
         { label: 'Unqualified', value: 'unqualified', severity: 'danger' },
         { label: 'Qualified', value: 'qualified', severity: 'success' },
         { label: 'New', value: 'new', severity: 'info' },
@@ -41,7 +41,7 @@ export class ContactComponent implements OnInit{
 
   contacts = [
     { id: 1, name: 'Ashish Gupta', email: 'ashish@infuro.com', phone: '+91 999999999', company: 'Infuro', status: 'unqualified' },
-    { id: 2, name: 'Sakshi Garg', email: 'sakshi@infuro.com', phone: '+91 888888888', company: 'Infuro', status: 'qualified' },
+    { id: 2, name: 'Rudresh Sharma', email: 'Rudresh@infuro.com', phone: '+91 888888888', company: 'Infuro', status: 'qualified' },
     { id: 3, name: 'Sakshi Garg', email: 'sakshi@infuro.com', phone: '+91 777777777', company: 'Infuro', status: 'qualified' },
     { id: 4, name: 'Sakshi Garg', email: 'sakshi@infuro.com', phone: '+91 666666666', company: 'Infuro', status: 'proposal' },
     { id: 5, name: 'Sakshi Garg', email: 'sakshi@infuro.com', phone: '+91 555555555', company: 'Infuro', status: 'renewal' },

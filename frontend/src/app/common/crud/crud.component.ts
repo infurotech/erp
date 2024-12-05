@@ -31,6 +31,9 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   searchKeyword: string = '';
   filters: Record<string, any> = {};
   confirmDeleteDialog: boolean = false;
+
+  contactsList: string[] = [];
+
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({});
   }
@@ -49,6 +52,11 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
         icon: 'pi pi-file-import',
       }
     ]
+
+    // As of now we don't have any api so getting contacts data via loop. 
+    this.data.forEach(item => {
+       this.contactsList.push(item['phone'])
+    })
   }
 
  // Initialize the form based on fields configuration
@@ -236,5 +244,13 @@ initializeForm(): void {
     this.fields = fields;   
     this.createFormFields();  
   }
-  
+
+  onFilterChangeEvent(event:any) {
+    if(event.field == 'search') {
+       this.searchKeyword = event.value;
+    } else  {
+      this.filters[event.field] = event.value;
+    }
+    this.onFilter();
+  }
 }

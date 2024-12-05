@@ -42,14 +42,23 @@
   <!-- Toolbar with filters and bulk operations -->
   <p-toolbar>
     <div class="flex flex-column sm:flex-row">
-      <span class="p-input-icon-left mb-2">
-        <i class="pi pi-search"></i>
-        <input pInputText type="text" [(ngModel)]="searchKeyword" #filter placeholder="Search Keyword" (input)="onFilter()" class="w-full" />
-      </span>
+      <app-filter
+          field="search"
+          (filterChange)="onFilterChangeEvent($event)"
+        />
       <div *ngFor="let field of filteredFields">
-        <p-dropdown styleClass="ml-2" [options]="field.options" *ngIf="field.type === 'select'" [(ngModel)]="filters[field.field]" (onChange)="onFilter()"></p-dropdown>
-        <p-dropdown styleClass="ml-2" [options]="field.options" *ngIf="field.type === 'tag'" [(ngModel)]="filters[field.field]" (onChange)="onFilter()"></p-dropdown>
-        <p-calendar styleClass="ml-2" *ngIf="field.type === 'date'" [(ngModel)]="filters[field.field]" (onChange)="onFilter()"></p-calendar>
+        <app-filter *ngIf="field.type == 'tag' &&  field.filter"
+          [field]="field.field"
+          [filterType]="field.type"
+          [filterOptions]="field.options"
+          (filterChange)="onFilterChangeEvent($event)"
+        />
+        <app-filter *ngIf="field.type == 'custom' &&  field.filter"
+          [field]="field.field"
+          [filterType]="field.type"
+          [filterOptions]="contactsList"
+          (filterChange)="onFilterChangeEvent($event)"
+        />
       </div>
       <button pButton class="p-button-outlined mb-2 ml-2" icon="pi pi-filter-slash" (click)="onResetFilter()"></button>
       <button pButton class="p-button-outlined mb-2 ml-2" label="Save" icon="pi pi-save"></button>
