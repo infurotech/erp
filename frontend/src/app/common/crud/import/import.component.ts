@@ -33,13 +33,13 @@ export class ImportComponent implements OnInit {
   constructor(private fb: FormBuilder,private messageService: MessageService) {
     this.items = [
       {
-          label: 'Upload File'
+          label: 'Upload'
       },
       {
-          label: 'Data Mapping'
+          label: 'Mapping'
       },
       {
-          label: 'Display'
+          label: 'Validate'
       }
   ];
 
@@ -81,6 +81,7 @@ export class ImportComponent implements OnInit {
   }
 
   navigateForward() {
+    console.log('navigateForward');
     if(this.activeIndex == 0 && this.files.length) {
       this.activeIndex++;
     }
@@ -94,6 +95,7 @@ export class ImportComponent implements OnInit {
 
    async onDocumentUpload(event: any) {
     this.files = event.files;
+    console.log(this.files)
     if (this.files && this.files.length) {
       const file = this.files[0];
       await this.parseExcel(file).then((res) => {

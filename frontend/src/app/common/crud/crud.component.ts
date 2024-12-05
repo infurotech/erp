@@ -3,7 +3,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CrudField } from './crud-field';
 import { MenuItem } from 'primeng/api';
 import { CrudOptions } from './crud-options';
-import { ImportComponent } from './import/import.component';
+// import { ImportComponent } from './import/import.component';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+
 
 @Component({
   selector: 'app-crud',
@@ -11,7 +13,8 @@ import { ImportComponent } from './import/import.component';
   styleUrl: './crud.component.less'
 })
 export class CrudComponent<T extends Record<string, any>> implements OnInit {
-  @ViewChild(ImportComponent) importComponent: ImportComponent;
+  // @ViewChild(ImportComponent) importComponent: ImportComponent;
+  @ViewChild('importDialog') importDialog: DynamicDialogRef | undefined;
 
   @Input() displayName: string;
   @Input() options: CrudOptions;  // Field definitions
@@ -45,6 +48,8 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
         icon: 'pi pi-file-import',
         command: () => {
           this.isImportVisible = true;
+          this.importDialog.maximize({});
+          console.log(this.importDialog);
         }
       }
     ]
@@ -146,7 +151,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
     this.form.reset();
     this.isDialogVisible = false;
     this.isImportVisible = false;
-    this.importComponent.resetForm();
+    // this.importComponent.resetForm();
   }
 
   // Getter for easy access to form controls in the template

@@ -62,8 +62,8 @@
 
   <crud-grid  *ngIf="gridView" [data]="data" [fields]="options.fields"></crud-grid>
   <crud-board *ngIf="!gridView" [data]="data" [fields]="options.fields"></crud-board>
-  <p-dialog [(visible)]="isImportVisible" [modal]="true" header="Import" class="p-fluid" [draggable]="false"
-    [closable]="true" [style]="{'width': '50rem'}" (onHide)="resetForm()" [maximizable]="true">
+  <p-dialog [(visible)]="isImportVisible" #importDialog [modal]="true" header="Import" class="p-fluid" [draggable]="false"
+    [closable]="true" (onHide)="resetForm()" [maximizable]="true">
     <ng-template pTemplate="content">
       <crud-import [data]="data" [fields]="options.fields" (eventActionImport)="notifyEventImport($event)"/>
     </ng-template>
