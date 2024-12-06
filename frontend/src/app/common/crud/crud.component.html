@@ -38,6 +38,7 @@
     </div>
   </div>
   <p-tieredMenu #moreActions [model]="moreActionItems" [popup]="true" />
+  <p-tabMenu [scrollable]="true" [model]="tabMenuItems" [(activeItem)]="activeItem"></p-tabMenu>
 
   <!-- Toolbar with filters and bulk operations -->
   <p-toolbar>
@@ -60,12 +61,17 @@
           (filterChange)="onFilterChangeEvent($event)"
         />
       </div>
-      <button pButton class="p-button-outlined mb-2 ml-2" icon="pi pi-filter-slash" (click)="onResetFilter()"></button>
-      <button pButton class="p-button-outlined mb-2 ml-2" label="Save" icon="pi pi-save"></button>
+
+      <div *ngIf="moreFilters.length > 0" class="ml-2">
+        <p-multiSelect [options]="moreFilters" [(ngModel)]="selectedFilters" (onChange)="selectFilter()" optionLabel="label" display="chip" placeholder="More Filters">
+        </p-multiSelect>
+      </div>
+      <button pButton class="p-button-outlined mb-2 ml-2" label="Save" (click)="saveFilter()" icon="pi pi-save"></button>
+      <button pButton class="p-button-outlined mb-2 ml-2" icon="pi pi-filter-slash" (click)="resetFilter()"></button>
       <button *ngIf="isDeleteButtonVisible" pButton pRipple icon="pi pi-check" class="p-button-outlined mb-2 ml-2" label="Delete" (click)="onDelete()"></button>
     </div>
   </p-toolbar>
-
+  
   <!-- <p-tabView>
     <p-tabPanel header="All"> -->
   <!-- Data Table for Displaying Items -->
@@ -104,17 +110,12 @@
         </div>
         </div>
         <div class="col-6 flex gap-2 p-0">
-        <button *ngIf="isEditing === false" pButton pRipple label="Save" icon="pi pi-check" class="p-element p-ripple p-button p-component" type="submit"></button>
-        <button *ngIf="isEditing === true" pButton pRipple label="Update" icon="pi pi-check" class="p-element p-ripple p-button p-component" type="submit"></button>
-
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-element p-ripple p-button-outlined p-button p-component" (click)="resetForm()"></button>
+        <p-button *ngIf="isEditing === false" pRipple label="Save" icon="pi pi-check" type="submit"></p-button>
+        <p-button *ngIf="isEditing === true" pRipple label="Update" icon="pi pi-check" type="submit"></p-button>
+        <p-button pRipple label="Cancel" icon="pi pi-times" [outlined]="true"  (click)="resetForm()"></p-button>
         </div>
       </form>
     </ng-template>
-    <!-- <ng-template pTemplate="footer">
-      <button pButton pRipple label="Save" icon="pi pi-check" class="p-element p-ripple p-button p-component" type="submit"></button>
-      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-element p-ripple p-button-outlined p-button p-component" (click)="resetForm()"></button>
-    </ng-template> -->
 </p-dialog>
 
 
@@ -122,12 +123,27 @@
   <p-dialog [(visible)]="confirmDeleteDialog" [draggable]="false" header="Confirm" [modal]="true" [style]="{width:'450px'}">
     <div class="flex align-items-center justify-content-center">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-      <span >Are you sure you want to delete?</span>
+      <span>{{"Are you sure you want to delete?"}}</span>
     </div>
     <ng-template pTemplate="footer">
-      <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
-        (click)="confirmDeleteDialog = false"></button>
-      <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+      <p-button pRipple icon="pi pi-times" label="No"
+        (click)="confirmDeleteDialog = false"></p-button>
+      <p-button pRipple icon="pi pi-check" label="Yes" (click)="confirmDelete()"></p-button>
     </ng-template>
   </p-dialog>
+
+  <p-dialog header="Save Filter" [(visible)]="showFilterDialog" [modal]="true" [draggable]="false" [style]="{width:'450px'}">
+    <div class="p-fluid">
+      <p-panel>
+       <div class="mb-2">
+         <input  pInputText [(ngModel)]="newFilterName" placeholder="Enter Filter Name" class="w-full"/>
+       </div>
+      </p-panel>
+       <!-- Add New Filter Button -->
+      <div class="flex flex-column mt-2 col-6">
+        <p-button pRipple label="Create Filter" (click)="onCreateCustomFilter()"></p-button>
+      </div>
+    </div>
+  </p-dialog>
+  
 </div>

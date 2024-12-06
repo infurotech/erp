@@ -31,17 +31,36 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   searchKeyword: string = '';
   filters: Record<string, any> = {};
   confirmDeleteDialog: boolean = false;
-
   contactsList: string[] = [];
+  moreFilters: any[];
+  showMoreFilters: boolean;
+  selectedFilters: CrudField[] = []; 
+  allFields: CrudField[] = []; 
+  initialFilteredFields: CrudField[];
+  // for add new fiter
+  showFilterDialog: boolean = false;
+  isNewFilterAdded: boolean = false;
+  newFilterName: string = '';
+  customFilters: any[] = []; 
+  filteredData: any[] = [];
+  // tabMenuItems: any[] = [];
+  tabMenuItems: MenuItem[] = [];  
+  activeItem: any = null;
+
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({});
   }
+ 
 
+ 
   ngOnInit(): void {
+    this.filteredFields = this.options.fields.filter(field => !field.key && field.filter === true).slice(0, 2);  
+    this.moreFilters = this.options.fields.filter(field => !field.key && field.filter === true).slice(2); 
+    this.allFields = this.options.fields; 
     this.initializeForm();
+    this.initialFilteredFields = [...this.filteredFields];
     this.initialData = [...this.data]
-    this.filteredFields = this.options.fields.filter(f => !f.key);
     this.moreActionItems = [
       {
         label: 'Export',
@@ -59,6 +78,18 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
     })
   }
 
+  selectFilter() {
+    this.addFiltersToVisible();
+  }
+  
+  addFiltersToVisible() {
+    this.selectedFilters.forEach(filter => {
+      if (!this.filteredFields.includes(filter)) {
+        this.filteredFields.push(filter);
+      }
+    });
+  }
+  
  // Initialize the form based on fields configuration
 initializeForm(): void {
   const group: Record<string, any> = {};
@@ -200,7 +231,7 @@ initializeForm(): void {
   }
   
   onFilter() {
-    let filteredData = [...this.initialData]; 
+    let filteredData = [...this.initialData];
     if (this.searchKeyword) {
       filteredData = filteredData.filter(item => {
         return Object.values(item).some(val =>
@@ -212,28 +243,29 @@ initializeForm(): void {
     Object.keys(this.filters).forEach(field => {
       if (this.filters[field]) {
         filteredData = filteredData.filter(item => {
-          const fieldValue = item[field];
-          if (fieldValue instanceof Date && this.filters[field] instanceof Date) {
-            return fieldValue.toISOString().slice(0, 10) === this.filters[field].toISOString().slice(0, 10);
-          }
+          let fieldValue = item[field];
+        
           return fieldValue === this.filters[field];
         });
       }
     });
-
+  
+    // Store the filtered data to use later
     this.data = filteredData;
-    this.onFilterChange.emit(filteredData)
+    this.filteredData = filteredData;
+    this.onFilterChange.emit(filteredData);
   }
   
-  onResetFilter() {
+  resetFilter() {
+    const previousFilteredData = [...this.filteredData];
     this.searchKeyword = '';  
-    this.filteredFields.forEach(field => {
-      this.filters[field.field] = null;
-    });
-    this.data = [...this.initialData];
+    this.filters = {};  
+    this.selectedFilters = [];  
     this.onFilter();
+    this.initialFilteredFields = [...this.filteredFields];    
+    this.filteredData = previousFilteredData;
   }
-
+  
   createFormFields() {
     this.fields.forEach(field => {
       this.form.addControl(field.field, this.fb.control('')); 
@@ -253,4 +285,34 @@ initializeForm(): void {
     }
     this.onFilter();
   }
+
+  saveFilter() {
+    this.showFilterDialog = true;
+  }
+  
+  onCreateCustomFilter() {
+    if (this.newFilterName) {
+      const newFilter = {
+        name: this.newFilterName,
+        filteredData: [...this.filteredData] 
+      };
+      this.customFilters.push(newFilter);
+      const newTab: MenuItem = {
+        label: this.newFilterName,
+        command: () => this.onTabClick(newFilter)  
+      };
+
+      this.tabMenuItems = [...this.tabMenuItems, newTab];
+      this.activeItem = this.tabMenuItems[this.tabMenuItems.length - 1]; 
+  
+      this.newFilterName = '';  
+      this.showFilterDialog = false;
+    }
+  }
+  
+  onTabClick(filter: any) {
+    this.filteredData = filter.filteredData;
+    this.data = [...this.filteredData];  
+  }
+  
 }

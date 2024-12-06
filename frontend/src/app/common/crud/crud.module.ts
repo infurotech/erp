@@ -8,6 +8,7 @@ import { CrudComponent } from './crud.component';
 import { BoardComponent } from './board/board.component';
 import { GridComponent } from './grid/grid.component';
 import { FilterComponent } from '../filter/filter.component';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @NgModule({
     imports: [
@@ -16,6 +17,7 @@ import { FilterComponent } from '../filter/filter.component';
         ReactiveFormsModule,
         PrimengImportsModule,
         FormsModule,
+        AutoCompleteModule
     ],
     declarations: [
         CrudComponent, 
