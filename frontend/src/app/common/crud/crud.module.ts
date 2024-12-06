@@ -7,6 +7,8 @@ import { CrudRoutingModule } from './crud-routing.module';
 import { CrudComponent } from './crud.component';
 import { BoardComponent } from './board/board.component';
 import { GridComponent } from './grid/grid.component';
+import { FilterComponent } from '../filter/filter.component';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @NgModule({
     imports: [
@@ -15,11 +17,13 @@ import { GridComponent } from './grid/grid.component';
         ReactiveFormsModule,
         PrimengImportsModule,
         FormsModule,
+        AutoCompleteModule
     ],
     declarations: [
         CrudComponent, 
         BoardComponent,
-        GridComponent
+        GridComponent,
+        FilterComponent
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     exports: [CrudComponent]
