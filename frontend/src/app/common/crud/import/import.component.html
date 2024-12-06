@@ -1,98 +1,76 @@
-<p-card>
-    <ng-template pTemplate="header">
-        <p-steps [activeIndex]="activeIndex" [model]="items" [readonly]="true"
-            (activeIndexChange)="onActiveIndexChange($event)" />
-    </ng-template>
-    <div *ngIf="activeIndex == 0" class="flex justify-content-center">
-        <p-fileUpload mode="basic" chooseLabel="Choose" #fileUploader chooseIcon="pi pi-upload" name="file" accept=".xlsx,.xls,.csv" maxFileSize="5000000"
-        (onUpload)="onDocumentUpload($event)" [auto]="true" chooseLabel="Upload" url="/api/document/upload" />
-    </div>
-    <!-- <p-fileUpload *ngIf="activeIndex == 0" #fileUploader name="file" chooseIcon="pi pi-upload"
-        url="https://www.primefaces.org/cdn/api/upload.php" accept=".xlsx,.xls,.csv" maxFileSize="5000000"
-        (onUpload)="onDocumentUpload($event)" [auto]="true" chooseLabel="Upload">
-        <ng-template let-file pTemplate="file">
-            <div>
-                <span class="text-overflow-ellipse">{{ file.name }}</span>
-            </div>
-        </ng-template>
-        <ng-template pTemplate="content">
-            <div *ngFor="let file of files">
-                <span class="text-overflow-ellipse">{{ file.fileName ? file.fileName : file.name }}</span>
-            </div>
-        </ng-template>
-    </p-fileUpload> -->
-    <!-- <p-fileUpload *ngIf="activeIndex == 0" #fileUploader name="file" chooseIcon="pi pi-upload" accept=".xlsx,.xls,.csv" maxFileSize="5000000"
-        (onUpload)="onDocumentUpload($event)" [auto]="true" chooseLabel="Upload">
-        <ng-template let-file pTemplate="file">
-            <div>
-                <span class="text-overflow-ellipse">{{ file.name }}</span>
-            </div>
-        </ng-template>
-        <ng-template pTemplate="content">
-            <div *ngFor="let file of files">
-                <span class="text-overflow-ellipse">{{ file.fileName ? file.fileName : file.name }}</span>
-            </div>
-        </ng-template>
-    </p-fileUpload> -->
-    <div *ngIf="uploadedHeaders.length > 0 && activeIndex == 1" class="mb-3">
-        <form [formGroup]="mappingForm">
-            <div formArrayName="mappings">
-                <h3>Map the uploaded headers to the default fields:</h3>
-                <div *ngFor="let mapping of mappingForm.get('mappings').controls; let i = index" [formGroupName]="i">
-                    <div class="field grid">
-                        <label class="col-12 mb-2 md:col-2 md:mb-0">{{ fields[i].label }} {{fields[i]?.required ? "*" :
-                            ''}}</label>
-                        <div class="col-12 md:col-10">
-                            <p-dropdown formControlName="mappedField" [options]="crudOptions.fields" optionLabel="label"
-                                optionValue="field">
-                            </p-dropdown>
-                            <div class="text-red-500" *ngIf="mapping.get('mappedField')?.hasError('required')">
-                                {{ fields[i].label }} is required.
+<p-dialog [(visible)]="displayImportDialog" #importDialog [modal]="true" header="Import" class="p-fluid" [draggable]="false"
+[closable]="true" (onHide)="resetForm()" [maximizable]="true">
+    <p-steps styleClass="mb-5" [activeIndex]="activeIndex" [model]="items" [readonly]="true"
+        (activeIndexChange)="onActiveIndexChange($event)" />
+    <ng-template pTemplate="content">
+        <div *ngIf="activeIndex == 0" class="flex justify-content-center">
+            <p-fileUpload #fileUploader chooseIcon="pi pi-upload" name="file" accept=".xlsx,.xls,.csv" maxFileSize="5000000"
+            (onUpload)="onDocumentUpload($event)" [auto]="true" chooseLabel="Upload" [url]="uploadUrl">
+                <ng-template pTemplate="content">
+                    <div (click)="uploadDocument()" class="flex align-items-center justify-content-center flex-column">
+                        <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400"></i>
+                        <p class="mt-4 mb-0">Drag and drop files here to upload.</p>
+                    </div>
+                </ng-template>
+            </p-fileUpload>
+        </div>
+        <div *ngIf="uploadedHeaders.length > 0 && activeIndex == 1" class="mb-3">
+            <form [formGroup]="mappingForm">
+                <div formArrayName="mappings">
+                    <div *ngFor="let mapping of mappingForm.get('mappings').controls; let i = index" [formGroupName]="i">
+                        <div class="field grid">
+                            <label class="col-12 mb-2 md:col-2 md:mb-0">{{ fields[i].label }} {{fields[i]?.required ? "*" : ''}}</label>
+                            <div class="col-12 md:col-10">
+                                <p-dropdown formControlName="mappedField" [options]="crudOptions.fields" optionLabel="label"
+                                    optionValue="field">
+                                </p-dropdown>
+                                <div class="text-red-500" *ngIf="mapping.get('mappedField')?.hasError('required')">
+                                    {{ fields[i].label }} is required.
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
+        </div>
+        <form [formGroup]="gridForm">
+            <p-table *ngIf="activeIndex == 2" [value]="mappedTableData" [rowHover]="true" [scrollable]="true"
+                styleClass="table-compact">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width:150px" *ngFor="let field of fields" [pSortableColumn]="field.name">
+                            <div class="flex justify-content-between align-items-center">
+                                {{ field.label }}
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item let-i="rowIndex">
+                    <tr formArrayName="gridRows">
+                        <td *ngFor="let field of fields" [formGroupName]="i"
+                            [ngClass]="{'border-1 border-solid border-red-500': ((!getRowData(field,i) || getRowData(field,i) == '') && field.required)}"
+                            [pEditableColumn]="field.field" pEditableColumnField="field.label">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="{{field.type}}" [formControlName]="field.field" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ getRowData(field,i) }}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </form>
-    </div>
-    <form [formGroup]="gridForm">
-        <p-table *ngIf="activeIndex == 2" [value]="showTableData" [rowHover]="true" [scrollable]="true"
-            styleClass="table-compact">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th style="min-width:150px" *ngFor="let field of fields" [pSortableColumn]="field.name">
-                        <div class="flex justify-content-between align-items-center">
-                            {{ field.label }}
-                        </div>
-                    </th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-item let-i="rowIndex">
-                <tr formArrayName="gridRows">
-                    <td *ngFor="let field of fields" [formGroupName]="i"
-                        [ngClass]="{'border-1 border-solid border-red-500': ((!getRowData(field,i) || getRowData(field,i) == '') && field.required)}"
-                        [pEditableColumn]="field.field" pEditableColumnField="field.label">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input pInputText type="{{field.type}}" [formControlName]="field.field" />
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ getRowData(field,i) }}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </form>
-    <p-toast position="top-center" [life]="3000"></p-toast>
+    </ng-template>
     <ng-template pTemplate="footer">
-        <div class="flex justify-content-end">
-            <p-button pRipple label="Export" icon="pi pi-upload" class="mt-4 mr-2" (click)="exportCSV()"></p-button>
-            <p-button *ngIf="activeIndex != 0" class="mt-4 w-auto mr-2" pRipple label="Prev" icon="pi pi-angle-left"
-                (click)="navigateBack()" />
-            <p-button class="mt-4 w-auto" pRipple label="{{ activeIndex == 2 ? 'Submit' : 'Next'}}"
-                [icon]="activeIndex == 2 ? '' : 'pi pi-angle-right'" (click)="navigateForward()" iconPos="right" />
+        <div class="flex justify-content-end mt-4">
+            <p-button *ngIf="activeIndex == 0" pRipple label="Download Template" icon="pi pi-download" [outlined]="true" class="mr-2" (click)="downloadImportTemplate()"/>
+            <p-button *ngIf="activeIndex != 0" class="mr-2" pRipple label="Prev" icon="pi pi-angle-left" [outlined]="true" (click)="navigateBack()" />
+            <p-button *ngIf="activeIndex != 2" icon="pi pi-angle-right" pRipple label="Next" (click)="navigateForward()" iconPos="right" [disabled]="!files.length" />
+            <p-button *ngIf="activeIndex == 2" pRipple label="Submit" (click)="submitForm()" iconPos="right" />
         </div>
     </ng-template>
-</p-card>
+    <p-toast position="top-center" [life]="3000"></p-toast>
+</p-dialog>

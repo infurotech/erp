@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { CrudField } from '../crud-field';
 import { CrudOptions } from '../crud-options';
-import { Form, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MenuItem, MessageService } from 'primeng/api';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FileUpload } from 'primeng/fileupload';
 
 @Component({
     selector: 'crud-import',
@@ -11,12 +13,18 @@ import { MenuItem, MessageService } from 'primeng/api';
     styleUrl: './import.component.scss',
 })
 export class ImportComponent implements OnInit {
+  @ViewChild('importDialog') importDialog: DynamicDialogRef | undefined;
+  @ViewChild('fileUploader') fileUploader:FileUpload;
+
   @Input() fields: Array<CrudField> = []; // Field definitions
   @Input() data: any[] = [];
-  @Output() eventActionImport: EventEmitter<any> = new EventEmitter();
 
-  showData = [];
-  showTableData = [];
+  @Output() onImport: EventEmitter<any> = new EventEmitter();
+
+  uploadUrl : string = '/api/document/upload';
+  displayImportDialog: boolean;
+  parsedFileData = [];
+  mappedTableData = [];
   files: any[] = [];
   uploadedHeaders = [];
   crudOptions: CrudOptions = {
@@ -54,6 +62,11 @@ export class ImportComponent implements OnInit {
     });
   }
 
+  openDialog() {
+    this.importDialog.maximize({});
+    this.displayImportDialog = true;
+  }
+
   getGridRows() {
     return (this.gridForm.get('gridRows') as FormArray);
   }
@@ -63,7 +76,7 @@ export class ImportComponent implements OnInit {
   }
 
   setGridFormData() {
-    this.showTableData.forEach((item) => {
+    this.mappedTableData.forEach((item) => {
       const row = this.fb.group({});
       this.fields.forEach(field => {
         row.addControl(field.field, this.fb.control(item[field.field] || '', field.required ? Validators.required : []));
@@ -81,16 +94,11 @@ export class ImportComponent implements OnInit {
   }
 
   navigateForward() {
-    console.log('navigateForward');
-    if(this.activeIndex == 0 && this.files.length) {
-      this.activeIndex++;
-    }
-    else if(this.activeIndex == 1) {
+    if(this.activeIndex == 1) {
       this.confirmMapping();
+      return;
     }
-    else if(this.activeIndex == 2) {
-      this.submitForm();
-    }
+    this.activeIndex++;
   }
 
    async onDocumentUpload(event: any) {
@@ -98,13 +106,14 @@ export class ImportComponent implements OnInit {
     console.log(this.files)
     if (this.files && this.files.length) {
       const file = this.files[0];
-      await this.parseExcel(file).then((res) => {
+      await this.parseExcel(file).then((res : any) => {
          if(res) {
             this.initializeMappingForm();
             this.activeIndex = 1;
          }
          else {
-          console.log("error",res)
+          console.log("error",res);
+          this.messageService.add({ severity:'error', detail: res });
          }
       })
     }
@@ -126,7 +135,7 @@ export class ImportComponent implements OnInit {
         const fields: CrudField[] = this.mapFields(jsonData);
         this.crudOptions.fields = fields;
         this.uploadedHeaders = Object.keys(jsonData[0]);
-        this.showData = jsonData;
+        this.parsedFileData = jsonData;
         resolve(true)
       };
       reader.onerror = (error) => reject(error);
@@ -174,7 +183,7 @@ export class ImportComponent implements OnInit {
 
   // Method to map the data to the selected fields
   mapDataToFields(mappedHeaders: { [key: string]: string }): void {
-    const mappedData = this.showData.map(row => {
+    const mappedData = this.parsedFileData.map(row => {
       const mappedRow: any = {};
       for (const field of this.fields) {
         const uploadedHeader = mappedHeaders[field.field];
@@ -183,7 +192,7 @@ export class ImportComponent implements OnInit {
       return mappedRow;
     });
 
-    this.showTableData = mappedData;
+    this.mappedTableData = mappedData;
     this.setGridFormData();
   }
 
@@ -224,15 +233,16 @@ export class ImportComponent implements OnInit {
   }
 
   resetForm(): void {
+    this.displayImportDialog = false;
     this.uploadedHeaders = [];
-    this.showTableData = []
+    this.mappedTableData = []
     this.activeIndex = 0;
   }
 
   submitForm() {
       let isValid = this.validateImportedData();
-      this.showTableData = [];
-      this.showTableData = this.getGridRows().controls.map((rowControl: FormGroup) => {
+      this.mappedTableData = [];
+      this.mappedTableData = this.getGridRows().controls.map((rowControl: FormGroup) => {
         const rowData = {};
         this.fields.forEach(field => {
           rowData[field.field] = rowControl.get(field.field)?.value;
@@ -240,9 +250,9 @@ export class ImportComponent implements OnInit {
         return rowData;
       });
 
-      if(!isValid && this.showTableData.length > 0) {
+      if(!isValid && this.mappedTableData.length > 0) {
          this.messageService.add({ severity:'success', detail: 'Data Imported' });
-         this.eventActionImport.emit(this.showTableData);
+         this.onImport.emit(this.mappedTableData);
       } else {
         this.messageService.add({ severity:'error', detail: 'Invalid Data' });
       }
@@ -252,21 +262,22 @@ export class ImportComponent implements OnInit {
     return this.gridForm.invalid;
   }
 
-  exportCSV() {
-    const csvData = this.generateCSVData(this.fields);
-    this.downloadCSV(csvData);
+  downloadImportTemplate() {
+    const templateFormat = this.generateTemplateFormat(this.fields);
+
+    const blob = new Blob([templateFormat], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'import.csv';
+    link.click();
   }
 
-  generateCSVData(fields: Array<CrudField>): string {
+  generateTemplateFormat(fields: Array<CrudField>): string {
     const headers = fields.map(field => field.label).join(',');
     return headers;
   }
 
-  downloadCSV(csvData: string): void {
-    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'export.csv';
-    link.click();
+  uploadDocument() {
+    this.fileUploader.choose();
   }
 }

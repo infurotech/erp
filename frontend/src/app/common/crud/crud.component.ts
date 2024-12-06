@@ -3,8 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CrudField } from './crud-field';
 import { MenuItem } from 'primeng/api';
 import { CrudOptions } from './crud-options';
-// import { ImportComponent } from './import/import.component';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ImportComponent } from './import/import.component';
 
 
 @Component({
@@ -13,20 +12,18 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
   styleUrl: './crud.component.less'
 })
 export class CrudComponent<T extends Record<string, any>> implements OnInit {
-  // @ViewChild(ImportComponent) importComponent: ImportComponent;
-  @ViewChild('importDialog') importDialog: DynamicDialogRef | undefined;
+  @ViewChild(ImportComponent) importComponent: ImportComponent;
 
   @Input() displayName: string;
   @Input() options: CrudOptions;  // Field definitions
   @Input() data: T[] = [];           // List of items
   @Input() filteredFields: Array<CrudField> = [];  // Field definitions
-  @Output() bulkActionEvent: EventEmitter<any> = new EventEmitter();
+  @Output() onCrudAction: EventEmitter<any> = new EventEmitter();
 
   form: FormGroup;
   isEditing: boolean = false;
   editingItem: T | null = null;
   isDialogVisible: boolean = false;
-  isImportVisible: boolean = false;
   editTableColumns: boolean = false;
   gridView: boolean = true;
   moreActionItems: MenuItem[] | undefined;
@@ -47,9 +44,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
         label: 'Import',
         icon: 'pi pi-file-import',
         command: () => {
-          this.isImportVisible = true;
-          this.importDialog.maximize({});
-          console.log(this.importDialog);
+          this.importComponent.openDialog();
         }
       }
     ]
@@ -150,17 +145,15 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   resetForm(): void {
     this.form.reset();
     this.isDialogVisible = false;
-    this.isImportVisible = false;
-    // this.importComponent.resetForm();
   }
 
   // Getter for easy access to form controls in the template
   get f() { return this.form.controls; }
 
-  notifyEventImport(event: any) {
+  onImport(event: any) {
     console.log("import event",event)
     this.data = this.data.concat(event);
-    this.bulkActionEvent.emit({type: 'Edit' , data: this.data});
+    this.onCrudAction.emit({type: 'Edit' , data: this.data});
   }
 
 }

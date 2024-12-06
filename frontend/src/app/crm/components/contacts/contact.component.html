@@ -1,7 +1,7 @@
 <div class="grid">
     <div class="col-12">
         <app-crud [displayName]="'Contacts'" [data]="contacts" [options]="crudOptions"
-            (bulkActionEvent)="getBulkActionEvent($event)">
+            (onCrudAction)="getCrudAction($event)">
             <ng-template></ng-template>
         </app-crud>
     </div>
