@@ -1,8 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CrudField } from './crud-field';
 import { MenuItem } from 'primeng/api';
 import { CrudOptions } from './crud-options';
+import { ImportComponent } from './import/import.component';
+
 
 @Component({
   selector: 'app-crud',
@@ -10,12 +12,13 @@ import { CrudOptions } from './crud-options';
   styleUrl: './crud.component.less'
 })
 export class CrudComponent<T extends Record<string, any>> implements OnInit {
+  @ViewChild(ImportComponent) importComponent: ImportComponent;
 
   @Input() displayName: string;
   @Input() options: CrudOptions;  // Field definitions
   @Input() data: T[] = [];           // List of items
   @Input() filteredFields: Array<CrudField> = [];  // Field definitions
-
+  @Output() onBulkImport: EventEmitter<any> = new EventEmitter();
 
   form: FormGroup;
   isEditing: boolean = false;
@@ -23,7 +26,6 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   isDialogVisible: boolean = false;
   editTableColumns: boolean = false;
   gridView: boolean = true;
-
   moreActionItems: MenuItem[] | undefined;
 
   constructor(private fb: FormBuilder) {
@@ -41,6 +43,9 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
       {
         label: 'Import',
         icon: 'pi pi-file-import',
+        command: () => {
+          this.importComponent.openDialog();
+        }
       }
     ]
   }
@@ -144,4 +149,10 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
 
   // Getter for easy access to form controls in the template
   get f() { return this.form.controls; }
+
+  onImport(event: any) {
+    this.data = this.data.concat(event);
+    this.onBulkImport.emit({type: 'Edit' , data: this.data});
+  }
+
 }
