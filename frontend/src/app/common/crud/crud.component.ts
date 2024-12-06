@@ -18,7 +18,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   @Input() options: CrudOptions;  // Field definitions
   @Input() data: T[] = [];           // List of items
   @Input() filteredFields: Array<CrudField> = [];  // Field definitions
-  @Output() onCrudAction: EventEmitter<any> = new EventEmitter();
+  @Output() onBulkImport: EventEmitter<any> = new EventEmitter();
 
   form: FormGroup;
   isEditing: boolean = false;
@@ -151,9 +151,8 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   get f() { return this.form.controls; }
 
   onImport(event: any) {
-    console.log("import event",event)
     this.data = this.data.concat(event);
-    this.onCrudAction.emit({type: 'Edit' , data: this.data});
+    this.onBulkImport.emit({type: 'Edit' , data: this.data});
   }
 
 }

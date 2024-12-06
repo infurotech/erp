@@ -66,7 +66,6 @@ export class ContactComponent implements OnInit{
     { name: 'Xuxue Feng', image: 'xuxuefeng.png' }
   ];
 
-  getCrudAction(event) {
-    console.log("Crud Action Event : ",event.type , event.data);
+  getBulkImport(event) {
   }
 }

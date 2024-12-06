@@ -8,8 +8,6 @@ import { CrudComponent } from './crud.component';
 import { BoardComponent } from './board/board.component';
 import { GridComponent } from './grid/grid.component';
 import { ImportComponent } from './import/import.component';
-import { MessageService } from 'primeng/api';
-import { DialogService } from 'primeng/dynamicdialog';
 
 @NgModule({
     imports: [
@@ -26,7 +24,6 @@ import { DialogService } from 'primeng/dynamicdialog';
         ImportComponent
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-    exports: [CrudComponent],
-    providers: [MessageService, DialogService]
+    exports: [CrudComponent]
 })
 export class CrudModule { }

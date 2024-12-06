@@ -6,6 +6,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MenuItem, MessageService } from 'primeng/api';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FileUpload } from 'primeng/fileupload';
+import { AppConsts } from 'src/app/shared/AppConsts';
 
 @Component({
     selector: 'crud-import',
@@ -21,7 +22,7 @@ export class ImportComponent implements OnInit {
 
   @Output() onImport: EventEmitter<any> = new EventEmitter();
 
-  uploadUrl : string = '/api/document/upload';
+  uploadUrl : string = AppConsts.fileUploadUrl;
   displayImportDialog: boolean;
   parsedFileData = [];
   mappedTableData = [];
@@ -103,7 +104,6 @@ export class ImportComponent implements OnInit {
 
    async onDocumentUpload(event: any) {
     this.files = event.files;
-    console.log(this.files)
     if (this.files && this.files.length) {
       const file = this.files[0];
       await this.parseExcel(file).then((res : any) => {
@@ -112,7 +112,6 @@ export class ImportComponent implements OnInit {
             this.activeIndex = 1;
          }
          else {
-          console.log("error",res);
           this.messageService.add({ severity:'error', detail: res });
          }
       })
