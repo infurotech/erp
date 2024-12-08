@@ -25,7 +25,7 @@ import { DividerModule } from 'primeng/divider';
 import { DockModule } from 'primeng/dock';
 import { DragDropModule } from 'primeng/dragdrop';
 import { DropdownModule } from 'primeng/dropdown';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { DeferModule } from 'primeng/defer';
 import { EditorModule } from 'primeng/editor';
 import { FieldsetModule } from 'primeng/fieldset';
@@ -105,6 +105,7 @@ import { AutoFocusModule } from 'primeng/autofocus';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { MessageService } from 'primeng/api';
 
 
 @NgModule({
@@ -323,6 +324,6 @@ import { NgModule } from '@angular/core';
     // InputIconModule,
     AutoFocusModule
   ],
-  providers: [  ]
+  providers: [ MessageService , DialogService ]
 })
 export class PrimengImportsModule {}

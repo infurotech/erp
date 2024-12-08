@@ -22,6 +22,7 @@ import { Vehicle } from './services/vehicle/entities/vehicle.entity';
 import { User } from './services/user/entities/user.entity';
 import { ScheduleModule } from './services/schedule/schedule.module';
 import config from './config/config';
+import { DocumentModule } from './services/document/document.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot(
