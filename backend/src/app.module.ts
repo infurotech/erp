@@ -19,6 +19,7 @@ import { Vehicle } from './services/vehicle/entities/vehicle.entity';
 import { User } from './services/user/entities/user.entity';
 import { ScheduleModule } from './services/schedule/schedule.module';
 import config from './config/config';
+import { GeneralModule } from './services/general/general.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot(
@@ -39,12 +40,13 @@ import config from './config/config';
       ],
       synchronize: config.DB.synchronize
     }
-  ), CustomerModule, ProductModule, JobModule, JobItemModule, VehicleModule, UserModule, ScheduleModule, AuthModule],
+  ), CustomerModule, ProductModule, JobModule, JobItemModule, VehicleModule, UserModule, ScheduleModule, AuthModule,GeneralModule],
   controllers: [AppController],
   providers: [AppService,
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
-    },],
+    },
+  ],
 })
 export class AppModule { }

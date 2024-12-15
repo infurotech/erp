@@ -25,6 +25,6 @@ import { JobService } from "./job.service";
   }
 })
 @Controller("jobs")
-export class JobController implements CrudController<Job> {
+export class JobController {
   constructor(public service: JobService) {}
 }
