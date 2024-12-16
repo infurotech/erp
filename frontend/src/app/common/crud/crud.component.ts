@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CrudField } from './crud-field';
 import { MenuItem } from 'primeng/api';
@@ -17,6 +17,9 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   @Input() filteredFields: Array<CrudField> = [];  // Field definitions
   @Output() onAction = new EventEmitter<any[]>();
   @Output() onFilterChange = new EventEmitter<any[]>();
+  @Output() onClear = new EventEmitter<any[]>();
+  @ContentChild('filterTemplate', { static: false }) filterTemplate!: TemplateRef<any>;
+
   selectedRows: any[] = [];
   initialData: T[] = [];  
   fields: CrudField[] = []; 
@@ -32,10 +35,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   filters: Record<string, any> = {};
   confirmDeleteDialog: boolean = false;
   contactsList: string[] = [];
-  moreFilters: any[];
   showMoreFilters: boolean;
-  selectedFilters: CrudField[] = []; 
-  allFields: CrudField[] = []; 
   initialFilteredFields: CrudField[];
   // for add new fiter
   showFilterDialog: boolean = false;
@@ -47,6 +47,13 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   tabMenuItems: MenuItem[] = [];  
   activeItem: any = null;
 
+  activeFilters = {
+    name: '',
+    email: '',
+    company: '',
+    status: '',
+    search: ''
+  };
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({});
@@ -56,8 +63,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
  
   ngOnInit(): void {
     this.filteredFields = this.options.fields.filter(field => !field.key && field.filter === true).slice(0, 2);  
-    this.moreFilters = this.options.fields.filter(field => !field.key && field.filter === true).slice(2); 
-    this.allFields = this.options.fields; 
+    // this.moreFilters = this.options.fields.filter(field => !field.key && field.filter === true).slice(2); 
     this.initializeForm();
     this.initialFilteredFields = [...this.filteredFields];
     this.initialData = [...this.data]
@@ -76,18 +82,6 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
     this.data.forEach(item => {
        this.contactsList.push(item['phone'])
     })
-  }
-
-  selectFilter() {
-    this.addFiltersToVisible();
-  }
-  
-  addFiltersToVisible() {
-    this.selectedFilters.forEach(filter => {
-      if (!this.filteredFields.includes(filter)) {
-        this.filteredFields.push(filter);
-      }
-    });
   }
   
  // Initialize the form based on fields configuration
@@ -239,13 +233,14 @@ initializeForm(): void {
         );
       });
     }
-  
-    Object.keys(this.filters).forEach(field => {
-      if (this.filters[field]) {
+    
+    Object.keys(this.activeFilters).forEach(field => {
+      if (this.activeFilters[field]) {
         filteredData = filteredData.filter(item => {
           let fieldValue = item[field];
-        
-          return fieldValue === this.filters[field];
+          return Array.isArray(this.activeFilters[field])
+                  ? this.activeFilters[field].includes(fieldValue)
+                  : fieldValue === this.activeFilters[field]
         });
       }
     });
@@ -259,8 +254,15 @@ initializeForm(): void {
   resetFilter() {
     const previousFilteredData = [...this.filteredData];
     this.searchKeyword = '';  
-    this.filters = {};  
-    this.selectedFilters = [];  
+    this.filters = {};
+    this.activeFilters = {
+      name: '',
+      email: '',
+      company: '',
+      status: '',
+      search: ''
+    };
+    this.onClear.emit();
     this.onFilter();
     this.initialFilteredFields = [...this.filteredFields];    
     this.filteredData = previousFilteredData;
@@ -278,11 +280,14 @@ initializeForm(): void {
   }
 
   onFilterChangeEvent(event:any) {
-    if(event.field == 'search') {
-       this.searchKeyword = event.value;
-    } else  {
-      this.filters[event.field] = event.value;
+    const { field, value, header } = event;
+    
+    if (field === 'search') {
+      this.searchKeyword = value
+    } else {
+      this.activeFilters[header] = value;
     }
+
     this.onFilter();
   }
 

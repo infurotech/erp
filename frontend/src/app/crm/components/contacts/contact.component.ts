@@ -9,18 +9,19 @@ import { CrudOptions } from 'src/app/common/crud/crud-options';
   styleUrl: './contact.component.less'
 })
 export class ContactComponent implements OnInit{
+  users : string[] = [];
   crudOptions:  CrudOptions = {
     boardView: false,
     gridEditing: false,
     fields:[
       { field: 'id', label: 'ID', type: 'number', required: true, key: true },
-      { field: 'name', label: 'Name', type: 'text', required: true },
+      { field: 'name', label: 'Name', type: 'text', filter:true,required: true },
       { field: 'email', label: 'Email', type: 'tag', filter:true, required: true, options:[
         { label: 'ashish@infuro.com', value: 'ashish@infuro.com' },
         { label: 'sakshi@infuro.com', value: 'sakshi@infuro.com' },
         { label: 'sag@bestwe.com', value: 'sag@bestwe.com' }
       ] },
-      { field: 'phone', label: 'Phone', type: 'custom', filter: false, required: true },
+      { field: 'phone', label: 'Phone', type: 'custom', filter: true, required: true },
       { field: 'company', label: 'Company', type: 'tag', filter: true,  required: true, options:[
         { label: 'Infuro', value: 'Infuro' },
         { label: 'BestWe', value: 'BestWe'}
@@ -35,6 +36,7 @@ export class ContactComponent implements OnInit{
       ]}
     ]
   }
+  selectedUser:string = '';
   @Output() contactsChange = new EventEmitter<any[]>();
 
   fieldOption: any[];
@@ -45,6 +47,8 @@ export class ContactComponent implements OnInit{
 
   ngOnInit() {
     this.fieldOption = this.crudOptions.fields;
+
+    this.users = ['Ashish Gupta' , 'Sakshi Garg' , 'Sag']
   }
   
   contacts = [
@@ -79,5 +83,9 @@ export class ContactComponent implements OnInit{
   }
 
   onFilterChange(event){
+  }
+
+  onClear() {
+    this.selectedUser = null;
   }
 }
