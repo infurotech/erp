@@ -10,6 +10,6 @@ import { ProductService } from "./product.service";
   },
 })
 @Controller("products")
-export class ProductController implements CrudController<Product> {
+export class ProductController{
   constructor(public service: ProductService) {}
 }
