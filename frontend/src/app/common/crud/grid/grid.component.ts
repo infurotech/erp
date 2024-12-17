@@ -57,7 +57,7 @@ export class GridComponent implements OnInit {
   getTagSeverity(field: CrudField, value: string){
     var severity = 'default';
     if(field.options){
-      severity = field.options?.find(op => op.value == value).severity;
+      severity = field.options?.find(op => op.value == value)?.severity;
     }
     return severity;
   } 
@@ -65,7 +65,7 @@ export class GridComponent implements OnInit {
   getTagLabel(field: CrudField, value: string){
     var label = value;
     if(field.options){
-      label = field.options?.find(op => op.value == value).label;
+      label = field.options?.find(op => op.value == value)?.label;
     }
     return label;
   }

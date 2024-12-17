@@ -60,6 +60,7 @@
 
   <crud-grid  *ngIf="gridView" [data]="data" [fields]="options.fields" (selectionChange)="onSelectionChange($event)" (tableHeaders)="onTableHeadersReceived($event)" (openDialog)="openDialogEvent($event)" (requestDelete)="confirmDelete($event)"></crud-grid>
   <crud-board *ngIf="!gridView" [data]="data" [fields]="options.fields"></crud-board>
+  <crud-import [data]="data" [fields]="options.fields" (onImport)="onImport($event)"/>
   <!-- </p-tabPanel>
   </p-tabView> -->
 

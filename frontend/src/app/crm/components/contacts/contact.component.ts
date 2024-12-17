@@ -88,4 +88,8 @@ export class ContactComponent implements OnInit{
   onClear() {
     this.selectedUser = null;
   }
+
+  getBulkImport(event) {
+    
+  }
 }

@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CrudField } from './crud-field';
 import { MenuItem } from 'primeng/api';
 import { CrudOptions } from './crud-options';
+import { ImportComponent } from './import/import.component';
+
 
 @Component({
   selector: 'app-crud',
@@ -10,6 +12,7 @@ import { CrudOptions } from './crud-options';
   styleUrl: './crud.component.less'
 })
 export class CrudComponent<T extends Record<string, any>> implements OnInit {
+  @ViewChild(ImportComponent) importComponent: ImportComponent;
 
   @Input() displayName: string;
   @Input() options: CrudOptions;  // Field definitions
@@ -23,6 +26,8 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   selectedRows: any[] = [];
   initialData: T[] = [];  
   fields: CrudField[] = []; 
+  @Output() onBulkImport: EventEmitter<any> = new EventEmitter();
+
   form: FormGroup;
   isEditing: boolean = false;
   editingItem: T | null = null;
@@ -75,6 +80,9 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
       {
         label: 'Import',
         icon: 'pi pi-file-import',
+        command: () => {
+          this.importComponent.openDialog();
+        }
       }
     ]
 
@@ -320,4 +328,9 @@ initializeForm(): void {
     this.data = [...this.filteredData];  
   }
   
+  onImport(event: any) {
+    this.data = this.data.concat(event);
+    this.onBulkImport.emit({type: 'Edit' , data: this.data});
+  }
+
 }
