@@ -12,9 +12,4 @@ import { CustomerService } from "./customer.service";
 @Controller("customers")
 export class CustomerController implements CrudController<Customer> {
   constructor(public service: CustomerService) {}
-
-  // @Get('filterByName')
-  // async filterByName(@Query('name') name: string) {
-  //   return this.service.findByName(name);
-  // }
 }

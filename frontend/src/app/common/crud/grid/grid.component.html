@@ -1,5 +1,5 @@
 <p-table [value]="data" [rows]="10" [rowHover]="true" [scrollable]="true" styleClass="table-compact"
-    [paginator]="true">
+    [paginator]="true" [(selection)]="selectedRows" (selectionChange)="onSelectionChange($event)">
     <ng-template pTemplate="header">
         <tr>
             <th style="width: 3rem">
@@ -20,7 +20,7 @@
     <ng-template pTemplate="body" let-item>
         <tr>
             <td style="width: 3rem">
-                <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                <p-tableCheckbox [value]="item"></p-tableCheckbox>
             </td>
             <td *ngFor="let field of fields">
                 <ng-container *ngIf="field.type != 'tag'">{{ item[field.field] }}</ng-container>
@@ -28,8 +28,8 @@
                     [severity]="getTagSeverity(field, item[field.field])" />
             </td>
             <td style="width: 3rem" alignFrozen="right" pFrozenColumn [frozen]="true">
-                <p-button (onClick)="tableActions.toggle($event)" [text]="true" icon="pi pi-ellipsis-v"
-                    severity="secondary" />
+                <p-button (click)="openMenu($event, item)" [text]="true" icon="pi pi-ellipsis-v"
+                severity="secondary" />
             </td>
         </tr>
     </ng-template>

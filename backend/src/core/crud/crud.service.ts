@@ -3,7 +3,7 @@ import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class CoreService<T> extends TypeOrmCrudService<T> {
+export class CrudService<T> extends TypeOrmCrudService<T> {
   constructor(protected readonly repo: Repository<T>) {
     super(repo); // Call the parent constructor
   }
