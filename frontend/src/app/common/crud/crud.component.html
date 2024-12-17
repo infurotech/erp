@@ -38,75 +38,95 @@
     </div>
   </div>
   <p-tieredMenu #moreActions [model]="moreActionItems" [popup]="true" />
+  <p-tabMenu [scrollable]="true" [model]="tabMenuItems" [(activeItem)]="activeItem"></p-tabMenu>
 
   <!-- Toolbar with filters and bulk operations -->
   <p-toolbar>
-    <div class="flex flex-column sm:flex-row">
-      <span class="p-input-icon-left mb-2">
-        <i class="pi pi-search"></i>
-        <input pInputText type="text" #filter placeholder="Search Keyword" class="w-full" />
-      </span>
-      <div *ngFor="let field of filteredFields">
-        <p-dropdown styleClass="ml-2" [options]="field.options" *ngIf="field.type === 'select'"></p-dropdown>
-        <p-dropdown styleClass="ml-2" [options]="field.options" *ngIf="field.type === 'tag'"></p-dropdown>
-        <p-calendar styleClass="ml-2" *ngIf="field.type === 'date'"></p-calendar>
-        
-      </div>
-      <button pButton class="p-button-outlined mb-2 ml-2" icon="pi pi-filter-slash"></button>
-      <button pButton class="p-button-outlined mb-2 ml-2" label="Save" icon="pi pi-save"></button>
-    </div>
+      <app-filter
+        [fields]="options.fields"
+        [filterOptions]="contactsList"
+        [filterTemplate]="filterTemplate"
+        [isDeleteButtonVisible]="isDeleteButtonVisible"
+        (filterChange)="onFilterChangeEvent($event)"
+        (resetFilter)="resetFilter()"
+        (saveFilter)="saveFilter()"
+        (deleteData)="onDelete()">
+      </app-filter>
   </p-toolbar>
-
+  
   <!-- <p-tabView>
     <p-tabPanel header="All"> -->
   <!-- Data Table for Displaying Items -->
 
-  <crud-grid  *ngIf="gridView" [data]="data" [fields]="options.fields"></crud-grid>
+  <crud-grid  *ngIf="gridView" [data]="data" [fields]="options.fields" (selectionChange)="onSelectionChange($event)" (tableHeaders)="onTableHeadersReceived($event)" (openDialog)="openDialogEvent($event)" (requestDelete)="confirmDelete($event)"></crud-grid>
   <crud-board *ngIf="!gridView" [data]="data" [fields]="options.fields"></crud-board>
   <crud-import [data]="data" [fields]="options.fields" (onImport)="onImport($event)"/>
   <!-- </p-tabPanel>
   </p-tabView> -->
 
   <!-- Dialog for Add/Edit -->
-  <p-dialog [(visible)]="isDialogVisible" [modal]="true" header="Product Details" class="p-fluid" [draggable]="false"
-    [closable]="true" [style]="{'width': '50rem'}" (onHide)="resetForm()" [maximizable]="true">
-    <!-- <ng-template pTemplate="header">
-      <div class="custom-dialog-header">
-        <span>{{ isEditing ? 'Edit Item' : 'Add New Item' }}</span>
-        <button type="button" class="p-dialog-header-close" (click)="resetForm()">×</button>
-      </div>
-    </ng-template> -->
+  <p-dialog [(visible)]="isDialogVisible" header="Product Details" class="p-fluid" [draggable]="false"
+        [style]="{'width': '50rem'}" >
     <ng-template pTemplate="content">
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="field" *ngFor="let field of fields">
-          <label for="name">{{ field.label }}</label>
-          <!-- Input field for text-based fields -->
-          <input *ngIf="field.type === 'text'" formControlName="{{ field.field }}" pInputText />
-          <!-- Dropdown for select fields -->
-          <p-dropdown *ngIf="field.type === 'select'" formControlName="{{ field.field }}" [options]="field.options"
-            optionLabel="label" optionValue="value"></p-dropdown>
-          <!-- More field types can be added as needed -->
+          <div>  
+          <label for="{{field.field}}">{{ field.label }}</label>
+          <input *ngIf="field.type === 'number'" type="number" formControlName="{{ field.field }}" pInputText />
+          <input *ngIf="field.type === 'text'" formControlName="{{ field.field }}" pInputText [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"/>
+          <p-dropdown *ngIf="field.type === 'select'" formControlName="{{ field.field }}" [options]="field.options" optionLabel="label" optionValue="value" [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-dropdown>
+          <p-dropdown *ngIf="field.type === 'tag'" formControlName="{{ field.field }}" [options]="field.options" optionLabel="label" optionValue="value" [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-dropdown>
+          <p-calendar *ngIf="field.type === 'date'" formControlName="{{ field.field }}" [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-calendar>
+          <div *ngIf="form.get(field.field).touched && form.get(field.field).invalid">
+            <small *ngIf="form.get(field.field).hasError('required')" class="p-error">{{field.field}} is required.</small>
+            <small *ngIf="form.get(field.field).hasError('minlength')" class="p-error">
+              Minimum length is {{ field.minLength }} characters.
+            </small>
+            <small *ngIf="form.get(field.field).hasError('email')" class="p-error">{{field.field}} is Invalid.</small>
+            <small *ngIf="form.get(field.field).hasError('maxlength')" class="p-error">
+              Maximum length is {{ field.maxLength }} characters.
+            </small>
+            <small *ngIf="form.get(field.field).hasError('pattern')" class="p-error">
+              Invalid format.
+            </small>
+          </div>
+        </div>
+        </div>
+        <div class="col-6 flex gap-2 p-0">
+        <p-button *ngIf="isEditing === false" pRipple label="Save" icon="pi pi-check" type="submit"></p-button>
+        <p-button *ngIf="isEditing === true" pRipple label="Update" icon="pi pi-check" type="submit"></p-button>
+        <p-button pRipple label="Cancel" icon="pi pi-times" [outlined]="true"  (click)="resetForm()"></p-button>
         </div>
       </form>
     </ng-template>
+</p-dialog>
+
+
+  <!-- Confirm delete dialog -->
+  <p-dialog [(visible)]="confirmDeleteDialog" [draggable]="false" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+      <span>{{"Are you sure you want to delete?"}}</span>
+    </div>
     <ng-template pTemplate="footer">
-      <button pButton pRipple label="Cancel" icon="pi pi-times"
-        class="p-element p-ripple p-button-outlined p-button p-component" (click)="resetForm()"></button>
-      <button pButton pRipple label="Save" icon="pi pi-check" class="p-element p-ripple p-button p-component"
-        type="submit"></button>
+      <p-button pRipple icon="pi pi-times" label="No"
+        (click)="confirmDeleteDialog = false"></p-button>
+      <p-button pRipple icon="pi pi-check" label="Yes" (click)="confirmDelete()"></p-button>
     </ng-template>
   </p-dialog>
 
-  <!-- Confirm delete dialog -->
-  <!-- <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-    <div class="flex align-items-center justify-content-center">
-      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-      <span *ngIf="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>
+  <p-dialog header="Save Filter" [(visible)]="showFilterDialog" [modal]="true" [draggable]="false" [style]="{width:'450px'}">
+    <div class="p-fluid">
+      <p-panel>
+       <div class="mb-2">
+         <input  pInputText [(ngModel)]="newFilterName" placeholder="Enter Filter Name" class="w-full"/>
+       </div>
+      </p-panel>
+       <!-- Add New Filter Button -->
+      <div class="flex flex-column mt-2 col-6">
+        <p-button pRipple label="Create Filter" (click)="onCreateCustomFilter()"></p-button>
+      </div>
     </div>
-    <ng-template pTemplate="footer">
-      <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
-        (click)="deleteProductDialog = false"></button>
-      <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
-    </ng-template>
-  </p-dialog> -->
+  </p-dialog>
+  
 </div>

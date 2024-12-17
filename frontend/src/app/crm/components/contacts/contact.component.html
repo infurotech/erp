@@ -1,12 +1,15 @@
 <div class="grid">
     <div class="col-12">
         <app-crud [displayName]="'Contacts'" [data]="contacts" [options]="crudOptions"
-            (onBulkImport)="getBulkImport($event)">
-            <ng-template pFilter="agentFilter">
-                <crm-agent-filter></crm-agent-filter>
-            </ng-template>
-            <ng-template pFilter="statusFilter">
-                <crm-agent-filter></crm-agent-filter>
+             (onAction)="onAction($event)" (onFilterChange)="onFilterChange($event)" (onClear)="onClear()"
+             (onBulkImport)="getBulkImport($event)">
+            <ng-template #filterTemplate  let-onFilterChange="onFilterChange">
+                <p-dropdown styleClass="ml-2"
+                    [(ngModel)]="selectedUser"
+                    [options]="users"
+                    placeholder="Select user name"
+                    (onChange)="onFilterChange('name', 'text', $event.value)">
+                </p-dropdown>
             </ng-template>
         </app-crud>
     </div>

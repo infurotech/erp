@@ -4,7 +4,7 @@
         (activeIndexChange)="onActiveIndexChange($event)" />
     <ng-template pTemplate="content">
         <div *ngIf="activeIndex == 0" class="flex justify-content-center">
-            <p-fileUpload #fileUploader chooseIcon="pi pi-upload" name="file" accept=".xlsx,.xls,.csv" maxFileSize="5000000"
+            <p-fileUpload mode="basic" #fileUploader chooseIcon="pi pi-upload" name="file" accept=".xlsx,.xls,.csv" maxFileSize="5000000"
             (onUpload)="onDocumentUpload($event)" [auto]="true" chooseLabel="Upload" [url]="uploadUrl">
                 <ng-template pTemplate="content">
                     <div (click)="uploadDocument()" class="flex align-items-center justify-content-center flex-column">

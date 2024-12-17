@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
-import { join } from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -22,7 +20,6 @@ import { Vehicle } from './services/vehicle/entities/vehicle.entity';
 import { User } from './services/user/entities/user.entity';
 import { ScheduleModule } from './services/schedule/schedule.module';
 import config from './config/config';
-import { DocumentModule } from './services/document/document.module';
 import { CoreModule } from './core/core.module';
 
 @Module({

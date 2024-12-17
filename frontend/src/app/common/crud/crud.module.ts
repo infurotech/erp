@@ -7,6 +7,7 @@ import { CrudRoutingModule } from './crud-routing.module';
 import { CrudComponent } from './crud.component';
 import { BoardComponent } from './board/board.component';
 import { GridComponent } from './grid/grid.component';
+import { FilterComponent } from './filter/filter.component';
 import { ImportComponent } from './import/import.component';
 
 @NgModule({
@@ -21,6 +22,7 @@ import { ImportComponent } from './import/import.component';
         CrudComponent, 
         BoardComponent,
         GridComponent,
+        FilterComponent,
         ImportComponent
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
