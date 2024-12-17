@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
 import { JobItem } from "./entities/job-item.entity";
-import { CrudService } from "src/core/crud/crud.service";
+import { CrudService } from "../crud/crud.service";
 
 @Injectable()
 export class JobItemService extends CrudService<JobItem> {
