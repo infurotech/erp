@@ -1,4 +1,4 @@
 
 export class AppConsts {
-    static fileUploadUrl = '/api/document/upload';
+    static fileUploadUrl = '/api/storage/upload';
 }
