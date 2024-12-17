@@ -2,7 +2,12 @@
     <div class="col-12">
         <app-crud [displayName]="'Contacts'" [data]="contacts" [options]="crudOptions"
             (onBulkImport)="getBulkImport($event)">
-            <ng-template></ng-template>
+            <ng-template pFilter="agentFilter">
+                <crm-agent-filter></crm-agent-filter>
+            </ng-template>
+            <ng-template pFilter="statusFilter">
+                <crm-agent-filter></crm-agent-filter>
+            </ng-template>
         </app-crud>
     </div>
 </div>

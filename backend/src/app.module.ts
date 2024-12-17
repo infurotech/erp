@@ -23,6 +23,7 @@ import { User } from './services/user/entities/user.entity';
 import { ScheduleModule } from './services/schedule/schedule.module';
 import config from './config/config';
 import { DocumentModule } from './services/document/document.module';
+import { CoreModule } from './core/core.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot(
@@ -43,12 +44,8 @@ import { DocumentModule } from './services/document/document.module';
       ],
       synchronize: config.DB.synchronize
     }
-  ), 
-  ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '..', 'uploads'),
-    serveRoot: '/uploads', // URL prefix for uploaded files
-  }),
-  DocumentModule, CustomerModule, ProductModule, JobModule, JobItemModule, VehicleModule, UserModule, ScheduleModule, AuthModule],
+  ),
+  CoreModule, CustomerModule, ProductModule, JobModule, JobItemModule, VehicleModule, UserModule, ScheduleModule, AuthModule],
   controllers: [AppController],
   providers: [AppService,
     {
