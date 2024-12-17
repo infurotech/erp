@@ -19,6 +19,7 @@ import { Vehicle } from './services/vehicle/entities/vehicle.entity';
 import { User } from './services/user/entities/user.entity';
 import { ScheduleModule } from './services/schedule/schedule.module';
 import config from './config/config';
+import { CoreModule } from './services/core/core.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot(

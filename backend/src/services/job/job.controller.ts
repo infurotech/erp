@@ -1,8 +1,8 @@
-import { Controller } from "@nestjs/common";
-import { Crud, CrudController } from "@nestjsx/crud";
+import { Controller, Get } from '@nestjs/common';
+import { Crud, CrudController } from '@nestjsx/crud';
 
-import { Job } from "./entities/job.entity";
-import { JobService } from "./job.service";
+import { Job } from './entities/job.entity';
+import { JobService } from './job.service';
 
 @Crud({
   model: {
@@ -11,20 +11,30 @@ import { JobService } from "./job.service";
   query: {
     join: {
       vehicle: {
-        eager: true
+        eager: true,
       },
       manager: {
         eager: true,
-        exclude: ['password']
+        exclude: ['password'],
       },
       assignee: {
         eager: true,
-        exclude: ['password']
-      }
-    }
-  }
+        exclude: ['password'],
+      },
+    },
+  },
 })
-@Controller("jobs")
+@Controller('jobs')
 export class JobController implements CrudController<Job> {
-  constructor(public service: JobService) {}
+  constructor(public readonly jobService: JobService) {
+    this.service = jobService; 
+  }
+
+  service: JobService;
+
+  // Custom route
+  @Get('hello') // Custom endpoint
+  getHello(): any {
+    return this.jobService.test();
+  }
 }

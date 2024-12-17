@@ -12,10 +12,9 @@ export const databaseProviders = [
         username: config.DB.username,
         password: config.DB.password,
         database: config.DB.database,
-        entities: [
-            __dirname + '/../services/**/entities/*.entity{.ts,.js}',
-        ],
-        synchronize: config.DB.synchronize,
+        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+
+        synchronize: true
       });
 
       return dataSource.initialize();
