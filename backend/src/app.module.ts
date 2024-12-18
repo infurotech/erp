@@ -2,14 +2,13 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
 
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { APP_GUARD } from '@nestjs/core';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { CustomerModule } from './services/customer/customer.module';
 import { Customer } from './services/customer/entities/customer.entity';
-import { ProductModule } from './services/product/product.module';
-import { JobModule } from './services/job/job.module';
-import { JobItemModule } from './services/job-item/job-item.module';
 import { VehicleModule } from './services/vehicle/vehicle.module';
 import { UserModule } from './services/user/user.module';
 import { RolesGuard } from './auth/role.guard';
@@ -21,6 +20,10 @@ import { User } from './services/user/entities/user.entity';
 import { ScheduleModule } from './services/schedule/schedule.module';
 import config from './config/config';
 import { CoreModule } from './core/core.module';
+import { CustomerModule } from './services/customer/customer.module';
+import { ProductModule } from './services/product/product.module';
+import { JobModule } from './services/job/job.module';
+import { JobItemModule } from './services/job-item/job-item.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot(

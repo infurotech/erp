@@ -26,15 +26,5 @@ import { JobService } from './job.service';
 })
 @Controller('jobs')
 export class JobController implements CrudController<Job> {
-  constructor(public readonly jobService: JobService) {
-    this.service = jobService; 
-  }
-
-  service: JobService;
-
-  // Custom route
-  @Get('hello') // Custom endpoint
-  getHello(): any {
-    return this.jobService.test();
-  }
+  constructor(public service: JobService) {}
 }
