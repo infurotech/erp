@@ -1,0 +1,51 @@
+<div class="flex flex-wrap gap-3 ">
+    <div *ngFor="let field of filteredFields;index as i">
+        <ng-container *ngIf="field.type === 'text'">
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i> 
+                <input pInputText
+                    type="text"
+                    [(ngModel)]="searchKeyword"
+                    placeholder="Search Keyword"
+                    (input)="onSearch()"
+                    class="w-full"/>
+            </span>
+        </ng-container>
+
+        <ng-container *ngIf="field.type === 'tag'">
+            <p-dropdown
+                [options]="field.options"
+                (onChange)="onFilterChange(field)"
+                [(ngModel)]="tagFilterValues[field.field]"
+                placeholder="Select {{ field.field }}"
+                [multiple]="true">
+            </p-dropdown>
+        </ng-container>
+
+        <ng-container *ngIf="field.type === 'custom'">
+            <p-autoComplete
+                styleClass="ml-2"
+                [(ngModel)]="customFilterValue"
+                [suggestions]="filteredItems"
+                (completeMethod)="filterItems($event)"
+                (onSelect)="onAutoCompleteItemSelect($event,field)"
+                optionLabel="label"
+                [dropdown]="true">
+            </p-autoComplete>
+        </ng-container>
+
+        <ng-container *ngIf="filterType === 'date'">
+        <p-calendar *ngIf="field.type === 'date'" [(ngModel)]="filters[field.field]" placeholder="Select Date" (onSelect)="onFilter()"></p-calendar>
+        </ng-container>
+    </div>
+    <ng-container *ngIf="filterTemplate">
+        <ng-container *ngTemplateOutlet="filterTemplate; context : {onFilterChange: onCustomFilterChange?.bind(this)}"></ng-container>
+    </ng-container>
+    <div *ngIf="moreFilters?.length > 0">
+        <p-multiSelect [options]="moreFilters" [(ngModel)]="selectedFilters" (onChange)="selectFilter($event)" (onSelectAllChange)="onMultiSelectAllChange($event)" optionLabel="label" placeholder="More Filters">
+        </p-multiSelect>
+    </div>
+    <button pButton class="p-button-outlined mb-2" label="Save"  icon="pi pi-save" (click)="saveFilterEvent()"></button>
+    <button pButton class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="resetAllFilters()"></button>
+    <button *ngIf="isDeleteButtonVisible" pButton pRipple icon="pi pi-check" class="p-button-outlined mb-2" label="Delete" (click)="onDeleteEvent()"></button>
+</div>
