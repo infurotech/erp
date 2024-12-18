@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
-
+import { databaseProviders } from './database/database.providers';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
@@ -19,13 +19,13 @@ import { Customer } from './modules/crm/customer/entities/customer.entity';
   imports: [TypeOrmModule.forRoot(
     {
       type: config.DB.type,
-      host: config.DB.host,
-      port: config.DB.port,
-      username: config.DB.username,
-      password: config.DB.password,
-      database: config.DB.database,
-      entities: [User,Customer, __dirname + './**/*.entity{.ts,.js}'],
-      synchronize: config.DB.synchronize
+      host: "localhost",
+      port: 5432,
+      username: "postgres",
+      password: "root",
+      database: "erp_db",
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true
     }
   ),
   AuthModule, CoreModule, AdminModule, CrmModule, SalesModule, InventoryModule ],
@@ -34,6 +34,7 @@ import { Customer } from './modules/crm/customer/entities/customer.entity';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
+      ...databaseProviders
     },],
 })
 export class AppModule { }

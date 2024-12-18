@@ -8,8 +8,8 @@ export class Customer extends BaseEntity{
   @Column() 
   firstName: string;
   @Column() 
-  middleName: string;
-  @Column() 
+  // middleName: string;
+  // @Column() 
   lastName: string;
   @Column() 
   phone: string;
