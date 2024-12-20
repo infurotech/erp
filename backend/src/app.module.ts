@@ -19,11 +19,11 @@ import { Customer } from './modules/crm/customer/entities/customer.entity';
   imports: [TypeOrmModule.forRoot(
     {
       type: config.DB.type,
-      host: "localhost",
-      port: 5432,
-      username: "postgres",
-      password: "root",
-      database: "erp_db",
+      host: config.DB.host,
+      port: config.DB.port,
+      username: config.DB.username,
+      password: config.DB.password,
+      database: config.DB.database,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true
     }
