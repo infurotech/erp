@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
-import { databaseProviders } from './database/database.providers';
+import { databaseProviders } from './databaseass/database.providers';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
@@ -28,7 +28,7 @@ import { Customer } from './modules/crm/customer/entities/customer.entity';
       synchronize: true
     }
   ),
-  AuthModule, CoreModule, AdminModule, CrmModule, SalesModule, InventoryModule ],
+  AuthModule, CoreModule, AdminModule, CrmModule, SalesModule, InventoryModule],
   controllers: [AppController],
   providers: [AppService,
     {

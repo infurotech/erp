@@ -2,7 +2,7 @@ import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TenantManager } from './tenant.manager';
 import { TenantTypeOrmProvider } from './tenant.typeorm';
 import { TenantMiddleware } from './tenant.middleware';
-import { CachingModule } from '../caching/caching.module'; // Import your caching module
+import { CachingModule } from '../caching/caching.module';
 
 @Module({
   imports: [CachingModule], // Ensure caching functionality is available
