@@ -1,23 +1,19 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
 
 @Entity()
-export class User extends BaseEntity{
+export class App extends BaseEntity{
   @PrimaryGeneratedColumn() 
   id: number;
   @Column() 
-  firstName: string;
+  name: string;
   @Column() 
-  middleName: string;
+  clientId: string;
   @Column() 
-  lastName: string;
+  clientSecret: string;
   @Column() 
-  phone: string;
-  @Column() 
-  email: string;
-  @Column() 
-  password: string;
-  @Column() 
-  profileUrl: string;
+  tenantId: string;
+  @Column()
+  failedAttempts: string;
   @Column() 
   locked: boolean;
 }

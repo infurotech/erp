@@ -5,21 +5,24 @@ import { redisStore } from 'cache-manager-redis-yet';
 
 @Module({
   imports: [
-    CacheModule.registerAsync({
-      useFactory: async () => {
-        const store = await redisStore({
-          socket: {
-            host: 'localhost',
-            port: 6379,
-          },
-        });
+    /// In memory cache
+    CacheModule.register() 
+    /// Redis cache
+    // CacheModule.registerAsync({
+    //   useFactory: async () => {
+    //     const store = await redisStore({
+    //       socket: {
+    //         host: 'localhost',
+    //         port: 6379,
+    //       },
+    //     });
 
-        return {
-          store: store as CacheStore,
-          ttl: 3 * 60000, // 3 minutes (milliseconds)
-        };
-      },
-    }),
+    //     return {
+    //       store: store as CacheStore,
+    //       ttl: 3 * 60000, // 3 minutes (milliseconds)
+    //     };
+    //   },
+    // }),
   ],
   providers: [CachingManager],
   exports: [CachingManager,CacheModule],

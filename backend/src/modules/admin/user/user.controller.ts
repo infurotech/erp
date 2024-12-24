@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { Crud, CrudController, CrudRequest, Override, ParsedBody, ParsedRequest } from "@nestjsx/crud";
 
-import { User } from "../../auth/entities/user.entity";
+import { User } from "../../core/entities/user.host.entity";
 import { UserService } from "./user.service";
 
 @Crud({

@@ -6,7 +6,7 @@ import { jwtConstants } from './const';
 import { LocalStrategy } from './local.staregy';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import { User } from '../entities/user.host.entity';
 
 @Module({
   imports: [
