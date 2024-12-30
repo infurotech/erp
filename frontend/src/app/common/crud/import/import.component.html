@@ -4,7 +4,7 @@
         (activeIndexChange)="onActiveIndexChange($event)" />
     <ng-template pTemplate="content">
         <div *ngIf="activeIndex == 0" class="flex justify-content-center">
-            <p-fileUpload mode="basic" #fileUploader chooseIcon="pi pi-upload" name="file" accept=".xlsx,.xls,.csv" maxFileSize="5000000"
+            <p-fileUpload #fileUploader chooseIcon="pi pi-upload" name="file" accept=".xlsx,.xls,.csv" maxFileSize="5000000"
             (onUpload)="onDocumentUpload($event)" [auto]="true" chooseLabel="Upload" [url]="uploadUrl">
                 <ng-template pTemplate="content">
                     <div (click)="uploadDocument()" class="flex align-items-center justify-content-center flex-column">
@@ -33,36 +33,34 @@
                 </div>
             </form>
         </div>
-        <form [formGroup]="gridForm">
-            <p-table *ngIf="activeIndex == 2" [value]="mappedTableData" [rowHover]="true" [scrollable]="true"
-                styleClass="table-compact">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="min-width:150px" *ngFor="let field of fields" [pSortableColumn]="field.name">
-                            <div class="flex justify-content-between align-items-center">
-                                {{ field.label }}
-                            </div>
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-item let-i="rowIndex">
-                    <tr formArrayName="gridRows">
-                        <td *ngFor="let field of fields" [formGroupName]="i"
-                            [ngClass]="{'border-1 border-solid border-red-500': ((!getRowData(field,i) || getRowData(field,i) == '') && field.required)}"
-                            [pEditableColumn]="field.field" pEditableColumnField="field.label">
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="{{field.type}}" [formControlName]="field.field" />
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{ getRowData(field,i) }}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </form>
+        <p-table *ngIf="activeIndex == 2" [value]="mappedTableData" [rowHover]="true" [scrollable]="true"
+            styleClass="table-compact">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="min-width:150px" *ngFor="let field of fields" [pSortableColumn]="field.name">
+                        <div class="flex justify-content-between align-items-center">
+                            {{ field.label }}
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item let-i="rowIndex">
+                <tr>
+                    <td *ngFor="let field of fields"
+                        [ngClass]="{'border-1 border-solid border-red-500': (!item[field.field] && field.required)}"
+                        [pEditableColumn]="field.field" pEditableColumnField="field.label">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText [type]="field.type" [(ngModel)]="item[field.field]" (input)="updateTableData(i,field.field)"/>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ item[field.field] }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
     </ng-template>
     <ng-template pTemplate="footer">
         <div class="flex justify-content-end mt-4">
