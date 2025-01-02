@@ -12,8 +12,10 @@ import { AdminModule } from './modules/admin/admin.module';
 import { CrmModule } from './modules/crm/crm.module';
 import { SalesModule } from './modules/sales/sales.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
-import { User } from './modules/auth/entities/user.entity';
-import { Customer } from './modules/crm/customer/entities/customer.entity';
+import { BullModule } from '@nestjs/bullmq';
+import { CloudAPIModule } from './modules/plugins/nestjs-whatsapp-cloudapi/whatsapp-cloudapi.module';
+import { TwilioModule } from './modules/plugins/nestjs-whatsapp-twilio/whatsapp-twilio.module';
+import { NotificationModule } from './modules/marketing/notification/notification.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot(
@@ -26,15 +28,29 @@ import { Customer } from './modules/crm/customer/entities/customer.entity';
       database: "erp_db",
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true
-    }
-  ),
-  AuthModule, CoreModule, AdminModule, CrmModule, SalesModule, InventoryModule ],
+    }),
+    BullModule.forRoot({
+      connection: {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT as unknown as number,
+      },
+    }),
+    AuthModule,
+    CoreModule,
+    AdminModule,
+    CrmModule,
+    SalesModule,
+    InventoryModule,
+    NotificationModule
+  ],
   controllers: [AppController],
-  providers: [AppService,
+  providers: [
+    AppService,
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
-      ...databaseProviders
-    },],
+      ...databaseProviders,
+    },
+  ],
 })
-export class AppModule { }
+export class AppModule {}
