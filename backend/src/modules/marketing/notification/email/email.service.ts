@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { NotificationInfo, NotificationPriority } from '../notifications'
 import * as nodemailer from 'nodemailer';
 import { EjsRendererService } from './render-templates';
 @Injectable()

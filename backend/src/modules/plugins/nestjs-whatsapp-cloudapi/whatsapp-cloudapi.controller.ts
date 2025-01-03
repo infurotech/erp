@@ -33,46 +33,4 @@ export class CloudAPIController {
       return challenge?.toString();
     }
   }
-  /*
-  Purely for responding to user
-  @Post('webhook')
-  @HttpCode(200)
-  async sendProactiveMessage(
-    @Body() request:any,
-  ): Promise<void> {
-    const { messages } = request;
-    if (!messages) return;
-    let response;
-    messages.forEach(async(message)=>{
-      const messageSender = message.from;
-      // const messageID = message.id;
-      switch (message.type) {
-        case 'text':
-          const text = message.text.body;
-          response = await this.whatsappService.sendWhatsAppMessage(
-            messageSender,
-            text,
-          );
-          break;
-        case 'image':
-            const image = message.image.url;
-            const caption = message.image.caption;
-            response = await this.whatsappService.sendImageByUrl(
-              messageSender,
-              image,
-              caption
-            );
-          break;
-        
-        case 'template' :
-          const template = message.template;
-           response = await this.whatsappService.sendMessageByTemplate(
-            messageSender,
-            template
-           )
-      }
-    })
-    return response;
-  }
-  */
 }

@@ -15,7 +15,8 @@ const {
   WHATSAPP_CLOUD_API_WEBHOOK_VERIFICATION_TOKEN: VERIFICATION_TOKEN
 } = process.env;
 @Module({
-  providers: [QueueProducer,QueueConsumer, EmailService, EjsRendererService],
+  providers: [QueueConsumer, EmailService, EjsRendererService],
+  controllers : [QueueProducer],
   imports: [
     BullModule.registerQueue({
       name: 'notificationQueue'

@@ -19,8 +19,7 @@ import { NotificationModule } from './modules/marketing/notification/notificatio
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(
-    {
+    TypeOrmModule.forRoot({
       type: config.DB.type,
       host: config.DB.host,
       port: config.DB.port,
@@ -28,9 +27,8 @@ import { NotificationModule } from './modules/marketing/notification/notificatio
       password: config.DB.password,
       database: config.DB.database,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true
-    }
-  ),
+      synchronize: true,
+    }),
     BullModule.forRoot({
       connection: {
         host: process.env.REDIS_HOST,
@@ -43,17 +41,14 @@ import { NotificationModule } from './modules/marketing/notification/notificatio
     CrmModule,
     SalesModule,
     InventoryModule,
-    NotificationModule
+    NotificationModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
+  providers: [AppService,
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
       ...databaseProviders
     },],
-      ...databaseProviders,
-    }
-)
+})
 export class AppModule {}

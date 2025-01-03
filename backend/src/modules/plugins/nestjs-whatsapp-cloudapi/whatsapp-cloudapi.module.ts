@@ -1,12 +1,3 @@
-// import { Module } from '@nestjs/common';
-// import { CloudAPIController } from './whatsapp-cloudapi.controller';
-// import { CloudAPIService } from './whatsapp-cloudapi.service'
-// @Module({
-//     controllers : [CloudAPIController],
-//     providers : [CloudAPIService]
-// })
-// export class CloudAPIModule {}
-// plugin.module.ts
 import { Module, DynamicModule, Provider } from '@nestjs/common';
 import { CloudAPIService } from './whatsapp-cloudapi.service';
 import { CloudAPIController } from './whatsapp-cloudapi.controller';
