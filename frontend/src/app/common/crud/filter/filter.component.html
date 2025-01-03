@@ -14,7 +14,7 @@
 
         <ng-container *ngIf="field.type === 'tag'">
             <p-dropdown
-                [options]="field.options"
+                [options]="fieldOptions[field.field]"
                 (onChange)="onFilterChange(field)"
                 [(ngModel)]="tagFilterValues[field.field]"
                 placeholder="Select {{ field.field }}"
@@ -27,7 +27,7 @@
                 styleClass="ml-2"
                 [(ngModel)]="customFilterValue"
                 [suggestions]="filteredItems"
-                (completeMethod)="filterItems($event)"
+                (completeMethod)="filterItems($event,field.field)"
                 (onSelect)="onAutoCompleteItemSelect($event,field)"
                 optionLabel="label"
                 [dropdown]="true">

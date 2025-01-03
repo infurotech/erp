@@ -4,19 +4,22 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, OneToMan
 @Entity()
 export class Customer extends BaseEntity{
   @PrimaryGeneratedColumn() 
-  id: number;
-  @Column() 
+  index: number;
+
+  @Column()
+  id:number;
+
+  @Column()
   firstName: string;
-  @Column() 
-  // middleName: string;
-  // @Column() 
+
+  @Column()
   lastName: string;
+
   @Column() 
   phone: string;
+
   @Column() 
   email: string;
-  @Column() 
-  uniqueId: string;
 
   @OneToMany(() => Vehicle, (vehicle) => vehicle.customer)
   vehicles: Vehicle[]

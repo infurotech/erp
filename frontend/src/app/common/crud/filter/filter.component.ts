@@ -10,7 +10,7 @@ import { MultiSelectSelectAllChangeEvent } from 'primeng/multiselect';
 })
 export class FilterComponent implements OnInit {
   @Input() fields: CrudField[];
-  @Input() filterOptions : any;
+  @Input() fieldOptions : any;
   @Input() isDeleteButtonVisible : boolean = false;
   @Output() filterChange  = new EventEmitter<any>();
   @Output() resetFilter = new EventEmitter<any>();
@@ -46,12 +46,12 @@ export class FilterComponent implements OnInit {
     this.filterChange.emit({ field: 'custom' , header: header.field, value: this.customFilterValue.label});
   }
 
-  filterItems(event: AutoCompleteCompleteEvent) {
-    
+  filterItems(event: AutoCompleteCompleteEvent, field:string) {
+    let filterOptions = this.fieldOptions[field];
     let filtered: any[] = [];
     let query = event.query;
-    for (let i = 0; i < this.filterOptions.length; i++) {
-        let item = this.filterOptions[i];
+    for (let i = 0; i < filterOptions?.length; i++) {
+        let item = filterOptions[i];
         if (item.toLowerCase().indexOf(query.toLowerCase()) == 0) {
             filtered.push({'label' : item});
         }

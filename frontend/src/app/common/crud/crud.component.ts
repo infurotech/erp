@@ -17,10 +17,13 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   @Input() displayName: string;
   @Input() options: CrudOptions;  // Field definitions
   @Input() data: T[] = [];           // List of items
+  @Input() fieldOptions = {};
   @Input() filteredFields: Array<CrudField> = [];  // Field definitions
   @Output() onAction = new EventEmitter<any[]>();
   @Output() onFilterChange = new EventEmitter<any[]>();
   @Output() onClear = new EventEmitter<any[]>();
+  @Output() onDataUpdated = new EventEmitter<any>();
+
   @ContentChild('filterTemplate', { static: false }) filterTemplate!: TemplateRef<any>;
 
   selectedRows: any[] = [];
@@ -39,7 +42,6 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   searchKeyword: string = '';
   filters: Record<string, any> = {};
   confirmDeleteDialog: boolean = false;
-  contactsList: string[] = [];
   showMoreFilters: boolean;
   initialFilteredFields: CrudField[];
   // for add new fiter
@@ -85,11 +87,6 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
         }
       }
     ]
-
-    // As of now we don't have any api so getting contacts data via loop. 
-    this.data.forEach(item => {
-       this.contactsList.push(item['phone'])
-    })
   }
   
  // Initialize the form based on fields configuration
@@ -162,6 +159,7 @@ initializeForm(): void {
   addItem(): void {
     const newItem = this.form.value;
     this.data.push(newItem);
+    this.onDataUpdated.emit({item: newItem , action: 'create' , index: null});
     this.isDialogVisible = false;
   }
 
@@ -172,6 +170,7 @@ initializeForm(): void {
     if (index !== -1) {
       this.data[index] = updatedItem;
     }
+    this.onDataUpdated.emit({item: updatedItem , action: 'update' , index: this.editingItem['index']});
     this.isDialogVisible = false;
   }
 
@@ -329,8 +328,7 @@ initializeForm(): void {
   }
   
   onImport(event: any) {
-    this.data = this.data.concat(event);
-    this.onBulkImport.emit({type: 'Edit' , data: this.data});
+    this.onBulkImport.emit({type: 'Edit' , data: event});
   }
 
 }

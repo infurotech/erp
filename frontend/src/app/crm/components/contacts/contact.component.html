@@ -1,14 +1,14 @@
 <div class="grid">
     <div class="col-12">
-        <app-crud [displayName]="'Contacts'" [data]="contacts" [options]="crudOptions"
-             (onAction)="onAction($event)" (onFilterChange)="onFilterChange($event)" (onClear)="onClear()"
-             (onBulkImport)="getBulkImport($event)">
+        <app-crud *ngIf="contacts.length" [displayName]="'Contacts'" [data]="contacts" [options]="crudOptions"
+             [fieldOptions]="fieldOptions" (onAction)="onAction($event)" (onFilterChange)="onFilterChange($event)" (onClear)="onClear()"
+             (onDataUpdated)="onDataUpdated($event)" (onBulkImport)="getBulkImport($event)">
             <ng-template #filterTemplate  let-onFilterChange="onFilterChange">
                 <p-dropdown styleClass="ml-2"
                     [(ngModel)]="selectedUser"
-                    [options]="users"
+                    [options]="fieldOptions['firstName']"
                     placeholder="Select user name"
-                    (onChange)="onFilterChange('name', 'text', $event.value)">
+                    (onChange)="onFilterChange('firstName', 'text', $event.value)">
                 </p-dropdown>
             </ng-template>
         </app-crud>
