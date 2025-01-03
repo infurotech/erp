@@ -250,7 +250,6 @@ export class ImportComponent implements OnInit {
       });
 
       if(!isValid && this.mappedTableData.length > 0) {
-         this.messageService.add({ severity:'success', detail: 'Data Imported' });
          this.onImport.emit(this.mappedTableData);
       } else {
         this.messageService.add({ severity:'error', detail: 'Invalid Data' });

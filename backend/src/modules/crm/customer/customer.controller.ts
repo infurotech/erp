@@ -4,7 +4,7 @@ import { Crud, CrudController } from "@nestjsx/crud";
 import { Customer } from "./entities/customer.entity";
 import { CustomerService } from "./customer.service";
 import { DataSource } from "typeorm";
-import { CreateCustomerBulkDto } from "./dto/create-customer.dto";
+import { CreateCustomerBulkDto } from "./dto/create-customer-bulk.dto";
 
 @Crud({
   model: {

@@ -1,5 +1,4 @@
-import { IsNotEmpty,IsArray,ValidateNested} from "class-validator";
-import { Type } from 'class-transformer';
+import { IsNotEmpty} from "class-validator";
 export class CreateCustomerDto {
     @IsNotEmpty()
     id:number;
@@ -17,10 +16,4 @@ export class CreateCustomerDto {
     email: string;
 }
 
-export class CreateCustomerBulkDto {
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => CreateCustomerDto)
-    bulk: CreateCustomerDto[];
-  } 
 

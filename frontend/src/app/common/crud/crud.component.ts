@@ -19,10 +19,8 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   @Input() data: T[] = [];           // List of items
   @Input() fieldOptions = {};
   @Input() filteredFields: Array<CrudField> = [];  // Field definitions
-  @Output() onAction = new EventEmitter<any[]>();
-  @Output() onFilterChange = new EventEmitter<any[]>();
-  @Output() onClear = new EventEmitter<any[]>();
-  @Output() onDataUpdated = new EventEmitter<any>();
+  @Output() onAction = new EventEmitter<any>();
+  @Output() onFilterChange = new EventEmitter<any>();
 
   @ContentChild('filterTemplate', { static: false }) filterTemplate!: TemplateRef<any>;
 
@@ -50,7 +48,6 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   newFilterName: string = '';
   customFilters: any[] = []; 
   filteredData: any[] = [];
-  // tabMenuItems: any[] = [];
   tabMenuItems: MenuItem[] = [];  
   activeItem: any = null;
 
@@ -69,8 +66,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
 
  
   ngOnInit(): void {
-    this.filteredFields = this.options.fields.filter(field => !field.key && field.filter === true).slice(0, 2);  
-    // this.moreFilters = this.options.fields.filter(field => !field.key && field.filter === true).slice(2); 
+    this.filteredFields = this.options.fields.filter(field => !field.key && field.filter === true).slice(0, 2);
     this.initializeForm();
     this.initialFilteredFields = [...this.filteredFields];
     this.initialData = [...this.data]
@@ -152,25 +148,17 @@ initializeForm(): void {
     } else {
       this.addItem();
     }
-    this.onAction.emit(this.form.value);
   }
 
   // Add new item to the list
   addItem(): void {
-    const newItem = this.form.value;
-    this.data.push(newItem);
-    this.onDataUpdated.emit({item: newItem , action: 'create' , index: null});
+    this.onAction.emit({item: this.form.value , action: 'create'});
     this.isDialogVisible = false;
   }
 
   // Update an existing item
   updateItem(): void {
-    const updatedItem = this.form.value;
-    const index = this.data.findIndex(item => item === this.editingItem);
-    if (index !== -1) {
-      this.data[index] = updatedItem;
-    }
-    this.onDataUpdated.emit({item: updatedItem , action: 'update' , index: this.editingItem['index']});
+    this.onAction.emit({item: this.form.value , action: 'update' , updatedItem: this.editingItem});
     this.isDialogVisible = false;
   }
 
@@ -209,8 +197,7 @@ initializeForm(): void {
 
   confirmDelete(event) {
     if (this.selectedRows.length > 0) {
-      this.onAction.emit(this.selectedRows);
-      this.data = this.data.filter(item => !this.selectedRows.some(selected => selected === item));
+      this.onAction.emit({item: this.selectedRows , action: 'delete'});
       this.selectedRows = [];
       this.isDeleteButtonVisible = false;
       this.confirmDeleteDialog = false;
@@ -221,8 +208,7 @@ initializeForm(): void {
       } else {
         this.selectedRows = [event];
       }
-      this.onAction.emit(this.selectedRows);
-      this.data = this.data.filter(item => !this.selectedRows.some(selected => selected === item));
+      this.onAction.emit({item: this.selectedRows , action: 'delete'});
       this.selectedRows = [];
       this.isDeleteButtonVisible = false;
       this.confirmDeleteDialog = false;
@@ -255,7 +241,7 @@ initializeForm(): void {
     // Store the filtered data to use later
     this.data = filteredData;
     this.filteredData = filteredData;
-    this.onFilterChange.emit(filteredData);
+    this.onFilterChange.emit({data : filteredData,isClear: false});
   }
   
   resetFilter() {
@@ -269,7 +255,7 @@ initializeForm(): void {
       status: '',
       search: ''
     };
-    this.onClear.emit();
+    this.onFilterChange.emit({data : null,isClear: true});
     this.onFilter();
     this.initialFilteredFields = [...this.filteredFields];    
     this.filteredData = previousFilteredData;
