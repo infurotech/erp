@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Diwali</title>
+  <link rel="stylesheet" href="/styles/diwali.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <h1><%= title %></h1>
+      <p><%= subtitle %></p>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="intro">
+      <div class="container">
+        <p><%= message %></p>
+        <img src="<%= mainImage %>" alt="Diwali Celebration" class="diwali-image">
+      </div>
+    </section>
+
+    <section class="highlights">
+      <div class="container">
+        <h2>Diwali Highlights</h2>
+        <ul>
+          <% highlights.forEach(function(highlight) { %>
+            <li><%= highlight %></li>
+          <% }); %>
+        </ul>
+      </div>
+    </section>
+
+    <section class="events">
+      <div class="container">
+        <h2>Upcoming Events</h2>
+        <ul>
+          <% events.forEach(function(event) { %>
+            <li>
+              <strong><%= event.name %></strong>: <%= event.date %> - <%= event.description %>
+            </li>
+          <% }); %>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; <%= new Date().getFullYear() %> Happy Diwali! All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
