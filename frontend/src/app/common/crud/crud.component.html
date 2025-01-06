@@ -44,8 +44,8 @@
   <p-toolbar>
       <app-filter
         [fields]="options.fields"
-        [filterOptions]="contactsList"
-        [filterTemplate]="filterTemplate"
+        [fieldOptions]="fieldOptions"
+        [filterTemplates]="filterTemplates"
         [isDeleteButtonVisible]="isDeleteButtonVisible"
         (filterChange)="onFilterChangeEvent($event)"
         (resetFilter)="resetFilter()"
@@ -65,17 +65,16 @@
   </p-tabView> -->
 
   <!-- Dialog for Add/Edit -->
-  <p-dialog [(visible)]="isDialogVisible" header="Product Details" class="p-fluid" [draggable]="false"
-        [style]="{'width': '50rem'}" >
+  <p-dialog styleClass="w-30rem" [(visible)]="isDialogVisible" header="Product Details" class="p-fluid" [modal]="true" [draggable]="false" [maximizable]="true">
     <ng-template pTemplate="content">
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="field" *ngFor="let field of fields">
           <div>  
           <label for="{{field.field}}">{{ field.label }}</label>
           <input *ngIf="field.type === 'number'" type="number" formControlName="{{ field.field }}" pInputText />
-          <input *ngIf="field.type === 'text'" formControlName="{{ field.field }}" pInputText [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"/>
+          <input *ngIf="field.type === 'text' || field.type === 'custom'" formControlName="{{ field.field }}" pInputText [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"/>
           <p-dropdown *ngIf="field.type === 'select'" formControlName="{{ field.field }}" [options]="field.options" optionLabel="label" optionValue="value" [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-dropdown>
-          <p-dropdown *ngIf="field.type === 'tag'" formControlName="{{ field.field }}" [options]="field.options" optionLabel="label" optionValue="value" [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-dropdown>
+          <p-dropdown *ngIf="field.type === 'tag'" formControlName="{{ field.field }}" [options]="fieldOptions[field.field]" [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-dropdown>
           <p-calendar *ngIf="field.type === 'date'" formControlName="{{ field.field }}" [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-calendar>
           <div *ngIf="form.get(field.field).touched && form.get(field.field).invalid">
             <small *ngIf="form.get(field.field).hasError('required')" class="p-error">{{field.field}} is required.</small>
@@ -92,7 +91,7 @@
           </div>
         </div>
         </div>
-        <div class="col-6 flex gap-2 p-0">
+        <div class="flex gap-2 p-0">
         <p-button *ngIf="isEditing === false" pRipple label="Save" icon="pi pi-check" type="submit"></p-button>
         <p-button *ngIf="isEditing === true" pRipple label="Update" icon="pi pi-check" type="submit"></p-button>
         <p-button pRipple label="Cancel" icon="pi pi-times" [outlined]="true"  (click)="resetForm()"></p-button>
@@ -103,9 +102,9 @@
 
 
   <!-- Confirm delete dialog -->
-  <p-dialog [(visible)]="confirmDeleteDialog" [draggable]="false" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+  <p-dialog [(visible)]="confirmDeleteDialog" [draggable]="false" header="Confirm" [modal]="true" styleClass="w-30rem">
     <div class="flex align-items-center justify-content-center">
-      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+      <i class="pi pi-exclamation-triangle mr-3 text-4xl"></i>
       <span>{{"Are you sure you want to delete?"}}</span>
     </div>
     <ng-template pTemplate="footer">
@@ -115,7 +114,7 @@
     </ng-template>
   </p-dialog>
 
-  <p-dialog header="Save Filter" [(visible)]="showFilterDialog" [modal]="true" [draggable]="false" [style]="{width:'450px'}">
+  <p-dialog header="Save Filter" [(visible)]="showFilterDialog" [modal]="true" [draggable]="false" styleClass="w-30rem">
     <div class="p-fluid">
       <p-panel>
        <div class="mb-2">

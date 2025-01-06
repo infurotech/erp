@@ -14,7 +14,7 @@
 
         <ng-container *ngIf="field.type === 'tag'">
             <p-dropdown
-                [options]="field.options"
+                [options]="fieldOptions[field.field]"
                 (onChange)="onFilterChange(field)"
                 [(ngModel)]="tagFilterValues[field.field]"
                 placeholder="Select {{ field.field }}"
@@ -27,7 +27,7 @@
                 styleClass="ml-2"
                 [(ngModel)]="customFilterValue"
                 [suggestions]="filteredItems"
-                (completeMethod)="filterItems($event)"
+                (completeMethod)="filterItems($event,field.field)"
                 (onSelect)="onAutoCompleteItemSelect($event,field)"
                 optionLabel="label"
                 [dropdown]="true">
@@ -38,8 +38,8 @@
         <p-calendar *ngIf="field.type === 'date'" [(ngModel)]="filters[field.field]" placeholder="Select Date" (onSelect)="onFilter()"></p-calendar>
         </ng-container>
     </div>
-    <ng-container *ngIf="filterTemplate">
-        <ng-container *ngTemplateOutlet="filterTemplate; context : {onFilterChange: onCustomFilterChange?.bind(this)}"></ng-container>
+    <ng-container *ngFor="let filter of filterTemplates">
+        <ng-container *ngTemplateOutlet="filter; context : {onFilterChange: onCustomFilterChange?.bind(this)}"></ng-container>
     </ng-container>
     <div *ngIf="moreFilters?.length > 0">
         <p-multiSelect [options]="moreFilters" [(ngModel)]="selectedFilters" (onChange)="selectFilter($event)" (onSelectAllChange)="onMultiSelectAllChange($event)" optionLabel="label" placeholder="More Filters">
