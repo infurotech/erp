@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, TemplateRef } from '@angular/core';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { CrudField } from '../crud-field';
 import { MultiSelectSelectAllChangeEvent } from 'primeng/multiselect';
@@ -17,7 +17,7 @@ export class FilterComponent implements OnInit {
   @Output() saveFilter = new EventEmitter<any>();
   @Output() deleteData = new EventEmitter<any>();
 
-  @Input() filterTemplate: TemplateRef<any>;
+  @Input() filterTemplates!: QueryList<TemplateRef<any>>;
 
   tagFilterValues: { [key: string]: any[] } = {};
   customFilterValue: any;

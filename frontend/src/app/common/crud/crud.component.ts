@@ -1,4 +1,4 @@
-import { Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CrudField } from './crud-field';
 import { MenuItem } from 'primeng/api';
@@ -22,7 +22,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   @Output() onAction = new EventEmitter<any>();
   @Output() onFilterChange = new EventEmitter<any>();
 
-  @ContentChild('filterTemplate', { static: false }) filterTemplate!: TemplateRef<any>;
+  @ContentChildren('filterTemplate') filterTemplates!: QueryList<TemplateRef<any>>;
 
   selectedRows: any[] = [];
   initialData: T[] = [];  
