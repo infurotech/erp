@@ -1,40 +1,38 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CrudOptions } from 'src/app/common/crud/crud-options';
 import { CustomerService } from '../../services/customer.service';
 import { ComponentsProvider } from 'src/app/shared/component';
+
 @Component({
-  selector: 'crm-contact',
-  templateUrl: './contact.component.html',
-  styleUrl: './contact.component.less'
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrl: './user.component.less'
 })
-export class ContactComponent implements OnInit{
-  fieldOptions = {};
+export class UserComponent implements OnInit{
   crudOptions:  CrudOptions = {
     boardView: false,
     gridEditing: false,
     fields:[
       { field: 'id', label: 'ID', type: 'number', required: true, key: true },
       { field: 'firstName', label: 'First Name', type: 'text', filter:true,required: true },
+      { field: 'middleName', label: 'Middle Name', type: 'text',required: true},
       { field: 'lastName', label: 'Last Name', type: 'text',required: true },
-      { field: 'email', label: 'Email', type: 'tag', filter:true,required: true,
-     },
-      { field: 'phone', label: 'Phone', type: 'custom', filter: true, required: true },
+      { field: 'email', label: 'Email', type: 'tag', filter: true, required: true },
     ]
   }
-  selectedUser:string = '';
-  @Output() contactsChange = new EventEmitter<any[]>();
-  contacts:any = [];
-  adminList = [];
+  users:any = [];
+  fieldOptions = {};
 
-  constructor(private customerService: CustomerService,private component: ComponentsProvider
-  ) {
-      this.customerService.setEndPoint('/api/customers');
+  constructor(private customerService: CustomerService, private component: ComponentsProvider) {
+    this.customerService.setEndPoint('/api/users')
   }
 
-   ngOnInit() {
-   this.customerService.getCustomers().subscribe((result) => this.contacts = result);
+  ngOnInit() {
+     this.customerService.getCustomers().subscribe(res => {
+      this.users = res;
+     })
 
-    let fields = "firstName,email,phone";
+    let fields = "firstName,email,lastName";
     this.customerService.getFieldsData(fields).subscribe({
       next: (result : any) => {
         this.fieldOptions = result;
@@ -42,18 +40,14 @@ export class ContactComponent implements OnInit{
         this.component.showToast("Error In Getting List" , 'error');
       }
     })
-
-    this.customerService.getAdminNameList("firstName").subscribe(res => {
-       this.adminList = res['firstName'];
-    })
   }
 
   onAction(event: any): void {
     if(event.action == 'create') {
       this.customerService.createCustomer(event.item).subscribe({
         next: (result) => {
-          this.contacts.push(event.item);
-          this.component.showToast("customer created" , 'success');
+          this.users.push(event.item);
+          this.component.showToast("user created" , 'success');
         },error: (err) => {
           this.component.showToast("error In Creation" , 'error');
         }
@@ -61,11 +55,11 @@ export class ContactComponent implements OnInit{
     } else if(event.action == 'update') {
       this.customerService.updateCustomer(event.item, event.updatedItem['id']).subscribe({
         next: (result) => {
-          const index = this.contacts.findIndex(item => item === event.updatedItem);
+          const index = this.users.findIndex(item => item === event.updatedItem);
           if (index !== -1) {
-            this.contacts[index] = event.item;
+            this.users[index] = event.item;
           }
-          this.component.showToast("customer updated" , 'success');
+          this.component.showToast("user updated" , 'success');
         },error: (err) => {
           this.component.showToast("error In Updation" , 'error');
         }
@@ -74,18 +68,12 @@ export class ContactComponent implements OnInit{
       let indexArray = event.item.map(data => data.id);
       this.customerService.deleteCustomer(indexArray).subscribe({
         next: (result) => {
-          this.contacts = this.contacts.filter(item => !event.item.some(selected => selected === item));
-          this.component.showToast("customer deleted" , 'success');
+          this.users = this.users.filter(item => !event.item.some(selected => selected === item));
+          this.component.showToast("user deleted" , 'success');
         },error: (err) => {
           this.component.showToast("error In Deletion" , 'error');
         }
       })
-    }
-  }
-
-  onFilterChange(event){
-    if(event.isClear) {
-      this.selectedUser = null;
     }
   }
 
@@ -96,8 +84,9 @@ export class ContactComponent implements OnInit{
       next: (result) => {
         this.component.showToast("Data Imported" , 'success');
       },error: (err) => {
-        this.component.showToast("Error In Import" , 'error');
+        this.component.showToast("error In Import" , 'error');
       }
     })
   }
+
 }

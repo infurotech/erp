@@ -4,10 +4,8 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, OneToMan
 @Entity()
 export class Customer extends BaseEntity{
   @PrimaryGeneratedColumn() 
-  index: number;
+  id: number;
 
-  @Column()
-  id:number;
 
   @Column()
   firstName: string;

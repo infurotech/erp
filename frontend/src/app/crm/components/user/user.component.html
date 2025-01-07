@@ -1,0 +1,8 @@
+<div class="grid">
+    <div class="col-12">
+        <app-crud *ngIf="users.length" [displayName]="'Users'" [data]="users"
+         [options]="crudOptions" [fieldOptions]="fieldOptions"
+         (onAction)="onAction($event)" (onBulkImport)="getBulkImport($event)">
+        </app-crud>
+    </div>
+</div>

@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ManagerService } from './manager.service';
 
 @Injectable()
 export class CustomerService {
-    private apiUrl = '/api/customers';
+    private apiUrl = '';
 
-    constructor(private _httpClient: HttpClient) {}
+    constructor(private _httpClient: HttpClient, private managerService: ManagerService) {}
+
+    setEndPoint(url: any) {
+        this.apiUrl = url;
+    }
 
     getCustomers(): Observable<any> {
        return this._httpClient.get(this.apiUrl);
@@ -23,7 +28,7 @@ export class CustomerService {
 
     deleteCustomer(requestArray:any): Observable<any> {
         const deleteUrl = `${this.apiUrl}/multiple`;
-        return this._httpClient.delete(deleteUrl, { body : { indexes: requestArray } });
+        return this._httpClient.delete(deleteUrl, { body : { ids: requestArray } });
     }
 
     getFieldsData(queryParams: string): Observable<any> {
@@ -37,4 +42,7 @@ export class CustomerService {
         return this._httpClient.post(bulkUrl,bulkCustomers);
     }
     
+     getAdminNameList(queryParams:string) : Observable<any> {
+        return this.managerService.getUserNameList(queryParams);
+    }
 };

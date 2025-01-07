@@ -32,6 +32,6 @@ import { AppLayoutComponent } from "./app.layout.component";
         AppConfigModule,
         PrimengImportsModule
     ],
-    exports: [AppLayoutComponent]
+    exports: [AppLayoutComponent,PrimengImportsModule]
 })
 export class AppLayoutModule { }

@@ -11,13 +11,9 @@ export class User extends BaseEntity{
   @Column() 
   lastName: string;
   @Column() 
-  phone: string;
-  @Column() 
   email: string;
-  @Column() 
+  @Column({ default: 'default_password' })
   password: string;
-  @Column() 
+  @Column({default: '' }) 
   profileUrl: string;
-  @Column() 
-  locked: boolean;
 }

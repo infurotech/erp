@@ -6,12 +6,11 @@
             <ng-template #filterTemplate  let-onFilterChange="onFilterChange">
                 <p-dropdown styleClass="ml-2"
                     [(ngModel)]="selectedUser"
-                    [options]="fieldOptions['firstName']"
+                    [options]="adminList"
                     placeholder="Select user name"
                     (onChange)="onFilterChange('firstName', 'text', $event.value)">
                 </p-dropdown>
             </ng-template>
         </app-crud>
     </div>
-    <p-toast position="top-center" [life]="3000"></p-toast>
 </div>
