@@ -32,7 +32,7 @@ export class UserComponent implements OnInit{
       this.users = res;
      })
 
-    let fields = "firstNamee,email,lastName";
+    let fields = "firstName,email,lastName";
     this.customerService.getFieldsData(fields).subscribe({
       next: (result : any) => {
         this.fieldOptions = result;
