@@ -68,7 +68,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Admin',
                 items: [
-                    { label: 'Users', icon: 'fa fa-user-tie', routerLink: ['/common/empty'] },
+                    { label: 'Users', icon: 'fa fa-user-tie', routerLink: ['/crm/users'] },
                 ]
             },
         ];
