@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import config from './config/config';
-import { VehicleController } from './vehicle/vehicle.controller';
-import { Vehicle } from './vehicle/entities/vehicle.entity';
-import { Customer } from './customer/entities/customer.entity';
-import { CustomerController } from './customer/customer.controller';
+import { User } from './user/entities/user.entity';
+import { UserService } from './user/user.service';
 
 @Module({
   imports: [
@@ -20,7 +18,7 @@ import { CustomerController } from './customer/customer.controller';
       synchronize: true
     }
   ),
-  TypeOrmModule.forFeature([Customer, Vehicle])],
-   controllers:[CustomerController,VehicleController],
+  TypeOrmModule.forFeature([User])],
+  controllers: [UserService],
 })
 export class AppModule {}

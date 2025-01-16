@@ -1,0 +1,36 @@
+syntax = "proto3";
+package customer;
+
+service CustomerService {
+  rpc getCustomers (Empty) returns (CustomerListResponse);
+  rpc getCustomerById(RequestById) returns (CustomerResponse);
+  rpc getCustomersColumnsList (ListRequest) returns (listResponse);
+}
+
+message Empty {}
+
+message RequestById {
+  int32 id = 1;
+}
+
+message ListRequest {
+  string column = 1;
+}
+
+message listResponse {
+   repeated string firstName = 1;
+   repeated string email = 2;
+   repeated string phone = 3;
+}
+
+message CustomerResponse {
+  int32 id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string phone = 4;
+  string email = 5;
+}
+
+message CustomerListResponse {
+  repeated CustomerResponse customers = 1;
+}

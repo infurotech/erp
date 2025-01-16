@@ -29,7 +29,7 @@ export class UserComponent implements OnInit{
 
   ngOnInit() {
      this.customerService.getCustomers().subscribe(res => {
-      this.users = res;
+      this.users = res['users'];
      })
 
     let fields = "firstName,email,lastName";

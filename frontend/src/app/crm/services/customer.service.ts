@@ -31,18 +31,26 @@ export class CustomerService {
         return this._httpClient.delete(deleteUrl, { body : { ids: requestArray } });
     }
 
+    getCustomerById(id: number): Observable<any> {
+        const getUrl  =  `${this.apiUrl}/${id}`;
+        return this._httpClient.get(getUrl);
+     }
+
     getFieldsData(queryParams: string): Observable<any> {
         const requestUrl = `${this.apiUrl}/list?columns=${queryParams}`;
         return this._httpClient.get(requestUrl);
     }
-
 
     createBulkCustomers(bulkCustomers:any): Observable<any> {
         const bulkUrl = `${this.apiUrl}/bulk`;
         return this._httpClient.post(bulkUrl,bulkCustomers);
     }
     
-     getAdminNameList(queryParams:string) : Observable<any> {
+    getAdminNameList(queryParams:string) : Observable<any> {
         return this.managerService.getUserNameList(queryParams);
+    }
+
+    getVehicles() {
+        return this._httpClient.get('/api/vehicles');
     }
 };

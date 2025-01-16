@@ -29,10 +29,12 @@ export class ContactComponent implements OnInit{
   constructor(private customerService: CustomerService,private component: ComponentsProvider
   ) {
       this.customerService.setEndPoint('/api/customers');
+      this.customerService.getVehicles().subscribe((result) => console.log("resultVehicles",result));
+      this.customerService.getCustomerById(52).subscribe((result) => console.log("CustomerById",result));
   }
 
    ngOnInit() {
-   this.customerService.getCustomers().subscribe((result) => this.contacts = result);
+   this.customerService.getCustomers().subscribe((result) => this.contacts = result['customers']);
 
     let fields = "firstName,email,phone";
     this.customerService.getFieldsData(fields).subscribe({

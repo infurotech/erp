@@ -1,0 +1,6 @@
+{
+    "compilerOptions": {
+      "assets": ["**/*.proto"],
+      "watchAssets": true
+    }
+}
