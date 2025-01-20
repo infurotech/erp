@@ -1,6 +1,6 @@
 import { Controller, Get, Inject, OnModuleInit, Param, Query } from "@nestjs/common";
 import { Observable } from "rxjs";
-import {ClientGrpc, GrpcMethod} from '@nestjs/microservices'
+import { ClientGrpc } from '@nestjs/microservices'
 
 interface CustomerService {
   getCustomers(data : {}): Observable<CustomerListResponse>;
@@ -37,13 +37,11 @@ export class CustomerController implements OnModuleInit {
 
   @Get('list')
   async getCustomersColumnsList(@Query('columns') column: string): Promise<any> {
-    console.log("column",column)
     return this.customerService.getCustomersColumnsList({column});
   }
   
   @Get(':id')
   getCustomerById(@Param() id: string) {
-    console.log("id",id,typeof(id))
     return this.customerService.getCustomerById(id);
   }
 
