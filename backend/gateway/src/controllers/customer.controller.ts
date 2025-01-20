@@ -1,48 +1,24 @@
-import { Controller, Get, Inject, OnModuleInit, Param, Query } from "@nestjs/common";
-import { Observable } from "rxjs";
-import { ClientGrpc } from '@nestjs/microservices'
-
-interface CustomerService {
-  getCustomers(data : {}): Observable<CustomerListResponse>;
-  getCustomersColumnsList(data: {column: string}) : Promise<any>;
-  getCustomerById(id : string): Promise<CustomerResponse>;
-}
-
-interface CustomerResponse {
-  id: number;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  email: string;
-}
-
-export interface CustomerListResponse {
-  customers: CustomerResponse[];
-}
+import { Controller, Get, Inject, Param, Query } from "@nestjs/common";
+import { ClientProxy } from '@nestjs/microservices'
 
 @Controller("customers")
-export class CustomerController implements OnModuleInit {
-  private customerService: CustomerService;
+export class CustomerController {
 
-  constructor(@Inject('CRUD_PACKAGE') private readonly client: ClientGrpc) {}
-  
-  onModuleInit() {
-    this.customerService = this.client.getService<CustomerService>('CustomerService');
-  }
+  constructor(@Inject('CRUD_PACKAGE') private readonly client: ClientProxy) {}
   
   @Get()
   getCustomer() {
-    return this.customerService.getCustomers(null);
+    return this.client.send('getCustomers',{data: null});
   }
 
   @Get('list')
   async getCustomersColumnsList(@Query('columns') column: string): Promise<any> {
-    return this.customerService.getCustomersColumnsList({column});
+    return this.client.send('getCustomersColumnsList',column)
   }
   
   @Get(':id')
   getCustomerById(@Param() id: string) {
-    return this.customerService.getCustomerById(id);
+    return this.client.send('getCustomerById',id);
   }
 
 }

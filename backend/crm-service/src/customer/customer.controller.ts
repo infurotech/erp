@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { TypeOrmCrudService } from "@dataui/crud-typeorm";
 import { Repository } from "typeorm";
 import { Customer } from "./entities/customer.entity"
-import { GrpcMethod } from '@nestjs/microservices';
+import { GrpcMethod, MessagePattern } from '@nestjs/microservices';
 import { GenericServiceControllerMethods } from "src/common/decorator";
 
 export interface CustomerResponse {
@@ -26,22 +26,10 @@ export class CustomerController {
     (this as any).CustomerRepository = this.customerRepository;
   }
 
-  // @GrpcMethod('CustomerService','getCustomers')
-  //  async getCustomers(): Promise<CustomerListResponse> {
-  //   const customers =  await this.repo.find();
-  //   return { customers: customers };
-  // }
-
-  // @GrpcMethod('CustomerService','getCustomerById')
-  //  async getCustomerById(id: {id: number}): Promise<CustomerResponse> {
-  //    const customer = await this.repo.findOneBy(id);
-  //    return customer;
-  // }
-
-  @GrpcMethod('CustomerService', 'getCustomersColumnsList')
-  async getCustomersColumnsList(columns : {column: string}): Promise<any> {
+  @MessagePattern('getCustomersColumnsList')
+  async getCustomersColumnsList(columns :  string): Promise<any> {
     const validColumns = this.customerRepository.metadata.columns.map((col) => col.propertyName);
-    const columnsArray = columns['column'].split(",");
+    const columnsArray = columns.split(",");
     const invalidColumns = columnsArray.filter((column) => !validColumns.includes(column));
     if (invalidColumns.length > 0) {
       throw new BadRequestException(`Invalid columns: ${invalidColumns.join(", ")}`);

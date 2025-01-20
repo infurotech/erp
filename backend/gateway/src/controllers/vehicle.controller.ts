@@ -1,24 +1,14 @@
-import { Controller, Get, Inject, OnModuleInit } from "@nestjs/common";
-import { ClientGrpc } from "@nestjs/microservices";
-import { Observable } from "rxjs";
-
-interface VehicleService {
-    getVehicles(data : {}): Observable<any>;
-}
+import { Controller, Get, Inject } from "@nestjs/common";
+import { ClientProxy } from "@nestjs/microservices";
 
 @Controller("vehicles")
-export class VehicleController implements OnModuleInit {
-  private vehicleService: VehicleService;
+export class VehicleController {
 
-  constructor(@Inject('CRUD_PACKAGE') private readonly client: ClientGrpc) {}
-  
-  onModuleInit() {
-    this.vehicleService = this.client.getService<VehicleService>('VehicleService');
-  }
+  constructor(@Inject('CRUD_PACKAGE') private readonly client: ClientProxy) {}
 
   @Get()
   getVehicles() {
-    return this.vehicleService.getVehicles(null);
+    return this.client.send('getVehicles', {data: null});
   }
 
 }

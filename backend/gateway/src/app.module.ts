@@ -23,23 +23,16 @@ import { VehicleController } from './controllers/vehicle.controller';
     ClientsModule.register([
       {
         name: 'CRUD_PACKAGE',
-        transport: Transport.GRPC,
+        transport: Transport.TCP,
         options: {
-          url: '127.0.0.1:3090',
-          package: ['customer','vehicle'],
-          protoPath: [
-            join(__dirname, '../../shared/proto/customer.proto'),
-            join(__dirname, '../../shared/proto/vehicle.proto')
-          ],
+          port: 3090,
         },
       },
       {
         name: 'USER_PACKAGE',
-        transport: Transport.GRPC,
+        transport: Transport.TCP,
         options: {
-          url: '127.0.0.1:3070',
-          package: 'user',
-          protoPath: join(__dirname, '../../shared/proto/user.proto'),
+          port: 3070,
         },
       }
     ])

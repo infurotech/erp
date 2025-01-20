@@ -1,4 +1,4 @@
-import { GrpcMethod } from "@nestjs/microservices";
+import { GrpcMethod, MessagePattern } from "@nestjs/microservices";
 
 export function GenericServiceControllerMethods(serviceName: string, entity: any) {
   return function (constructor: Function) {
@@ -32,7 +32,7 @@ export function GenericServiceControllerMethods(serviceName: string, entity: any
         configurable: true,
       });
 
-      GrpcMethod(serviceName, methodName)(
+      MessagePattern(methodName)(
         constructor.prototype,
         methodName,
         Reflect.getOwnPropertyDescriptor(constructor.prototype, methodName),

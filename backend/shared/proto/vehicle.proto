@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package vehicle;
-
-service VehicleService {
-  rpc getVehicles (Empty) returns (Empty);
-}
-
-message Empty {}

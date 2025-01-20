@@ -1,7 +1,6 @@
 import { Controller } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { TypeOrmCrudService } from "@dataui/crud-typeorm";
-import { GrpcMethod } from '@nestjs/microservices';
+import { MessagePattern } from '@nestjs/microservices';
 import { User } from "./entities/user.entity";
 import { Repository } from "typeorm";
 
@@ -18,7 +17,7 @@ export class UserService {
   constructor(@InjectRepository(User) private readonly repo: Repository<User>) {
   }
 
-  @GrpcMethod('UserService', 'GetUsers')
+  @MessagePattern('getUsers')
   async getUsers(): Promise<{ users: UserResponse[] }> {
     const users = await this.repo.find();
     return {
