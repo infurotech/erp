@@ -1,5 +1,5 @@
-import config from "src/config/config";
+// import config from "src/config/config";
 
 export const jwtConstants = {
-    secret: config.JWT.secret,
+    secret: '',
 };

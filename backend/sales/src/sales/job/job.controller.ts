@@ -1,5 +1,5 @@
 import { Controller, Get, Req } from '@nestjs/common';
-import { CreateManyDto, Crud, CrudController, CrudRequest, GetManyDefaultResponse } from '@nestjsx/crud';
+import { CreateManyDto, Crud, CrudController, CrudRequest, CrudService, GetManyDefaultResponse} from '@nestjsx/crud';
 
 import { Job } from './entities/job.entity';
 import { JobService } from './job.service';
@@ -24,13 +24,13 @@ import { JobService } from './job.service';
     },
   },
 })
+
 @Controller('jobs')
-
 export class JobController implements CrudController<Job> {
-  constructor(public service: JobService) {}
-
+  service: CrudService<Job>;
+  constructor(public jobService: JobService) {}
 
   async interceptRequest(@Req() req: Request) {
-    await this.service.initRepo(req);
+    await this.jobService.initRepo(req);
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
-import { User } from '../entities/user.host.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class AuthService extends TypeOrmCrudService<User>{

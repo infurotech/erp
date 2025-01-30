@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
-import { Repository } from 'typeorm';
+import { ObjectLiteral, Repository} from 'typeorm';
 
 @Injectable()
-export class CrudService<T> extends TypeOrmCrudService<T> {
+export class CrudService<T extends ObjectLiteral> extends TypeOrmCrudService<T> {
   constructor(protected readonly repo: Repository<T>) {
     super(repo); // Call the parent constructor
   }

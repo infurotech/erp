@@ -1,10 +1,10 @@
 import { Injectable, Scope, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, ObjectLiteral, Repository } from 'typeorm';
 import * as jwt from 'jsonwebtoken';
 import * as crypto from 'crypto';
-import { CachingManager } from 'src/caching/caching.manager';
+import { CachingManager } from '../caching/caching.manager';
 
 @Injectable({ scope: Scope.REQUEST })
 export class DatabaseService {
@@ -15,8 +15,9 @@ export class DatabaseService {
   ) {}
 
   private async decryptConnectionString(encryptedString: string): Promise<string> {
-    const secretKey = this.configService.get<string>('ENCRYPTION_SECRET');
-    const decipher = crypto.createDecipher('aes-256-cbc', secretKey);
+    const secretKey = this.configService.get<string>('ENCRYPTION_SECRET') || '';
+    const iv = Buffer.alloc(16, 0);
+    const decipher = crypto.createDecipheriv('aes-256-cbc', secretKey,iv);
     let decrypted = decipher.update(encryptedString, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
     return decrypted;
@@ -41,7 +42,8 @@ export class DatabaseService {
   }
 
   async getTenantConnection(token: string): Promise<DataSource> {
-    const decoded: any = jwt.verify(token, this.configService.get('JWT_SECRET'));
+    const jwtSecret = this.configService.get<string>('JWT_SECRET', 'default_secret');
+    const decoded: any = jwt.verify(token, jwtSecret);
     const tenantId = decoded.tenantId;
     if (!tenantId) throw new UnauthorizedException('Invalid token: Missing tenantId');
 
@@ -55,7 +57,7 @@ export class DatabaseService {
     }).initialize();
   }
 
-  async getRepository<T>(token: string, entity: any): Promise<Repository<T>> {
+  async getRepository<T extends ObjectLiteral>(token: string, entity: any): Promise<Repository<T>> {
     const connection = await this.getTenantConnection(token);
     return connection.getRepository<T>(entity);
   }
