@@ -61,4 +61,14 @@ export class DatabaseService {
     const connection = await this.getTenantConnection(token);
     return connection.getRepository<T>(entity);
   }
+
+  getDefaultRepository<T extends ObjectLiteral>( entity: any): Repository<T> {
+    var connection = new DataSource({
+      type: 'postgres',
+      url: "tenant_connection_string_should_be_set",
+      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+      synchronize: false,
+    });
+    return connection.getRepository<T>(entity);
+  }
 }

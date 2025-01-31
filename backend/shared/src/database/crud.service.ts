@@ -1,11 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { DatabaseService } from './database.service';
 import { ObjectLiteral, Repository} from 'typeorm';
 
 @Injectable()
 export class CrudService<T extends ObjectLiteral> extends TypeOrmCrudService<T> {
-  constructor(protected readonly repo: Repository<T>) {
+
+
+  constructor(private readonly databaseService: DatabaseService, private readonly entity: any) {
+    const repo = databaseService.getDefaultRepository(entity) as Repository<T>
     super(repo); // Call the parent constructor
+  }
+
+  async initTenantRepository(req: Request, entity: any) {
+    const token = req.headers['authorization']?.split(' ')[1];
+    const repo: Repository<T> = await this.databaseService.getRepository<T>(token, entity);
+    this.repo = repo;
   }
 
   /**
