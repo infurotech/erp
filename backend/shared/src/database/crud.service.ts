@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { DatabaseService } from './database.service';
-import { ObjectLiteral, Repository} from 'typeorm';
+import { Repository} from 'typeorm';
 
 @Injectable()
-export class CrudService<T extends ObjectLiteral> extends TypeOrmCrudService<T> {
-
+export class CrudService<T> extends TypeOrmCrudService<T> {
 
   constructor(private readonly databaseService: DatabaseService, private readonly entity: any) {
     const repo = databaseService.getDefaultRepository(entity) as Repository<T>

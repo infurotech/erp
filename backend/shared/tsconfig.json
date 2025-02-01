@@ -17,9 +17,6 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "types": ["node"],
-    "paths": {
-      "@shared/*": ["../shared/src/*"]  // Alias for the shared folder
-    }
+    "types": ["node"]
   }
 }

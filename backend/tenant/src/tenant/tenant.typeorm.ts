@@ -15,7 +15,7 @@ export class TenantTypeOrmProvider {
 
     const connectionString = await this.tenantManager.getConnectionString(tenantId);
     const dataSourceOptions: DataSourceOptions = {
-      type: 'postgres',
+      type: 'mysql',
       url: connectionString,
       entities: [__dirname + '/entities/*.entity{.ts,.js}'], // Adjust entity path
       synchronize: true,

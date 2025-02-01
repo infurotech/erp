@@ -16,9 +16,6 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false,
-    "paths": {
-      "@shared/*": ["../shared/src/*"]  // Alias for the shared folder
-    }
+    "noFallthroughCasesInSwitch": false
   }
 }

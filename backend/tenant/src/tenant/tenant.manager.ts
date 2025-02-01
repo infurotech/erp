@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { CachingManager } from '../caching/caching.manager';
+import { CachingManager } from '@packages/common';
 
 @Injectable()
 export class TenantManager {

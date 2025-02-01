@@ -1,10 +1,13 @@
 {
-  "name": "erp-backend-lib",
+  "name": "@packages/common",
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "npm run build",
+    "clean": "rimraf dist",
+    "start": "node dist/index.js",
+    "watch": "tsc --watch"
   },
   "author": "",
   "license": "ISC",
@@ -21,11 +24,11 @@
     "@nestjs/swagger": "^11.0.3",
     "@nestjs/typeorm": "^11.0.0",
     "@nestjsx/crud-typeorm": "^5.0.0-alpha.3",
+    "@nestjsx/crud": "^5.0.0-alpha.3",
     "@types/multer": "^1.4.12",
     "cache-manager": "^6.4.0",
     "cache-manager-redis-yet": "^5.1.5",
     "crypto": "^1.0.1",
-    "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "passport-local": "^1.0.0",

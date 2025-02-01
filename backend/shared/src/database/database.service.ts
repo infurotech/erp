@@ -1,17 +1,16 @@
 import { Injectable, Scope, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource, ObjectLiteral, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import * as jwt from 'jsonwebtoken';
 import * as crypto from 'crypto';
 import { CachingManager } from '../caching/caching.manager';
 
 @Injectable({ scope: Scope.REQUEST })
 export class DatabaseService {
+  private configService: ConfigService;
+  private readonly defaultDataSource: DataSource;
+  private readonly cachingManager: CachingManager;
   constructor(
-    private configService: ConfigService,
-    @InjectDataSource() private readonly defaultDataSource: DataSource,
-    private readonly cachingManager: CachingManager
   ) {}
 
   private async decryptConnectionString(encryptedString: string): Promise<string> {
@@ -50,25 +49,27 @@ export class DatabaseService {
     const connectionString = await this.fetchConnectionString(tenantId);
     
     return new DataSource({
-      type: 'postgres',
+      type: 'mysql',
       url: connectionString,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       synchronize: false,
     }).initialize();
   }
 
-  async getRepository<T extends ObjectLiteral>(token: string, entity: any): Promise<Repository<T>> {
+  async getRepository<T>(token: string, entity: any): Promise<Repository<T>> {
     const connection = await this.getTenantConnection(token);
     return connection.getRepository<T>(entity);
   }
 
-  getDefaultRepository<T extends ObjectLiteral>( entity: any): Repository<T> {
+  getDefaultRepository<T>( entity: any): Repository<T> {
     var connection = new DataSource({
-      type: 'postgres',
+      type: 'mysql',
       url: "tenant_connection_string_should_be_set",
-      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+      entities: entity.dataSource.options.entities,
       synchronize: false,
     });
+
     return connection.getRepository<T>(entity);
   }
+
 }

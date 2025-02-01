@@ -1,5 +1,5 @@
-import { Controller, Get, Req } from '@nestjs/common';
-import { CreateManyDto, Crud, CrudController, CrudRequest, CrudService, GetManyDefaultResponse} from '@nestjsx/crud';
+import { Controller, Req } from '@nestjs/common';
+import { Crud, CrudController, CrudService} from '@nestjsx/crud';
 
 import { Job } from './entities/job.entity';
 import { JobService } from './job.service';

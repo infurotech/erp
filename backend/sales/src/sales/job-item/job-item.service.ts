@@ -1,10 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Scope } from "@nestjs/common";
 
 import { JobItem } from "./entities/job-item.entity";
-import { CrudService } from "@shared/database";
-import { InjectRepository } from "@nestjs/typeorm";
+import { CrudService } from "@packages/common";
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class JobItemService extends CrudService<JobItem> {
   async initRepo(req: Request) {
     await this.initTenantRepository(req, JobItem);
