@@ -5,16 +5,8 @@ import { Repository} from 'typeorm';
 
 @Injectable()
 export class CrudService<T> extends TypeOrmCrudService<T> {
-
-  constructor(private readonly databaseService: DatabaseService, private readonly entity: any) {
-    const repo = databaseService.getDefaultRepository(entity) as Repository<T>
-    super(repo); // Call the parent constructor
-  }
-
-  async initTenantRepository(req: Request, entity: any) {
-    const token = req.headers['authorization']?.split(' ')[1];
-    const repo: Repository<T> = await this.databaseService.getRepository<T>(token, entity);
-    this.repo = repo;
+  constructor(protected readonly repo : Repository<T>, private readonly databaseService: DatabaseService) {
+    super(repo);
   }
 
   /**
