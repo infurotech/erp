@@ -18,7 +18,7 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@shared/*": ["../shared/src/*"]  // Alias for the shared folder
+      "@infuro/shared":["../shared/dist"]
     }
   }
 }

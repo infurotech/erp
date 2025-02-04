@@ -5,7 +5,7 @@ import {
     UseInterceptors,
   } from '@nestjs/common';
   import { FileInterceptor } from '@nestjs/platform-express';
-  import { diskStorage } from 'multer';
+  import { diskStorage , Express } from 'multer';
   import { extname } from 'path';
   import { StorageService } from './storage.service';
   

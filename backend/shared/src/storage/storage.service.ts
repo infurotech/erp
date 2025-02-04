@@ -2,7 +2,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { diskStorage } from 'multer';
+import { Express} from 'multer';
 import { extname } from 'path';
 import * as fs from 'fs';
 
