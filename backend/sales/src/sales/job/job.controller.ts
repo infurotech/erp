@@ -1,8 +1,9 @@
-import { Controller, Req } from '@nestjs/common';
-import { Crud, CrudController, CrudService} from '@nestjsx/crud';
+import { Controller } from '@nestjs/common';
+import { Crud, CrudController} from '@nestjsx/crud';
 
 import { Job } from './entities/job.entity';
 import { JobService } from './job.service';
+import { Audit } from '@packages/common';
 
 @Crud({
   model: {
@@ -24,13 +25,11 @@ import { JobService } from './job.service';
     },
   },
 })
-
+@Audit()
 @Controller('jobs')
 export class JobController implements CrudController<Job> {
-  service: CrudService<Job>;
-  constructor(public jobService: JobService) {}
-
-  async interceptRequest(@Req() req: Request) {
-    await this.jobService.initRepo(req);
+  service: JobService;
+  constructor(public jobService: JobService) {
+    this.service = jobService
   }
 }
