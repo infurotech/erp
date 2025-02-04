@@ -1,6 +1,6 @@
 import { Injectable, Scope } from "@nestjs/common";
 import { Job } from "./entities/job.entity";
-import { CrudService, DatabaseService} from '@packages/common';
+import { CrudService, DatabaseService} from '@infuro/shared';
 import { InjectRepository } from "@nestjs/typeorm";
 import {Repository} from 'typeorm'
  

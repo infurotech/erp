@@ -1,0 +1,22 @@
+diff --git a/node_modules/@nestjsx/crud-typeorm/lib/typeorm-crud.service.js b/node_modules/@nestjsx/crud-typeorm/lib/typeorm-crud.service.js
+index 541c2a8..d737a62 100644
+--- a/node_modules/@nestjsx/crud-typeorm/lib/typeorm-crud.service.js
++++ b/node_modules/@nestjsx/crud-typeorm/lib/typeorm-crud.service.js
+@@ -366,7 +366,7 @@ class TypeOrmCrudService extends crud_1.CrudService {
+                 ...allowedRelation.primaryColumns,
+                 ...(util_1.isArrayFull(options.persist) ? options.persist : []),
+                 ...columns,
+-            ].map((col) => `${alias}.${col}`);
++            ].filter((n, i, self) => self.indexOf(n) === i).map((col) => `${alias}.${col}`);
+             builder.addSelect(select);
+         }
+     }
+@@ -530,7 +530,7 @@ class TypeOrmCrudService extends crud_1.CrudService {
+             ...(options.persist && options.persist.length ? options.persist : []),
+             ...columns,
+             ...this.entityPrimaryColumns,
+-        ].map((col) => `${this.alias}.${col}`);
++        ].filter((n, i, self) => self.indexOf(n) === i).map((col) => `${this.alias}.${col}`);
+         return select;
+     }
+     getSort(query, options) {

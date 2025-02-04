@@ -7,7 +7,7 @@ import { JobService } from './job/job.service';
 import { JobItemController } from './job-item/job-item.controller';
 import { JobController } from './job/job.controller';
 import { Repository , DataSource } from 'typeorm';
-import { AuditService, DatabaseService } from '@packages/common';
+import { AuditService, DatabaseService } from '@infuro/shared';
 import { TenantsService } from './tenants/tenants.service';
 import { TenantsController } from './tenants/tenants.controller';
 import { Tenants } from './tenants/entities/tenant.entity';

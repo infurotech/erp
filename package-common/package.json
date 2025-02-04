@@ -1,0 +1,25 @@
+{
+  "name": "package-common",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "patch-package"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjsx/crud": "^5.0.0-alpha.3",
+    "@nestjsx/crud-typeorm": "^5.0.0-alpha.3",
+    "patch-package": "^8.0.0",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "typescript": "^5.7.3"
+  }
+}

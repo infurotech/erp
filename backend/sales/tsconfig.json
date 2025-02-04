@@ -18,7 +18,9 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "typeorm": ["../shared/node_modules/typeorm"]
+      "typeorm": ["../../package-common/node_modules/typeorm"],
+      "@nestjs/*": ["../../package-common/node_modules/@nestjs/*"],
+      "@nestjsx/*":["../../package-common/node_modules/@nestjsx/*"]
     }
   }
 }

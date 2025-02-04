@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SalesModule } from './sales/sales.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuditModule, BaseTransport, TransportMethods } from '@packages/common';
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: process.env.DATABASE_TYPE as 'mysql' | 'postgres' | 'sqlite' | 'mongodb' || 'mysql',
@@ -14,10 +13,7 @@ import { AuditModule, BaseTransport, TransportMethods } from '@packages/common';
     database: process.env.DB_NAME || 'Host_DB',
     entities: [__dirname + '/sales/**/entities/*.entity.{ts,js}'],
     synchronize: true
-}),SalesModule,AuditModule.forRoot({
-  transports:[TransportMethods.CONSOLE as unknown as BaseTransport],
-  logErrors: true
-})],
+}),SalesModule],
   controllers: [AppController],
   providers: [AppService]
 })
