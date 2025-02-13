@@ -65,7 +65,10 @@
   </p-tabView> -->
 
   <!-- Dialog for Add/Edit -->
-  <p-dialog [(visible)]="isDialogVisible" header="Product Details" class="p-fluid" [draggable]="false"
+
+  <!-- <p-dialog [(visible)]="isDialogVisible" [modal]="true" header="Product Details" class="p-fluid" [draggable]="false"
+  [closable]="true" [style]="{'width': '50rem'}" (onHide)="resetForm()" [maximizable]="true"> -->
+  <p-dialog [(visible)]="isDialogVisible"  [modal]="true" [maximizable]="true" header="Details" class="p-fluid" [draggable]="false"
         [style]="{'width': '50rem'}" >
     <ng-template pTemplate="content">
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
