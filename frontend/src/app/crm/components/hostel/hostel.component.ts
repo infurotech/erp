@@ -25,7 +25,7 @@ export class HostelComponent implements OnInit{
         { field: 'roomType', label: 'Room Type', type: 'text', required: true },
         { field: 'pricePerMonth', label: 'Price per Month', type: 'number', required: true },
         { field: 'availableUnits', label: 'Available Units', type: 'number', required: true },
-        { field: 'amenities', label: 'Amenities', type: 'tag', required: true, filter: true, options: [
+        { field: 'amenities', label: 'Amenities', type: 'text', required: true, filter: true, options: [
             { label: 'AC Rooms', value: 'AC Rooms' },
             { label: '24/7 Security', value: '24/7 Security' },
             { label: 'Mess', value: 'Mess' },
@@ -37,7 +37,7 @@ export class HostelComponent implements OnInit{
             { label: 'TV', value: 'TV' },
             { label: 'Shared Kitchen', value: 'Shared Kitchen' }
         ] },
-        { field: 'other_offerings', label: 'Other Offerings', type: 'tag', filter: true, options: [
+        { field: 'otherOfferings', label: 'Other Offerings', type: 'text', filter: true, options: [
             { label: 'Daily Housekeeping', value: 'Daily Housekeeping' },
             { label: 'Hot Water', value: 'Hot Water' },
             { label: 'Free Snacks', value: 'Free Snacks' },
@@ -46,11 +46,11 @@ export class HostelComponent implements OnInit{
             { label: 'Free Breakfast', value: 'Free Breakfast' },
             { label: 'Study Room', value: 'Study Room' }
         ] },
-        { field: 'status', label: 'Status', type: 'tag', filter: true, options: [
-            { label: 'Available', value: 'available', severity: 'success' },
-            { label: 'Occupied', value: 'occupied', severity: 'danger' },
-            { label: 'Under Maintenance', value: 'under_maintenance', severity: 'warning' }
-        ] }
+        // { field: 'status', label: 'Status', type: 'tag', filter: true, options: [
+        //     { label: 'Available', value: 'available', severity: 'success' },
+        //     { label: 'Occupied', value: 'occupied', severity: 'danger' },
+        //     { label: 'Under Maintenance', value: 'under_maintenance', severity: 'warning' }
+        // ] }
       ]
       
     }

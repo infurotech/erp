@@ -71,7 +71,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
     // this.moreFilters = this.options.fields.filter(field => !field.key && field.filter === true).slice(2); 
     this.initializeForm();
     this.initialFilteredFields = [...this.filteredFields];
-    this.initialData = [...this.data]
+    // this.initialData = [...this.data]
     this.moreActionItems = [
       {
         label: 'Export',
@@ -87,9 +87,9 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
     ]
 
     // As of now we don't have any api so getting contacts data via loop. 
-    this.data.forEach(item => {
-       this.contactsList.push(item['phone'])
-    })
+    // this.data.forEach(item => {
+    //    this.contactsList.push(item['phone'])
+    // })
   }
   
  // Initialize the form based on fields configuration

@@ -5,36 +5,36 @@ export class Property {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   address: string;
 
-  @Column()
+  @Column({ nullable: true })
   latitude: string;
 
-  @Column()
+  @Column({ nullable: true })
   longitude: string;
 
-  @Column()
+  @Column({ nullable: true })
   hostelType: string;
 
-  @Column()
+  @Column({ nullable: true })
   roomType: string;
 
-  @Column('decimal')
+  @Column('decimal', { nullable: true })
   pricePerMonth: number;
 
-  @Column('int')
+  @Column('int', { nullable: true })
   availableUnits: number;
 
-  // @Column('text', { array: true })
-  // amenities: string[];
+  @Column('text', { nullable: true })
+  amenities: string[];
 
-  // @Column('text', { array: true })
-  // otherOfferings: string[];
+  @Column('text', { nullable: true })
+  otherOfferings: string[];
 
-  // @Column('text', { array: true })
-  // imageUrls: string[];
+  @Column('text', { nullable: true })
+  imageUrls: string[];
 }
