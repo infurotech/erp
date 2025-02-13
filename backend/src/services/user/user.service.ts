@@ -12,7 +12,7 @@ export class UserService extends TypeOrmCrudService<User> {
 
   async findByUsername(username: string): Promise<User | undefined> {
     var user = await this.repo.findOneBy({ email: username });
-    console.log(user);
+    
     return user;
   }
 }

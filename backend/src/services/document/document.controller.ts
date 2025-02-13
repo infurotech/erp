@@ -17,8 +17,7 @@ import {
         storage: diskStorage({
           destination: './uploads', // Directory where files will be saved
           filename: (req, file, callback) => {
-            console.log(req);
-            console.log(file);
+            
             const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
             const ext = extname(file.originalname);
             callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
@@ -27,7 +26,7 @@ import {
       }),
     )
     uploadFile(@UploadedFile() file: Express.Multer.File) {
-      console.log(file); // File information
+      
       return {
         message: 'File uploaded successfully!',
         filePath: `/uploads/${file.filename}`,

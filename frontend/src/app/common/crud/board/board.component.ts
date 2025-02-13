@@ -63,7 +63,7 @@ export class BoardComponent implements OnInit {
 
   getGroups(groupedItems: { [key: string]: any[] }): string[] {
     var keys = Object.keys(groupedItems);
-    console.log(groupedItems);
+    
     return keys;
   }
 

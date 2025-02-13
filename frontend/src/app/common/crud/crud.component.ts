@@ -330,7 +330,7 @@ initializeForm(): void {
   
   onImport(event: any) {
     this.data = this.data.concat(event);
-    this.onBulkImport.emit({type: 'Bulk' , data: this.data});
+    this.onBulkImport.emit({type: 'Bulk' , data: event});
   }
 
 }
