@@ -1,0 +1,8 @@
+<div class="grid">
+    <div class="col-12">
+        <app-crud [displayName]="'Bookings'" [data]="bookings" [options]="crudOptions"
+             (onAction)="onAction($event)" (onFilterChange)="onFilterChange($event)" (onClear)="onClear()"
+             (onBulkImport)="getBulkImport($event)">
+        </app-crud>
+    </div>
+</div>

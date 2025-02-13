@@ -34,7 +34,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Properties',
                 items: [
                     { label: 'Listing', icon: 'fa fa-bed', routerLink: ['/crm/hostels'] },
-                    { label: 'Bookings', icon: 'fa fa-square-check', routerLink: ['/crm/booking'] },
+                    { label: 'Bookings', icon: 'fa fa-square-check', routerLink: ['/crm/bookings'] },
                 ]
             },
             // {

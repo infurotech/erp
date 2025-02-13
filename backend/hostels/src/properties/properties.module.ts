@@ -5,16 +5,19 @@ import { AuditService, DatabaseService } from '@infuro/shared';
 import { Property } from './entities/properties.entity';
 import { PropertyService } from './services/properties.service';
 import { PropertyController } from './controllers/properties.controller';
+import { BookingService } from './services/bookings.service';
+import { BookingController } from './controllers/bookings.controller';
+import { Booking } from './entities/bookings.entity';
 @Module({
-  imports: [TypeOrmModule.forFeature([Property])],
-  providers: [PropertyService,Repository,
+  imports: [TypeOrmModule.forFeature([Property, Booking])],
+  providers: [PropertyService, BookingService, Repository,
     {
     provide: DatabaseService,
     useFactory: (dataSource: DataSource) => new DatabaseService(dataSource),
     inject: [DataSource],
   },
   AuditService],
-  exports: [PropertyService, DatabaseService],
-  controllers: [PropertyController],
+  exports: [PropertyService, DatabaseService, BookingService],
+  controllers: [PropertyController, BookingController],
 })
 export class PropertyDataModule {}

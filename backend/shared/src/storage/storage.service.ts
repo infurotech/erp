@@ -48,7 +48,7 @@ export class StorageService {
 
   private async saveToLocal(file: Express.Multer.File): Promise<string> {
     const uploadPath = this.configService.get<string>('uploadPath');
-    const filePath = `${uploadPath}/${file.originalname}`;
+    const filePath = `${'./temp'}/${file.originalname}`;
     fs.renameSync(file.path, filePath);
     return filePath;
   }
