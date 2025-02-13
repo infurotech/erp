@@ -28,17 +28,15 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Opportunities', icon: 'fa fa-crown', routerLink: ['/common/empty'] },
                     { label: 'Marketing', icon: 'fa fa-paper-plane', routerLink: ['/common/empty'] },
                     { label: 'Analytics', icon: 'fa fa-chart-simple', routerLink: ['/common/empty'] },
-                    { label: 'Hostels', icon: 'fa fa-bed', routerLink: ['/crm/hostels'] },
                 ]
             },
-            // {
-            //     label: 'Sales',
-            //     items: [
-            //         { label: 'Orders', icon: 'fa fa-square-check', routerLink: ['/common/empty'] },
-            //         { label: 'Invoices', icon: 'fa fa-receipt', routerLink: ['/common/empty'] },
-            //         { label: 'Quotes', icon: 'fa fa-list-check', routerLink: ['/common/empty'] },
-            //     ]
-            // },
+            {
+                label: 'Properties',
+                items: [
+                    { label: 'Listing', icon: 'fa fa-bed', routerLink: ['/crm/hostels'] },
+                    { label: 'Bookings', icon: 'fa fa-square-check', routerLink: ['/crm/booking'] },
+                ]
+            },
             // {
             //     label: 'Inventory',
             //     items: [
