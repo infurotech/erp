@@ -4,6 +4,11 @@ import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    allowedHeaders: ['content-type'],
+    origin: 'http://localhost:3001',
+    credentials: true,
+  });
   // the next two lines did the trick
   app.use(bodyParser.json({limit: '50mb'}));
   app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
