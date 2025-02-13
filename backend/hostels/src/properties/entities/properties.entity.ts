@@ -17,24 +17,24 @@ export class Property {
   @Column({ nullable: true })
   longitude: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'hosteltype' })
   hostelType: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'roomtype' })
   roomType: string;
 
-  @Column('decimal', { nullable: true })
+  @Column('decimal', { nullable: true, name: 'pricepermonth' })
   pricePerMonth: number;
 
-  @Column('int', { nullable: true })
+  @Column('int', { nullable: true, name: 'availableunits'  })
   availableUnits: number;
 
   @Column('text', { nullable: true })
   amenities: string[];
 
-  @Column('text', { nullable: true })
+  @Column('text', { nullable: true, name: 'otherofferings' })
   otherOfferings: string[];
 
-  @Column('text', { nullable: true })
+  @Column('text', { nullable: true, name: 'imageurls' })
   imageUrls: string[];
 }
