@@ -1,5 +1,5 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { Crud, CrudController } from '@nestjsx/crud';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import { Crud, CrudController, Override } from '@nestjsx/crud';
 import { Property } from '../entities/properties.entity';
 import { PropertyService } from '../services/properties.service';
  
@@ -11,6 +11,16 @@ import { PropertyService } from '../services/properties.service';
 @Controller('properties')
 export class PropertyController implements CrudController<Property> {
   constructor(public service: PropertyService) {}
+
+  @Override("getOneBase")
+  async getOneCustom(@Param("id", ParseIntPipe) id: number): Promise<Property & { availableUnits: number }> {
+    return this.service.findOneCustom(id);
+  }
+
+  @Override("getManyBase")
+  async getManyCustom(): Promise<Array<Property>> {
+    return this.service.findAllCustom();
+  }
 
   @Get("search")
   async findNearbyHostels(

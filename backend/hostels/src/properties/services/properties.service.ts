@@ -1,14 +1,72 @@
-import { Injectable, Scope } from "@nestjs/common";
+import { Injectable, NotFoundException, Scope } from "@nestjs/common";
 
 import { CrudService, DatabaseService } from "@infuro/shared";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Property } from "../entities/properties.entity";
+import { FindOneOptions, Repository } from "typeorm";
+import { Booking } from "../entities/bookings.entity";
 
 @Injectable({ scope: Scope.REQUEST })
 export class PropertyService extends CrudService<Property> {
 
-  constructor(@InjectRepository(Property) repo, databaseService: DatabaseService) {
+  constructor(
+    @InjectRepository(Property) repo,
+    @InjectRepository(Booking) private readonly bookingRepo,
+    databaseService: DatabaseService) {
     super(repo, databaseService);
+  }
+
+  async findOneCustom(id: number): Promise<Property & { availableUnits: number }> {
+    // Fetch the property
+    const property = await this.repo.createQueryBuilder("property")
+      .where("property.id = :id", { id })
+      .getOne();
+
+    if (!property) {
+      throw new NotFoundException(`Property with ID ${id} not found`);
+    }
+
+    // Count booked units for this property
+    const bookedUnits = await this.bookingRepo
+      .createQueryBuilder("booking")
+      .where("booking.propertyId = :id", { id })
+      .andWhere("booking.booked = :status", { status: "true" })
+      .getCount();
+
+    // Calculate available units dynamically
+    const availableUnits = Math.max(property.availableunits - bookedUnits, 0);
+
+    return { ...property, availableUnits };
+  }
+
+  async findAllCustom(): Promise<Array<Property>> {
+    const properties = await this.repo
+      .createQueryBuilder("property")
+      .leftJoinAndSelect(
+        (qb) =>
+          qb
+            .from(Booking, "booking")
+            .select("booking.propertyid", "propertyid")
+            .addSelect("COUNT(booking.id)", "bookedunits")
+            .where("booking.booked = :status", { status: "true" })
+            .groupBy("booking.propertyid"),
+        "bookings",
+        "bookings.propertyid = property.id"
+      )
+      .addSelect("COALESCE(property.availableunits - bookings.bookedunits, property.availableunits)", "availableunits")
+      .getRawMany();
+
+      return properties.map((row) => ({
+        id: row.property_id,
+        name: row.property_name,
+        address: row.property_address,
+        availableunits: row.availableunits, // Calculated field
+        amenities: row.property_amenities,
+        latitude: row.property_latitude,
+        longitude: row.property_longitude,
+        otherofferings: row.property_otherofferings,
+        pricepermonth: row.property_pricepermonth
+      })) as (Property)[];
   }
 
   async findNearbyHostels(
@@ -22,16 +80,14 @@ export class PropertyService extends CrudService<Property> {
     skip: number = 0
   ): Promise<Property[]> {
 
-    console.log([search || null, minPrice || null, maxPrice || null, lng || null, lat || null, radius || null, page || null, skip || null]);
-
-    const data =  this.repo.query(
+    const data = this.repo.query(
       `SELECT property.id, property.name, address, pricepermonth, (availableunits - count(booking)) as availableunits, latitude, longitude, 
               amenities, otherofferings, COUNT(*) OVER() AS total
        FROM property
        LEFT JOIN booking on property.id = booking.propertyid
        WHERE 
           (ST_DistanceSphere(ST_SetSRID(ST_MakePoint(longitude::FLOAT, latitude::FLOAT), 4326), 
-           ST_MakePoint($4::FLOAT, $5::FLOAT)) < $6) AND (
+           ST_MakePoint($4::FLOAT, $5::FLOAT)) < $6) AND (availableunits - count(booking))  > 0 AND (
           
            ($2::DOUBLE PRECISION IS NULL OR pricepermonth >= $2::DOUBLE PRECISION)  -- Minimum price
           AND ($3::DOUBLE PRECISION IS NULL OR pricepermonth <= $3::DOUBLE PRECISION)  -- Maximum price
@@ -43,7 +99,6 @@ export class PropertyService extends CrudService<Property> {
        LIMIT $7 OFFSET $8;`,
       [search || null, minPrice || null, maxPrice || null, lng || null, lat || null, radius * 1000 || 5000, page || null, skip || null]
     );
-    console.log(data);
     return data;
   }
 }
