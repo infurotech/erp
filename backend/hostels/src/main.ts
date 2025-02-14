@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as bodyParser from 'body-parser';
+import * as express from "express";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,6 +10,10 @@ async function bootstrap() {
     origin: 'http://localhost:3001,https://properties.infurotech.com',
     credentials: true,
   });
+  
+  const expressApp = app.getHttpAdapter().getInstance();
+  expressApp.set("trust proxy", true); // ✅ Properly set trust proxy
+
   // the next two lines did the trick
   app.use(bodyParser.json({limit: '50mb'}));
   app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
