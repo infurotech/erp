@@ -6,7 +6,7 @@ export class Booking {
   id: number;
 
   @Column({ nullable: true })
-  propertyId: string;
+  propertyid: number;
 
   @Column({ nullable: true })
   name: string;

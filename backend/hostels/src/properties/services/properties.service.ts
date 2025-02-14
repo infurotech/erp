@@ -13,31 +13,35 @@ export class PropertyService extends CrudService<Property> {
 
   async findNearbyHostels(
     search?: string,
-    minPrice: number = 0,
-    maxPrice: number = 100000,
-    lat: number = 43.0511,
-    lng: number = 76.1436,
+    minPrice?: number,
+    maxPrice?: number,
+    lat: number = 40.758,
+    lng: number = -73.9855,
     radius: number = 5000,
-    page: number = 10,
+    page: number = 100,
     skip: number = 0
   ): Promise<Property[]> {
+
+    console.log([search || null, minPrice || null, maxPrice || null, lng || null, lat || null, radius || null, page || null, skip || null]);
+
     return this.repo.query(
-      `SELECT id, name, address, pricepermonth, availableunits, latitude, longitude, 
+      `SELECT property.id, property.name, address, pricepermonth, (availableunits - count(booking)) as availableunits, latitude, longitude, 
               hosteltype, roomtype, amenities, otherofferings, imageurls
        FROM property
+       LEFT JOIN booking on property.id = booking.propertyid
        WHERE 
           (ST_DistanceSphere(ST_SetSRID(ST_MakePoint(longitude::FLOAT, latitude::FLOAT), 4326), 
-           ST_MakePoint($4::FLOAT, $5::FLOAT)) < $6)
+           ST_MakePoint($4::FLOAT, $5::FLOAT)) < $6) AND (
           
-          OR ($2::DOUBLE PRECISION IS NULL OR pricepermonth >= $2::DOUBLE PRECISION)  -- Minimum price
-          OR ($3::DOUBLE PRECISION IS NULL OR pricepermonth <= $3::DOUBLE PRECISION)  -- Maximum price
+           ($2::DOUBLE PRECISION IS NULL OR pricepermonth >= $2::DOUBLE PRECISION)  -- Minimum price
+          AND ($3::DOUBLE PRECISION IS NULL OR pricepermonth <= $3::DOUBLE PRECISION)  -- Maximum price
           
-          OR ($1::TEXT IS NULL OR name ILIKE '%' || $1::TEXT || '%') 
-          OR ($1::TEXT IS NULL OR address ILIKE '%' || $1::TEXT || '%')
+          AND ($1::TEXT IS NULL OR (property.name ILIKE '%' || $1::TEXT || '%' OR address ILIKE '%' || $1::TEXT || '%')))
        
+       GROUP BY property.id
        ORDER BY pricePerMonth ASC
        LIMIT $7 OFFSET $8;`,
-      [search, minPrice, maxPrice, lng, lat, radius, page, skip]
+      [search || null, minPrice || null, maxPrice || null, lng || null, lat || null, radius || 5000, page || null, skip || null]
     );
   }
 }

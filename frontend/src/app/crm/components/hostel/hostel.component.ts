@@ -18,13 +18,13 @@ export class HostelComponent implements OnInit{
       fields: [
         { field: 'name', label: 'Name', type: 'text', required: true },
         { field: 'address', label: 'Address', type: 'text', required: true },
-        { field: 'imageUrls', label: 'Image URLs', type: 'custom', required: true },
+        { field: 'imageurls', label: 'Image URLs', type: 'custom', required: true },
         { field: 'latitude', label: 'Latitude', type: 'number', required: true },
         { field: 'longitude', label: 'Longitude', type: 'number', required: true },
-        { field: 'hostelType', label: 'Hostel Type', type: 'text', required: true },
-        { field: 'roomType', label: 'Room Type', type: 'text', required: true },
-        { field: 'pricePerMonth', label: 'Price per Month', type: 'number', required: true },
-        { field: 'availableUnits', label: 'Available Units', type: 'number', required: true },
+        { field: 'hosteltype', label: 'Hostel Type', type: 'text', required: true },
+        { field: 'roomtype', label: 'Room Type', type: 'text', required: true },
+        { field: 'pricepermonth', label: 'Monthly Rent', type: 'number', required: true },
+        { field: 'availableunits', label: 'Available Units', type: 'number', required: true },
         { field: 'amenities', label: 'Amenities', type: 'text', required: true, filter: true, options: [
             { label: 'AC Rooms', value: 'AC Rooms' },
             { label: '24/7 Security', value: '24/7 Security' },
