@@ -17,11 +17,11 @@ export class Property {
   @Column({ nullable: true })
   longitude: string;
 
-  @Column({ nullable: true })
-  hosteltype: string;
+  // @Column({ nullable: true })
+  // hosteltype: string;
 
-  @Column({ nullable: true })
-  roomtype: string;
+  // @Column({ nullable: true })
+  // roomtype: string;
 
   @Column('decimal', { nullable: true })
   pricepermonth: number;
@@ -35,6 +35,6 @@ export class Property {
   @Column('text', { nullable: true })
   otherofferings: string[];
 
-  @Column('text', { nullable: true })
-  imageurls: string[];
+  // @Column('text', { nullable: true })
+  // imageurls: string[];
 }

@@ -17,16 +17,16 @@ export class PropertyService extends CrudService<Property> {
     maxPrice?: number,
     lat: number = 40.758,
     lng: number = -73.9855,
-    radius: number = 5000,
+    radius: number = 5,
     page: number = 100,
     skip: number = 0
   ): Promise<Property[]> {
 
     console.log([search || null, minPrice || null, maxPrice || null, lng || null, lat || null, radius || null, page || null, skip || null]);
 
-    return this.repo.query(
+    const data =  this.repo.query(
       `SELECT property.id, property.name, address, pricepermonth, (availableunits - count(booking)) as availableunits, latitude, longitude, 
-              hosteltype, roomtype, amenities, otherofferings, imageurls
+              amenities, otherofferings, COUNT(*) OVER() AS total
        FROM property
        LEFT JOIN booking on property.id = booking.propertyid
        WHERE 
@@ -41,8 +41,10 @@ export class PropertyService extends CrudService<Property> {
        GROUP BY property.id
        ORDER BY pricePerMonth ASC
        LIMIT $7 OFFSET $8;`,
-      [search || null, minPrice || null, maxPrice || null, lng || null, lat || null, radius || 5000, page || null, skip || null]
+      [search || null, minPrice || null, maxPrice || null, lng || null, lat || null, radius * 1000 || 5000, page || null, skip || null]
     );
+    console.log(data);
+    return data;
   }
 }
 
