@@ -10,9 +10,10 @@ import { InjectDataSource } from '@nestjs/typeorm';
 export class DatabaseService {
 
   tokenValidator = {
-    issuer:  'dev.wakandi.com',
-    audience:  'cams',
-    securityKey: '4WRVu85iemmA4JFWv6F1h8M6HWTmY67o0b4p3yz6olUd3oT7bkgc4OKqOeXbXvVPqN5aUIlRB2dBmuSHa7CmnNTWCsXRyLaViwJyIx7bLSK5m5ckd5z4ZyKXYHhRyfk6',
+    issuer:  process.env.ISSUER,
+    audience:  process.env.AUDIENCE,
+    securityKey: process.env.SECURITY_KEY,
+    algorithms: process.env.ALGORITHMS
   };
 
   private configService: ConfigService;
@@ -56,15 +57,14 @@ export class DatabaseService {
 
   async getTenantConnection(token: string): Promise<DataSource> {
     const jwtSecret = this.configService.get<string>(process.env.SECURITY_KEY, 'default_secret');
-    // const decoded: any = this.jwtService.verify(
-    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjE4MjI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InR6dWF0ZGVtb3NhY2Nvc0BkZXYud2FrYW5kaS5jb20iLCJBc3BOZXQuSWRlbnRpdHkuU2VjdXJpdHlTdGFtcCI6ImFmOTc5ZDBiLTJmMzctMzE5OS02YzMzLTNhMTEyNDQxZWUwYiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJDbGllbnQiLCJBY2NvdW50YW50IiwiQWRtaW4iLCJBdWRpdG9yIiwiQm9hcmRNZW1iZXIiLCJCb2FyZE1lbWJlclJlcHJlc2VudGF0aXZlIiwiQ2xpZW50TWFuYWdlciIsIkNyZWRpdENvbW1pdHRlZSIsIkNyZWRpdE9mZmljZXIiLCJHZW5lcmFsTWFuYWdlciIsIkxvYW5PZmZpY2VyIiwiTmV3IFJvbGUiLCJTdXBwb3J0IiwiVGVsbGVyIl0sImh0dHA6Ly93d3cuYXNwbmV0Ym9pbGVycGxhdGUuY29tL2lkZW50aXR5L2NsYWltcy90ZW5hbnRJZCI6IjQwMCIsInN1YiI6IjE4MjI1IiwianRpIjoiODY3OTViYmMtY2ZjZC00YjA4LWIwZTMtMmYwMzk3ZmI1NjVhIiwiaWF0IjoxNzM4NTU2MTkxLCJlbWFpbCI6InR6dWF0ZGVtb3NhY2Nvc0BkZXYud2FrYW5kaS5jb20iLCJzYWNjb3NfZW1haWwiOiJ0enVhdGRlbW9zYWNjb3NAZGV2Lndha2FuZGkuY29tIiwic2FjY29zX25hbWUiOiJUWlVBVERlbW9TYWNjb3MiLCJzYWNjb3NfaWQiOiIxMDE2NzAiLCJXQUsiOiJXQkE6QSIsIkNBTSI6IkNBUzpTLENSUzpTLENNUzpTIiwibW9kdWxlVHlwZSI6IlNhY2NvcyIsIm5iZiI6MTczODU1NjE5MSwiZXhwIjoxNzM4NTU5NzkxLCJpc3MiOiJ3YWthbmRpLmNvbSIsImF1ZCI6ImNhbXMifQ.sT08VUpqk3d2lEEGsHr5HzPS5P455pSbtRcXHDo-nC0', {
-    //     publicKey: this.tokenValidator.securityKey,
-    //     audience:  this.tokenValidator.audience,
-    //     algorithms: ['HS256'] ,
-    //     issuer:    this.tokenValidator.issuer
-    //   });
-    //
-    const tenantId = '101';
+    const decoded: any = this.jwtService.verify(token, {
+        publicKey: this.tokenValidator.securityKey,
+        audience:  this.tokenValidator.audience,
+        algorithms: this.tokenValidator.algorithms as any,
+        issuer:    this.tokenValidator.issuer
+      });
+
+    const tenantId = decoded['http://www.aspnetboilerplate.com/identity/claims/tenantId'];
     if (!tenantId) throw new UnauthorizedException('Invalid token: Missing tenantId');
     const connectionString = await this.fetchConnectionString(tenantId);
     
