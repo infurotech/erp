@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query, Req } from '@nestjs/common';
 import { Crud, CrudController, Override } from '@nestjsx/crud';
 import { Property } from '../entities/properties.entity';
 import { PropertyService } from '../services/properties.service';
@@ -18,7 +18,8 @@ export class PropertyController implements CrudController<Property> {
   }
 
   @Override("getManyBase")
-  async getManyCustom(): Promise<Array<Property>> {
+  async getManyCustom(@Req() req: Request): Promise<Array<Property>> {
+    console.log('Incoming Request:', req);
     return this.service.findAllCustom();
   }
 }

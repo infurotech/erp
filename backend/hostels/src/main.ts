@@ -5,14 +5,13 @@ import * as express from "express";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  console.log('ALLOWED_ORIGIN',process.env.ALLOWED_ORIGIN);
+
   app.enableCors({
     allowedHeaders: ['content-type'],
     origin: process.env.ALLOWED_ORIGIN,
     credentials: true,
   });
-
-  const expressApp = app.getHttpAdapter().getInstance();
-  expressApp.set("trust proxy", true); // ✅ Properly set trust proxy
 
   // the next two lines did the trick
   app.use(bodyParser.json({limit: '50mb'}));
