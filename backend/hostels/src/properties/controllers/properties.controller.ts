@@ -21,8 +21,13 @@ export class PropertyController implements CrudController<Property> {
   async getManyCustom(): Promise<Array<Property>> {
     return this.service.findAllCustom();
   }
+}
 
-  @Get("search")
+@Controller('search')
+export class SearchController implements CrudController<Property> {
+  constructor(public service: PropertyService) {}
+
+  @Get("")
   async findNearbyHostels(
     @Query("search") search?: string,
     @Query("minPrice") minPrice?: string,

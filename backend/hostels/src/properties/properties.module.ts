@@ -4,7 +4,7 @@ import { Repository , DataSource } from 'typeorm';
 import { AuditService, DatabaseService } from '@infuro/shared';
 import { Property } from './entities/properties.entity';
 import { PropertyService } from './services/properties.service';
-import { PropertyController } from './controllers/properties.controller';
+import { PropertyController, SearchController } from './controllers/properties.controller';
 import { BookingService } from './services/bookings.service';
 import { BookingController } from './controllers/bookings.controller';
 import { Booking } from './entities/bookings.entity';
@@ -18,6 +18,6 @@ import { Booking } from './entities/bookings.entity';
   },
   AuditService],
   exports: [PropertyService, DatabaseService, BookingService],
-  controllers: [PropertyController, BookingController],
+  controllers: [PropertyController, BookingController, SearchController],
 })
 export class PropertyDataModule {}

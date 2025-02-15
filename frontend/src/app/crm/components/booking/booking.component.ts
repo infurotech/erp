@@ -18,10 +18,10 @@ export class BookingComponent {
       { field: 'email', label: 'Email', type: 'text', required: true },
       { field: 'phone', label: 'Phone', type: 'text', required: true }, 
       { field: 'booked', label: 'Booked', type: 'tag', filter: true,  required: true, options:[
-        { label: 'Booked', value: 'true' },
-        { label: 'Available', value: 'false'}
+        { label: 'Booked', value: true, severity: "danger" },
+        { label: 'Available', value: false, severity: "success"}
       ] },
-      { field: 'propertyId', label: 'Property', type: 'text', required: true },
+      { field: 'propertyid', label: 'Property', type: 'text', required: true },
     ]
   }
   selectedUser:string = '';

@@ -7,10 +7,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     allowedHeaders: ['content-type'],
-    origin: 'http://localhost:3001,https://properties.infurotech.com',
+    origin: process.env.ALLOWED_ORIGIN,
     credentials: true,
   });
-  
+
   const expressApp = app.getHttpAdapter().getInstance();
   expressApp.set("trust proxy", true); // ✅ Properly set trust proxy
 

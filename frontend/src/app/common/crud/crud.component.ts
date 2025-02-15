@@ -119,9 +119,9 @@ initializeForm(): void {
     if (field.pattern) {
       validators.push(Validators.pattern(field.pattern));
     }
-    if (field.field === 'name') {
-      validators.push(Validators.pattern('^[a-zA-Z0-9_]*$'));
-    }
+    // if (field.field === 'name') {
+    //   validators.push(Validators.pattern('^[a-zA-Z0-9_]*$'));
+    // }
     if (field.field === 'email') {
       validators.push(Validators.email);  
     }

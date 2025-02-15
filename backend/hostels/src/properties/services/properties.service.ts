@@ -84,17 +84,19 @@ export class PropertyService extends CrudService<Property> {
       `SELECT property.id, property.name, address, pricepermonth, (availableunits - count(booking)) as availableunits, latitude, longitude, 
               amenities, otherofferings, COUNT(*) OVER() AS total
        FROM property
-       LEFT JOIN booking on property.id = booking.propertyid
+       LEFT JOIN booking on property.id = booking.propertyid and booking.booked <> false
        WHERE 
           (ST_DistanceSphere(ST_SetSRID(ST_MakePoint(longitude::FLOAT, latitude::FLOAT), 4326), 
-           ST_MakePoint($4::FLOAT, $5::FLOAT)) < $6) AND (availableunits - count(booking))  > 0 AND (
+           ST_MakePoint($4::FLOAT, $5::FLOAT)) < $6) 
+           AND (
           
            ($2::DOUBLE PRECISION IS NULL OR pricepermonth >= $2::DOUBLE PRECISION)  -- Minimum price
-          AND ($3::DOUBLE PRECISION IS NULL OR pricepermonth <= $3::DOUBLE PRECISION)  -- Maximum price
+          AND ($3::DOUBLE PRECISION IS NULL OR pricepermonth is null)  -- Maximum price
           
           AND ($1::TEXT IS NULL OR (property.name ILIKE '%' || $1::TEXT || '%' OR address ILIKE '%' || $1::TEXT || '%')))
        
        GROUP BY property.id
+       HAVING (availableunits - count(booking))  > 0 
        ORDER BY pricePerMonth ASC
        LIMIT $7 OFFSET $8;`,
       [search || null, minPrice || null, maxPrice || null, lng || null, lat || null, radius * 1000 || 5000, page || null, skip || null]
