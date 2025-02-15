@@ -63,7 +63,6 @@ export class GridComponent implements OnInit {
   } 
   
   getTagLabel(field: CrudField, value: string){
-    console.log(value)
     var label = value;
     if(field.options){
       label = field.options?.find(op => op.value == value)?.label;

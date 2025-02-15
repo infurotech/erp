@@ -19,7 +19,6 @@ export class PropertyController implements CrudController<Property> {
 
   @Override("getManyBase")
   async getManyCustom(@Req() req: Request): Promise<Array<Property>> {
-    console.log('Incoming Request:', req);
     return this.service.findAllCustom();
   }
 }
