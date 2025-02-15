@@ -18,7 +18,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   @Input() options: CrudOptions;  // Field definitions
   @Input() data: T[] = [];           // List of items
   @Input() filteredFields: Array<CrudField> = [];  // Field definitions
-  @Output() onAction = new EventEmitter<any[]>();
+  @Output() onAction = new EventEmitter<any>();
   @Output() onFilterChange = new EventEmitter<any[]>();
   @Output() onClear = new EventEmitter<any[]>();
   @ContentChild('filterTemplate', { static: false }) filterTemplate!: TemplateRef<any>;
@@ -98,7 +98,7 @@ initializeForm(): void {
 
   this.options.fields.forEach(field => {
     const validators = this.getValidators(field);
-    group[field.field] = [this.editingItem?.[field.field] || '', validators];
+    group[field.field] = [this.editingItem?.[field.field], validators];
   });
 
   this.form = this.fb.group(group); 
@@ -155,7 +155,7 @@ initializeForm(): void {
     } else {
       this.addItem();
     }
-    this.onAction.emit(this.form.value);
+    this.onAction.emit({event: this.isEditing ? 'Update': 'Create', data: this.form.value});
   }
 
   // Add new item to the list

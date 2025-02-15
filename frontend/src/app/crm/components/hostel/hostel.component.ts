@@ -16,7 +16,7 @@ export class HostelComponent implements OnInit{
       boardView: false,
       gridEditing: false,
       fields: [
-        // { field: 'id', label: 'Id', type: 'number', required: true },
+        { field: 'id', label: 'Id', type: 'number', required: false },
         { field: 'name', label: 'Name', type: 'text', required: true },
         { field: 'address', label: 'Address', type: 'text', required: true },
         // { field: 'imageurls', label: 'Image URLs', type: 'custom', required: true },
@@ -69,8 +69,12 @@ export class HostelComponent implements OnInit{
       this.hostels = await this.hostelService.getAllProperties().toPromise();
     }
     
-   
-    onAction(actionData: any): void {
+    async onAction(actionData: any) {
+      if(actionData.event == "Update"){
+        await this.hostelService.updateProperty(actionData.data.id, actionData.data).toPromise();
+      } else if(actionData.event == "Create"){
+        await this.hostelService.createProperty(actionData.data).toPromise();
+      }
     }
   
     onFilterChange(event){

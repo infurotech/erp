@@ -37,11 +37,13 @@ export class BookingComponent {
     this.fieldOption = this.crudOptions.fields;
     this.bookings = await this.bookingService.getAllBookins().toPromise();
   }
-  
  
   async onAction(actionData: any) {
-    console.log(actionData);
-    const booking = await this.bookingService.createBooking(actionData).toPromise();
+    if(actionData.event == "Update"){
+      await this.bookingService.updateBooking(actionData.data.id, actionData.data).toPromise();
+    } else if(actionData.event == "Create"){
+      await this.bookingService.createBooking(actionData.data).toPromise();
+    }
   }
 
   onFilterChange(event){
@@ -52,8 +54,6 @@ export class BookingComponent {
   }
 
   async getBulkImport(event) {
-    
     const properties = await this.bookingService.bulkUploadBooking({bulk: event.data}).toPromise();
   }
-
 }
