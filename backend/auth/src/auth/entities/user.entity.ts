@@ -13,5 +13,4 @@ export class User extends BaseEntity{
   profileUrl: string;
   @Column()
   email: string;
-
 }

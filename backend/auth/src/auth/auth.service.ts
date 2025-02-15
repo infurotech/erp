@@ -18,21 +18,16 @@ export class AuthService extends TypeOrmCrudService<User>{
     if (user?.password !== pass) {
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.id };
     return {
       data : {
-        token: await this.jwtService.signAsync(payload),
+        token: await this.jwtService.signAsync({ sub: user.id }),
         name: user.firstName,
         avatar: user.profileUrl
       }
     };
   }
-
-  async 
-
-  async findByUsername(username: string): Promise<User | undefined> {
+  async findByUsername(username: string): Promise<User | null> {
     var user = await this.repo.findOneBy({ email: username });
-    console.log(user);
     return user;
   }
 }
