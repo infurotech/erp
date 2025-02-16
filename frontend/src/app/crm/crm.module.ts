@@ -7,12 +7,17 @@ import { CRMRoutingModule } from './crm.routing';
 
 import { ContactComponent } from './components/contacts/contact.component';
 import { CustomerService } from './services/customer.service';
-
+import { HostelComponent } from './components/hostel/hostel.component';
+import { HostelService } from './services/hostel.service';
+import { BookingService } from './services/booking.service';
+import { BookingComponent } from './components/booking/booking.component';
 
 
 @NgModule({
   declarations: [
-    ContactComponent
+    ContactComponent,
+    HostelComponent,
+    BookingComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +26,7 @@ import { CustomerService } from './services/customer.service';
     CRMRoutingModule
   ],
   providers:[
-    CustomerService
+    CustomerService, HostelService, BookingService
   ]
 })
 export class CRMModule { }

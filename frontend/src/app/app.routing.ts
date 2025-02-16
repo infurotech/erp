@@ -2,6 +2,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './common/notfound/notfound.component';
 import { AppLayoutComponent } from "./common/layout/app.layout.component";
+import { AuthGuard } from './shared/AuthGuard';
 
 @NgModule({
     imports: [
@@ -14,7 +15,8 @@ import { AppLayoutComponent } from "./common/layout/app.layout.component";
                     { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(m => m.InventoryModule) },
                     { path: 'sales', loadChildren: () => import('./sales/sales.module').then(m => m.SalesModule) },
                     { path: 'common', loadChildren: () => import('./common/common.module').then(m => m.AppCommonModule) }
-                ]
+                ],
+                canActivate: [AuthGuard]
             },
             { path: 'auth', loadChildren: () => import('./account/account.module').then(m => m.AccountModule) },
             { path: 'notfound', component: NotfoundComponent },

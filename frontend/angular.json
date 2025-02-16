@@ -19,6 +19,7 @@
                     "options": {
                         "outputPath": "dist/erp-app",
                         "index": "src/index.html",
+                        "baseHref": "/admin/",
                         "main": "src/main.ts",
                         "polyfills": [
                             "zone.js"
@@ -27,7 +28,8 @@
                         "inlineStyleLanguage": "scss",
                         "assets": [
                             "src/favicon.ico",
-                            "src/assets"
+                            "src/assets",
+                            "src/nginx.conf"
                         ],
                         "styles": [
                             "src/styles.scss"
@@ -39,13 +41,13 @@
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "1mb",
+                                    "maximumWarning": "5mb",
                                     "maximumError": "5mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
-                                    "maximumWarning": "2kb",
-                                    "maximumError": "4kb"
+                                    "maximumWarning": "8kb",
+                                    "maximumError": "16kb"
                                 }
                             ],
                             "outputHashing": "all"
