@@ -34,29 +34,29 @@ export class DatabaseService {
     return decrypted;
   }
 
-  private async fetchConnectionString(tenantId: string): Promise<string> {
-    const cacheKey = `db-conn-${tenantId}`;
+  private async fetchConnectionString(saccos_name: string): Promise<string> {
+    // const cacheKey = `db-conn-${tenantId}`;
     
     // const cachedConn = await this.cachingManager.get<string>(cacheKey);
     // if (cachedConn) return cachedConn;
-    const tenantRepo: Repository<any> = this.defaultDataSource.getRepository('tenants');
+    const tenantRepo: Repository<any> = this.defaultDataSource.getRepository('wp_wzaccounts');
 
-    const allTenants = await tenantRepo.find();
-    console.log('📋 Total tenants in DB:', allTenants);
-
-    const tenant = await tenantRepo.findOne({ where: { tenantId } });
-    console.log("tenant",tenant)
-    if (!tenant || !tenant.encryptedConnection) {
+    const wzAccount = await tenantRepo.findOne({ where: { label: saccos_name } });
+    if (!wzAccount) {
       throw new UnauthorizedException('Tenant database configuration not found.');
     }
-
-    const decryptedConn = await this.decryptConnectionString(tenant.encryptedConnection);
+    if(process.env.IS_LOCAL) {
+      wzAccount.db_host = process.env.HOST;
+      wzAccount.db_port = process.env.PORT;
+    }
+    const connectionUrl = `mysql://${wzAccount.db_login}:${wzAccount.db_password}@${wzAccount.db_host}:${wzAccount.db_port}/${wzAccount.db_database}`;
+    // const decryptedConn = await this.decryptConnectionString(tenant);
     // await this.cachingManager.set(cacheKey, decryptedConn, { ttl: 600 }); // Cache for 10 min
-    return decryptedConn;
+    return connectionUrl;
   }
 
   async getTenantConnection(token: string): Promise<DataSource> {
-    const jwtSecret = this.configService.get<string>(process.env.SECURITY_KEY, 'default_secret');
+    
     const decoded: any = this.jwtService.verify(token, {
         publicKey: this.tokenValidator.securityKey,
         audience:  this.tokenValidator.audience,
@@ -64,14 +64,12 @@ export class DatabaseService {
         issuer:    this.tokenValidator.issuer
       });
 
-    const tenantId = decoded['http://www.aspnetboilerplate.com/identity/claims/tenantId'];
-    if (!tenantId) throw new UnauthorizedException('Invalid token: Missing tenantId');
-    const connectionString = await this.fetchConnectionString(tenantId);
-    
+    const saccos_name = decoded['saccos_name'];
+    if (!saccos_name) throw new UnauthorizedException('Invalid token: Missing saccos_name');
+    const connectionString = await this.fetchConnectionString(saccos_name);
     return new DataSource({
       type: 'mysql',
       url: connectionString,
-      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       synchronize: false,
     }).initialize();
   }
