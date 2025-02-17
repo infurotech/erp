@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { Repository , DataSource } from 'typeorm';
 import { AuditService, DatabaseService } from '@infuro/shared';
 import { Property } from './entities/properties.entity';
@@ -10,7 +11,7 @@ import { BookingController } from './controllers/bookings.controller';
 import { Booking } from './entities/bookings.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Property, Booking])],
-  providers: [PropertyService, BookingService, Repository,
+  providers: [JwtService, PropertyService, BookingService, Repository,
     {
     provide: DatabaseService,
     useFactory: (dataSource: DataSource) => new DatabaseService(dataSource),

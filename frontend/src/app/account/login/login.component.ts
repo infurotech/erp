@@ -29,6 +29,9 @@ export class LoginComponent implements OnInit {
         private fb: FormBuilder) { }
 
     ngOnInit() {
+        if(this.loginService.isUserAuthenticated()) {
+            this.router.navigate(['/']);
+        }
         this.loginForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(6)]]
@@ -48,7 +51,7 @@ export class LoginComponent implements OnInit {
         }
         const response = await this.loginService.login(this.loginForm.value).toPromise();
         if(response) {  
-            this.router.navigate(['/login']);
+            this.router.navigate(['/']);
         }
     }
 }

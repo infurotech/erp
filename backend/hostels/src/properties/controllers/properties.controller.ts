@@ -1,7 +1,8 @@
-import { Controller, Get, Param, ParseIntPipe, Query, Req } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query, Req, UseGuards } from '@nestjs/common';
 import { Crud, CrudController, Override } from '@nestjsx/crud';
 import { Property } from '../entities/properties.entity';
 import { PropertyService } from '../services/properties.service';
+import { AuthGuard } from '@infuro/shared';
  
 @Crud({
   model: {
@@ -9,6 +10,7 @@ import { PropertyService } from '../services/properties.service';
   }
 })
 @Controller('properties')
+@UseGuards(AuthGuard)
 export class PropertyController implements CrudController<Property> {
   constructor(public service: PropertyService) {}
 

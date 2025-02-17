@@ -7,11 +7,20 @@ import { AppRoutingModule } from './app.routing';
 import { AppLayoutModule } from './common/layout/app.layout.module';
 
 import { NotfoundComponent } from './common/notfound/notfound.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptorService } from './shared/AuthInterceptor';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
     imports: [AppRoutingModule, AppLayoutModule],
-    providers: [ { provide: LocationStrategy, useClass: PathLocationStrategy }, CookieService ],
+    providers: [
+        { provide: LocationStrategy, useClass: PathLocationStrategy },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptorService,
+            multi: true,
+        },
+        CookieService],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

@@ -11,10 +11,11 @@ export class AuthController {
     @Post('login')
     async login(@Body() signInDto: Record<string, any>, @Res() res: Response) {
         const response = await this.authService.signIn(signInDto.email, signInDto.password);
+        console.log(response);
 
         // Set HTTP-Only Cookie
         res.cookie(this.configService.get<string>('JWT_SECRET_TOKEN') || 'session_token', response.token, {
-            httpOnly: true,  // Prevent XSS attacks
+            //httpOnly: true,  // Prevent XSS attacks
             secure: process.env.NODE_ENV === 'production', // Use secure cookie in production
             sameSite: 'strict',
             maxAge: parseFloat(this.configService.get<string>('JWT_SECRET_AGE') || '0') , // 7 days expiration

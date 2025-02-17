@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as dotenv from 'dotenv';
@@ -23,9 +24,13 @@ dotenv.config();
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: true,
     }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'secret007',
+      signOptions: { expiresIn: '1h' },
+    }),
     PropertyDataModule, StorageModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtService],
 })
 export class AppModule {}

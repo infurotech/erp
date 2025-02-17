@@ -1,9 +1,10 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';
 import { Property } from '../entities/properties.entity';
 import { PropertyService } from '../services/properties.service';
 import { Booking } from '../entities/bookings.entity';
 import { BookingService } from '../services/bookings.service';
+import { AuthGuard } from '@infuro/shared';
  
 @Crud({
   model: {
@@ -11,6 +12,7 @@ import { BookingService } from '../services/bookings.service';
   }
 })
 @Controller('booking')
+@UseGuards(AuthGuard)
 export class BookingController implements CrudController<Booking> {
   constructor(public service: BookingService) {}
  
