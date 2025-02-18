@@ -64,3 +64,12 @@ $gutter: 1rem; //for primeflex grid system
 .board-toolbar{
     padding: .5rem 1rem;
 }
+
+
+.layout-topbar .layout-topbar-logo{
+    width: auto !important;
+}
+.layout-topbar .layout-topbar-logo img {
+    height: 3.5rem !important; 
+    margin-right: 0.5rem;
+  }

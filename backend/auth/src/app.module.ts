@@ -8,9 +8,6 @@ import { AuthModule } from './auth/auth.module';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-console.log(process.env.DB_HOST);
-console.log(process.env.DB_NAME);
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),

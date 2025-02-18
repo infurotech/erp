@@ -20,7 +20,8 @@ export class GridComponent implements OnInit {
   selectedRows: any[] = [];
   selectedItem: any[];
   @Output() requestDelete = new EventEmitter<any>();  
-
+  totalRecords: number = 1000; // Total records in DB
+  loading: boolean = false;
   ngOnInit(): void {
     this.tableActionItems = [
       {
@@ -71,6 +72,7 @@ export class GridComponent implements OnInit {
   }
 
   onSelectionChange(event: any) {
+    console.log(event);
     this.selectedRows = event;
     this.selectionChange.emit(this.selectedRows);
   }

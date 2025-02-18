@@ -22,7 +22,6 @@ export class AuthService extends CrudService<User> {
 
   async signIn(username: string, pass: string): Promise<any> {
     const user = await this.findByUsername(username);
-    console.log(user);
     if (!user || !bcrypt.compare(pass, user.password)) {
       throw new UnauthorizedException();
     }
