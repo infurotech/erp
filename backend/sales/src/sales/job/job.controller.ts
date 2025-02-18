@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller , Delete , Param , Body } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';
 import { Job } from './entities/job.entity';
 import { JobService } from './job.service';
@@ -26,5 +26,9 @@ import { JobService } from './job.service';
 @Controller('jobs')
 export class JobController implements CrudController<Job> {
   constructor(public service: JobService) {}
- 
+
+  @Delete(':id')
+  async deleteJob(@Param('id') id:number) {
+    this.service.softDelete(id);
+  }
 }

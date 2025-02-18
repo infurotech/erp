@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SalesModule } from './sales/sales.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuditLogsSubscriber } from '@infuro/shared'
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: process.env.DATABASE_TYPE as 'mysql' | 'postgres' | 'sqlite' | 'mongodb' || 'mysql',
@@ -15,7 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     synchronize: true
 }),SalesModule],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService,AuditLogsSubscriber] //update name
 })
 export class AppModule {
 }
