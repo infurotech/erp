@@ -38,6 +38,7 @@ export class ImportComponent implements OnInit {
 
   mappingForm: FormGroup;
   gridForm: FormGroup;
+  errorColumns: any[] = [];
 
   constructor(private fb: FormBuilder,private messageService: MessageService) {
     this.items = [
@@ -57,33 +58,11 @@ export class ImportComponent implements OnInit {
     this.mappingForm = this.fb.group({
       mappings: this.fb.array([]) 
     });
-
-    this.gridForm = this.fb.group({
-      gridRows: this.fb.array([])
-    });
   }
 
   openDialog() {
     this.importDialog.maximize({});
     this.displayImportDialog = true;
-  }
-
-  getGridRows() {
-    return (this.gridForm.get('gridRows') as FormArray);
-  }
-
-  getRowData(field: CrudField,i: number) {
-    return (this.getGridRows()?.controls?.[i] as FormGroup)?.controls[field.field]?.value;
-  }
-
-  setGridFormData() {
-    this.mappedTableData.forEach((item) => {
-      const row = this.fb.group({});
-      this.fields.forEach(field => {
-        row.addControl(field.field, this.fb.control(item[field.field] || '', field.required ? Validators.required : []));
-      });
-      this.getGridRows().push(row);
-    });
   }
 
   onActiveIndexChange(event: number) {
@@ -182,17 +161,17 @@ export class ImportComponent implements OnInit {
 
   // Method to map the data to the selected fields
   mapDataToFields(mappedHeaders: { [key: string]: string }): void {
-    const mappedData = this.parsedFileData.map(row => {
+    const mappedData = this.parsedFileData.map((row,rowIndex) => {
       const mappedRow: any = {};
       for (const field of this.fields) {
         const uploadedHeader = mappedHeaders[field.field];
         mappedRow[field.field] = row[uploadedHeader];
+          !mappedRow[field.field] && field.required && this.errorColumns.push({'row': rowIndex,'field': field.field});
       }
       return mappedRow;
     });
 
     this.mappedTableData = mappedData;
-    this.setGridFormData();
   }
 
   mapFields(jsonData: any[]): CrudField[] {
@@ -236,18 +215,28 @@ export class ImportComponent implements OnInit {
     this.uploadedHeaders = [];
     this.mappedTableData = []
     this.activeIndex = 0;
+    this.errorColumns = [];
+  }
+
+  updateTableData(row: number , field: any) {
+    const exists = this.errorColumns.some(
+      (error) => error.row === row && error.field === field
+    );
+    
+    if(this.mappedTableData[row][field]) {
+       exists && this.errorColumns.splice(
+        this.errorColumns.findIndex(
+          (error) => error.row === row && error.field === field
+        ),1
+       );
+    } else {
+      console.warn("error")
+       this.errorColumns.push({'row' : row,'field': field})
+    }
   }
 
   submitForm() {
       let isValid = this.validateImportedData();
-      this.mappedTableData = [];
-      this.mappedTableData = this.getGridRows().controls.map((rowControl: FormGroup) => {
-        const rowData = {};
-        this.fields.forEach(field => {
-          rowData[field.field] = rowControl.get(field.field)?.value;
-        });
-        return rowData;
-      });
 
       if(!isValid && this.mappedTableData.length > 0) {
          this.messageService.add({ severity:'success', detail: 'Data Imported' });
@@ -258,7 +247,7 @@ export class ImportComponent implements OnInit {
   }
 
   validateImportedData(): boolean {
-    return this.gridForm.invalid;
+    return this.errorColumns.length > 0;
   }
 
   downloadImportTemplate() {
@@ -277,6 +266,7 @@ export class ImportComponent implements OnInit {
   }
 
   uploadDocument() {
+    this.errorColumns = [];
     this.fileUploader.choose();
   }
 }

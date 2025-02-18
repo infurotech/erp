@@ -18,7 +18,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   @Input() options: CrudOptions;  // Field definitions
   @Input() data: T[] = [];           // List of items
   @Input() filteredFields: Array<CrudField> = [];  // Field definitions
-  @Output() onAction = new EventEmitter<any[]>();
+  @Output() onAction = new EventEmitter<any>();
   @Output() onFilterChange = new EventEmitter<any[]>();
   @Output() onClear = new EventEmitter<any[]>();
   @ContentChild('filterTemplate', { static: false }) filterTemplate!: TemplateRef<any>;
@@ -71,7 +71,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
     // this.moreFilters = this.options.fields.filter(field => !field.key && field.filter === true).slice(2); 
     this.initializeForm();
     this.initialFilteredFields = [...this.filteredFields];
-    this.initialData = [...this.data]
+    // this.initialData = [...this.data]
     this.moreActionItems = [
       {
         label: 'Export',
@@ -87,9 +87,9 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
     ]
 
     // As of now we don't have any api so getting contacts data via loop. 
-    this.data.forEach(item => {
-       this.contactsList.push(item['phone'])
-    })
+    // this.data.forEach(item => {
+    //    this.contactsList.push(item['phone'])
+    // })
   }
   
  // Initialize the form based on fields configuration
@@ -98,7 +98,7 @@ initializeForm(): void {
 
   this.options.fields.forEach(field => {
     const validators = this.getValidators(field);
-    group[field.field] = [this.editingItem?.[field.field] || '', validators];
+    group[field.field] = [this.editingItem?.[field.field], validators];
   });
 
   this.form = this.fb.group(group); 
@@ -119,9 +119,9 @@ initializeForm(): void {
     if (field.pattern) {
       validators.push(Validators.pattern(field.pattern));
     }
-    if (field.field === 'name') {
-      validators.push(Validators.pattern('^[a-zA-Z0-9_]*$'));
-    }
+    // if (field.field === 'name') {
+    //   validators.push(Validators.pattern('^[a-zA-Z0-9_]*$'));
+    // }
     if (field.field === 'email') {
       validators.push(Validators.email);  
     }
@@ -155,7 +155,7 @@ initializeForm(): void {
     } else {
       this.addItem();
     }
-    this.onAction.emit(this.form.value);
+    this.onAction.emit({event: this.isEditing ? 'Update': 'Create', data: this.form.value});
   }
 
   // Add new item to the list
@@ -330,7 +330,7 @@ initializeForm(): void {
   
   onImport(event: any) {
     this.data = this.data.concat(event);
-    this.onBulkImport.emit({type: 'Edit' , data: this.data});
+    this.onBulkImport.emit({type: 'Bulk' , data: event});
   }
 
 }
