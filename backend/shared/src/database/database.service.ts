@@ -55,16 +55,8 @@ export class DatabaseService {
     return connectionUrl;
   }
 
-  async getTenantConnection(token: string): Promise<DataSource> {
-    
-    const decoded: any = this.jwtService.verify(token, {
-        publicKey: this.tokenValidator.securityKey,
-        audience:  this.tokenValidator.audience,
-        algorithms: this.tokenValidator.algorithms as any,
-        issuer:    this.tokenValidator.issuer
-      });
-
-    const saccos_name = decoded['saccos_name'];
+  async getTenantConnection(token: Object): Promise<DataSource> {
+    const saccos_name = token['saccos_name'];
     if (!saccos_name) throw new UnauthorizedException('Invalid token: Missing saccos_name');
     const connectionString = await this.fetchConnectionString(saccos_name);
     return new DataSource({
