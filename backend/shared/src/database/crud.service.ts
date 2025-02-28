@@ -1,12 +1,28 @@
-import { Injectable } from '@nestjs/common';
-import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
-import { DatabaseService } from './database.service';
-import { Repository} from 'typeorm';
+import { Inject, Injectable } from "@nestjs/common";
+import { TypeOrmCrudService } from "@nestjsx/crud-typeorm";
+import { Repository } from "typeorm";
+import { DatabaseService } from "../database/database.service";
+import { InjectRepository } from "@nestjs/typeorm";
+import { CachingManager } from "../caching";
+import { Cache } from "@nestjs/cache-manager";
+import { RequestContext } from "../contexts";
 
 @Injectable()
 export class CrudService<T> extends TypeOrmCrudService<T> {
-  constructor(protected readonly repo : Repository<T>, private readonly databaseService: DatabaseService) {
-    super(repo);
+  constructor(
+    private readonly databaseService: DatabaseService,
+    @InjectRepository(Object) private readonly baseRepo: Repository<T>,
+  ) {
+    super(baseRepo);
+    this.overrideRepository();
+  }
+
+  private async overrideRepository() {
+    const tenantId = RequestContext.get("tenantId");
+    if (!tenantId) return;
+
+    const connection = await this.databaseService.getTenantConnection(tenantId);
+    this.repo = connection.getRepository(this.baseRepo.target as any);
   }
 
   /**
