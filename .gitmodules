@@ -1,3 +1,6 @@
 [submodule "backend/erp-accounting"]
 	path = backend/erp-accounting
 	url = https://github.com/infurotech/erp-accounting.git
+[submodule "backend/properties-db"]
+	path = backend/properties-db
+	url = https://github.com/genevapro/property-db.git
