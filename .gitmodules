@@ -1,0 +1,3 @@
+[submodule "backend/property-db"]
+	path = backend/property-db
+	url = https://github.com/genevapro/property-db.git
