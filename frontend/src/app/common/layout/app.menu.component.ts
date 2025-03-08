@@ -24,7 +24,8 @@ export class AppMenuComponent implements OnInit {
                 label: 'CRM',
                 items: [
                     { label: 'Contacts', icon: 'fa fa-table-list', routerLink: ['/crm/contacts'] },
-                    { label: 'Leads', icon: 'fa fa-handshake', routerLink: ['/common/empty'] },
+                    { label: 'Companies', icon: 'fa fa-building', routerLink: ['/crm/companies'] },
+                    { label: 'Leads', icon: 'fa fa-handshake', routerLink: ['/crm/leads'] },
                     { label: 'Opportunities', icon: 'fa fa-crown', routerLink: ['/common/empty'] },
                     { label: 'Marketing', icon: 'fa fa-paper-plane', routerLink: ['/common/empty'] },
                     { label: 'Analytics', icon: 'fa fa-chart-simple', routerLink: ['/common/empty'] },
