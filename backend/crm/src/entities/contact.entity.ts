@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, ManyToMany, 
+    JoinTable, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Address } from "./address.entity";
 import { Company } from "./company.entity";
 import { ContactCompany } from "./contact-company.entity";

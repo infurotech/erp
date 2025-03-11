@@ -25,19 +25,19 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Contacts', icon: 'fa fa-table-list', routerLink: ['/crm/contacts'] },
                     { label: 'Companies', icon: 'fa fa-building', routerLink: ['/crm/companies'] },
-                    { label: 'Leads', icon: 'fa fa-handshake', routerLink: ['/crm/leads'] },
-                    { label: 'Opportunities', icon: 'fa fa-crown', routerLink: ['/common/empty'] },
-                    { label: 'Marketing', icon: 'fa fa-paper-plane', routerLink: ['/common/empty'] },
-                    { label: 'Analytics', icon: 'fa fa-chart-simple', routerLink: ['/common/empty'] },
+                    { label: 'Leads', icon: 'fa fa-crown', routerLink: ['/crm/leads'] },
+                    // { label: 'Opportunities', icon: 'fa fa-crown', routerLink: ['/common/empty'] },
+                    // { label: 'Marketing', icon: 'fa fa-paper-plane', routerLink: ['/common/empty'] },
+                    // { label: 'Analytics', icon: 'fa fa-chart-simple', routerLink: ['/common/empty'] },
                 ]
             },
-            {
-                label: 'Properties',
-                items: [
-                    { label: 'Listing', icon: 'fa fa-bed', routerLink: ['/crm/hostels'] },
-                    { label: 'Bookings', icon: 'fa fa-square-check', routerLink: ['/crm/bookings'] },
-                ]
-            },
+            // {
+            //     label: 'Properties',
+            //     items: [
+            //         { label: 'Listing', icon: 'fa fa-bed', routerLink: ['/crm/hostels'] },
+            //         { label: 'Bookings', icon: 'fa fa-square-check', routerLink: ['/crm/bookings'] },
+            //     ]
+            // },
             // {
             //     label: 'Inventory',
             //     items: [

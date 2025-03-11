@@ -21,7 +21,8 @@ import { AuthGuard } from './shared/AuthGuard';
             { path: 'auth', loadChildren: () => import('./account/account.module').then(m => m.AccountModule) },
             { path: 'notfound', component: NotfoundComponent },
             { path: '**', redirectTo: '/notfound' },
-        ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload' })
+        ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload', enableTracing: false },
+    )
     ],
     exports: [RouterModule]
 })

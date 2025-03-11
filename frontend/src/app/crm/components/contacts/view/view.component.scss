@@ -1,0 +1,62 @@
+.contact-card {
+    .contact-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 10px;
+    }
+
+    .profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .contact-avatar {
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .contact-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .contact-name {
+        font-size: 1.4rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .contact-role {
+        font-size: 0.9rem;
+        color: gray;
+    }
+
+    .contact-email {
+        font-size: 0.85rem;
+        color: #0073ff;
+        cursor: pointer;
+    }
+
+    .info {
+        font-size: 0.9rem;
+        color: #555;
+    }
+}
+
+.event-list {
+    border: none;
+}
+
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Adds space between panels */
+}
+.left-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Adds space between panels */
+}

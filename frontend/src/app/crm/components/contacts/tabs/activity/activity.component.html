@@ -1,0 +1,21 @@
+<div class="activity-list">
+    <p-card *ngFor="let activity of activities" class="activity-card">
+        <ng-template pTemplate="header">
+            <div class="activity-header">
+                <div class="left">
+                    <p-icon [ngClass]="getActivityIcon(activity.type)"></p-icon>
+                    <span class="activity-type">{{ activity.type }}</span>
+                </div>
+                <div class="right">
+                    <p-badge [value]="activity.user"></p-badge>
+                    <span class="activity-date">{{ activity.datetime | date:'MMM d, y h:mm a' }}</span>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="content">
+            <div class="activity-content">
+                <p>{{ activity.details }}</p>
+            </div>
+        </ng-template>
+    </p-card>
+</div>

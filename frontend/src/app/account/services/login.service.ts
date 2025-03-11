@@ -21,7 +21,6 @@ export class LoginService {
 
   isUserAuthenticated() {
     const token = this.getCookie('session_token');
-    console.log('token', token);
     if (token) {
       try {
         const decodedUser = jwtDecode(token);

@@ -1,0 +1,73 @@
+<div class="grid">
+    <!-- Left Panel - Contact Details -->
+    <div class="col-3">
+        <div class="left-sidebar">
+            <p-card class="contact-card">
+                <ng-template pTemplate="header">
+                    <div class="contact-header flex align-items-center justify-content-center gap-2">
+                        <!-- Profile Section -->
+                        <div class="profile">
+                            <p-avatar class="contact-avatar" size="xlarge" shape="circle"></p-avatar>
+                            <div class="contact-info">
+                                <h3 class="contact-name">Brian Halligan</h3>
+                                <p class="contact-role">CEO at HubSpot</p>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="content">
+                    <div class="flex align-items-center justify-content-center gap-2">
+                        <p-button icon="pi pi-envelope"
+                            class="p-ripple p-button p-button-icon-only p-button-rounded"></p-button>
+                        <p-button icon="pi pi-phone"
+                            class="p-ripple p-button p-button-icon-only p-button-rounded"></p-button>
+                        <p-button icon="pi pi-clock"
+                            class="p-ripple p-button p-button-icon-only p-button-rounded"></p-button>
+                        <p-button icon="pi pi-pencil"
+                            class="p-ripple p-button p-button-icon-only p-button-rounded"></p-button>
+                        <p-button icon="pi pi-calendar"
+                            class="p-ripple p-button p-button-icon-only p-button-rounded"></p-button>
+                        <p-button icon="pi pi-calendar"
+                            class="p-ripple p-button p-button-icon-only p-button-rounded"></p-button>
+                    </div>
+                </ng-template>
+            </p-card>
+            <p-panel header="Information">
+                <div class="info">
+                    <p><strong>Email:</strong></p>
+                    <p><strong>Phone Number:</strong> -</p>
+                    <p><strong>Contact Owner:</strong> -</p>
+                    <p><strong>Last Contacted:</strong> -</p>
+                    <p><strong>Lifecycle Stage:</strong> -</p>
+                    <p><strong>Lead Status:</strong> -</p>
+                </div>
+            </p-panel>
+        </div>
+    </div>
+
+    <!-- Main Content - Tabs -->
+    <div class="col-6">
+        <p-card>
+            <p-tabView>
+                <p-tabPanel header="Activity">No activity available.</p-tabPanel>
+                <p-tabPanel header="Notes">No notes available.</p-tabPanel>
+                <p-tabPanel header="Emails">No emails found.</p-tabPanel>
+                <p-tabPanel header="Calls">No calls recorded.</p-tabPanel>
+                <p-tabPanel header="Tasks">No tasks assigned.</p-tabPanel>
+                <p-tabPanel header="Meetings">No meetings scheduled.</p-tabPanel>
+            </p-tabView>
+        </p-card>
+    </div>
+
+    <!-- Right Sidebar - Related Information -->
+    <div class="col-3">
+        <div class="right-sidebar">
+            <p-panel header="Deals (0)"><a href="#">+ Add</a></p-panel>
+            <p-panel header="Company (1)"><a href="#">+ Add</a></p-panel>
+            <p-panel header="Tickets (0)"><a href="#">+ Add</a></p-panel>
+            <p-panel header="Attachments (0)"><a href="#">+ Add</a></p-panel>
+            <!-- <p-panel header="Playbooks (0)"><a href="#">Create</a></p-panel>
+        <p-panel header="List Memberships (1)"><a href="#">Manage</a></p-panel> -->
+        </div>
+    </div>
+</div>

@@ -1,8 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { CrudField } from '../../../common/crud/crud-field';
-import { CustomerService } from '../../services/customer.service';
 import { CrudOptions } from 'src/app/common/crud/crud-options';
-import { CrudModule } from "../../../common/crud/crud.module";
 import { HostelService } from '../../services/hostel.service';
 
 @Component({

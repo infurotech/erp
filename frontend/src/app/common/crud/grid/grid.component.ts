@@ -17,6 +17,7 @@ export class GridComponent implements OnInit {
   @Output() selectionChange = new EventEmitter<any[]>();
   @Output() tableHeaders = new EventEmitter<CrudField[]>();
   @Output() openDialog = new EventEmitter<{ isEdit: boolean, item: any }>();  
+  @Output() onClick = new EventEmitter<any>();
   selectedRows: any[] = [];
   selectedItem: any[];
   @Output() requestDelete = new EventEmitter<any>();  
@@ -55,6 +56,10 @@ export class GridComponent implements OnInit {
     this.tableActions.toggle(event);
   }
 
+  click(event) {
+    this.onClick.emit(event);
+  }
+
   getTagSeverity(field: CrudField, value: string){
     var severity = 'default';
     if(field.options){
@@ -72,7 +77,6 @@ export class GridComponent implements OnInit {
   }
 
   onSelectionChange(event: any) {
-    console.log(event);
     this.selectedRows = event;
     this.selectionChange.emit(this.selectedRows);
   }

@@ -10,6 +10,7 @@ import { LeadsComponent } from './components/leads/leads.component';
     imports: [RouterModule.forChild([
         { path: '', redirectTo: 'contacts', pathMatch: 'full' },
         { path: 'contacts', component: ContactComponent },
+        { path: 'contacts/view/:id', component: ContactComponent },
         { path: 'companies', component: CompaniesComponent },
         { path: 'leads', component: LeadsComponent },
         { path: 'hostels', component: HostelComponent },

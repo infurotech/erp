@@ -1,0 +1,86 @@
+<div class="card">
+    <!-- Profile Section -->
+     <div class="header">
+        <div class="flex mb-4 gap-6 header-items">
+            <p-avatar class="contact-avatar" size="xlarge" shape="circle"></p-avatar>
+            <div>
+                <h3 styleClass="mb-0">Brian Halligan</h3>
+                <label>Customer</label>
+            </div>
+            <div class="contact-info">
+                <h6 class="contact-name">Lead Status</h6>
+                <p class="contact-role">New</p>
+            </div>
+            <div class="contact-info">
+                <h6 class="contact-name">Relationship</h6>
+                <p class="contact-role">Customer</p>
+            </div>
+            <div class="contact-info">
+                <h6 class="contact-name">Assignee</h6>
+                <p class="contact-role">Ashish Gupta</p>
+            </div>
+        </div>
+     </div>
+    <p-menubar [model]="nestedMenuItems">
+        <ng-template #end>
+            <p-iconfield>
+                <p-inputicon class="pi pi-search" />
+                <input type="text" pInputText placeholder="Search" />
+            </p-iconfield>
+        </ng-template>
+    </p-menubar>
+</div>
+<div class="grid">
+    <div class="col-9">
+        <div class="card">
+            <p-tabView>
+                <p-tabPanel header="Activity">
+                    <div class="activity-list">
+                        <p-card *ngFor="let activity of activities" class="activity-card">
+                            <ng-template pTemplate="header">
+                                <div class="activity-header">
+                                    <div class="left">
+                                        <p-icon [ngClass]="getActivityIcon(activity.type)"></p-icon>
+                                        <span class="activity-type">{{ activity.type }}</span>
+                                    </div>
+                                    <div class="right">
+                                        <p-badge [value]="activity.user"></p-badge>
+                                        <span class="activity-date">{{ activity.datetime | date:'MMM d, y h:mm a' }}</span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="content">
+                                <div class="activity-content">
+                                    <p>{{ activity.details }}</p>
+                                </div>
+                            </ng-template>
+                        </p-card>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Notes">No notes available.</p-tabPanel>
+                <p-tabPanel header="Emails">No emails found.</p-tabPanel>
+                <p-tabPanel header="Calls">No calls recorded.</p-tabPanel>
+                <p-tabPanel header="Tasks">No tasks assigned.</p-tabPanel>
+                <p-tabPanel header="Appointment">No meetings scheduled.</p-tabPanel>
+            </p-tabView>
+        </div>
+    </div>
+    <div class="col-3 right-sidebar">
+        <p-panel header="Information">
+            <div class="info">
+                <p><strong>Email:</strong></p>
+                <p><strong>Phone Number:</strong> -</p>
+                <p><strong>Contact Owner:</strong> -</p>
+                <p><strong>Last Contacted:</strong> -</p>
+                <p><strong>Lifecycle Stage:</strong> -</p>
+                <p><strong>Lead Status:</strong> -</p>
+            </div>
+        </p-panel>
+        <p-panel header="Deals (0)"><a href="#">+ Add</a></p-panel>
+        <p-panel header="Company (1)"><a href="#">+ Add</a></p-panel>
+        <p-panel header="Tickets (0)"><a href="#">+ Add</a></p-panel>
+        <p-panel header="Attachments (0)"><a href="#">+ Add</a></p-panel>
+        <!-- <p-panel header="Playbooks (0)"><a href="#">Create</a></p-panel>
+        <p-panel header="List Memberships (1)"><a href="#">Manage</a></p-panel> -->
+    </div>
+</div>

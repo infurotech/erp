@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CrudOptions } from 'src/app/common/crud/crud-options';
+import { CRMService } from '../../services/crm.service';
 
 @Component({
   selector: 'app-companies',
@@ -13,7 +14,7 @@ export class CompaniesComponent implements OnInit {
     boardView: false,
     gridEditing: false,
     fields: [
-      { field: 'id', label: 'ID', type: 'text', required: true, key: true },
+      { field: 'id', label: 'ID', type: 'text', required: false, key: true },
       { field: 'name', label: 'Company Name', type: 'text', filter: true, required: true },
       { field: 'industry', label: 'Industry', type: 'text', filter: true, required: false },
       {
@@ -23,31 +24,43 @@ export class CompaniesComponent implements OnInit {
         ]
       },
       { field: 'website', label: 'Website', type: 'text', filter: false, required: false },
-      { field: 'created_at', label: 'Created At', type: 'date', required: false },
-      { field: 'updated_at', label: 'Updated At', type: 'date', required: false }
+      // { field: 'created_at', label: 'Created At', type: 'date', required: false },
+      // { field: 'updated_at', label: 'Updated At', type: 'date', required: false }
     ]
   }
 
   @Output() contactsChange = new EventEmitter<any[]>();
 
   fieldOption: any[];
-  constructor(
-  ) {
-  }
-
-  ngOnInit() {
-    this.fieldOption = this.crudOptions.fields;
-  }
-
-  onAction(actionData: any): void {
-  }
-
-  onFilterChange(event) {
-  }
-
-  onClear() {
-  }
-
-  getBulkImport(event) {
-  }
+  
+    constructor(
+      private crmService: CRMService
+    ) {
+      this.crmService.setPath('/companies')
+    }
+    
+    async ngOnInit() {
+      this.fieldOption = this.crudOptions.fields;
+      this.companies = await this.crmService.getAll().toPromise();
+    }
+    
+    async onAction(actionData: any) {
+      if(actionData.event == "Update"){
+        await this.crmService.update(actionData.data.id, actionData.data).toPromise();
+      } else if(actionData.event == "Create"){
+        await this.crmService.create(actionData.data).toPromise();
+      }
+    }
+  
+    onFilterChange(event){
+    }
+  
+    onClear() {
+      // this.selectedUser = null;
+    }
+  
+    async getBulkImport(event) {
+      
+      const properties = await this.crmService.bulkUpload({bulk: event.data}).toPromise();
+    }
 }
