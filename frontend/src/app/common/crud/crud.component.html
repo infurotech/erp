@@ -5,22 +5,13 @@
     <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
       <div>
         <div class="font-medium text-3xl text-900">{{displayName}}</div>
-        <div class="flex align-items-center text-700 flex-wrap">
-          <div class="mr-5 flex align-items-center mt-3">
-            <i class="pi pi-users mr-2"></i>
-            <span>0 Active</span>
+        <div class="flex align-items-center text-700 flex-wrap" *ngIf="summary">
+          <div class="mr-5 flex align-items-center mt-3" *ngFor="let item of summary">
+            <i class="fa mr-2" [class]="item['icon']"></i>
+            <span>{{item.value}} {{item.label}}</span>
           </div>
-          <div class="mr-5 flex align-items-center mt-3">
-            <i class="pi pi-globe mr-2"></i>
-            <span>0 Sessions</span>
-          </div>
-          <div class="flex align-items-center mt-3">
-            <i class="pi pi-clock mr-2"></i>
-            <span>0.00m Avg. Duration</span>
-          </div>
-        </div>
       </div>
-      <div class="mt-3 gap-2 lg:mt-0">
+      <div class="mt-3 gap-2">
         <button pButton pRipple label="New" class="p-button" (click)="openDialog(false)" icon="pi pi-plus"></button>
         <button pButton class="p-button-outlined ml-2" icon="fa fa-table-cells" (click)="gridView = true">
         </button>

@@ -73,8 +73,8 @@ export class PropertyService extends CrudService<Property> {
     search?: string,
     minPrice?: number,
     maxPrice?: number,
-    lat: number = 40.758,
-    lng: number = -73.9855,
+    lat: number = 38.9520687,
+    lng: number = -77.8688851,
     radius: number = 5,
     page: number = 100,
     skip: number = 0

@@ -8,7 +8,10 @@ import { BookingService } from '../../services/booking.service';
   styleUrl: './booking.component.scss'
 })
 export class BookingComponent {
-  bookings: [];
+  bookings: { booked: boolean }[];
+  summary: any[] = [
+    { label: 'Total Booked', value: 0, icon: 'fa-bed' }
+  ]
   crudOptions:  CrudOptions = {
     boardView: false,
     gridEditing: false,
@@ -36,6 +39,10 @@ export class BookingComponent {
   async ngOnInit() {
     this.fieldOption = this.crudOptions.fields;
     this.bookings = await this.bookingService.getAllBookins().toPromise();
+    if(this.bookings){
+      var totalBooked = this.bookings.filter(booking => booking.booked == true).length;
+      this.summary.find(summary => summary.label == 'Total Booked').value = totalBooked;
+    }
   }
  
   async onAction(actionData: any) {

@@ -15,6 +15,7 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   @ViewChild(ImportComponent) importComponent: ImportComponent;
 
   @Input() displayName: string;
+  @Input() summary: any[];
   @Input() options: CrudOptions;  // Field definitions
   @Input() data: T[] = [];           // List of items
   @Input() filteredFields: Array<CrudField> = [];  // Field definitions
