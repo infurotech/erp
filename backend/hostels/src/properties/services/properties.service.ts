@@ -82,7 +82,11 @@ export class PropertyService extends CrudService<Property> {
 
     const data = this.repo.query(
       `SELECT property.id, property.name, address, pricepermonth, (availableunits - count(booking)) as availableunits, latitude, longitude, 
-              amenities, otherofferings, COUNT(*) OVER() AS total
+              amenities, otherofferings,
+              ST_DistanceSphere(
+        ST_SetSRID(ST_MakePoint(longitude::FLOAT, latitude::FLOAT), 4326), 
+        ST_MakePoint($4::FLOAT, $5::FLOAT)
+    ) AS distance, COUNT(*) OVER() AS total
        FROM property
        LEFT JOIN booking on property.id = booking.propertyid and booking.booked <> false
        WHERE 
@@ -97,7 +101,7 @@ export class PropertyService extends CrudService<Property> {
        
        GROUP BY property.id
        HAVING (availableunits - count(booking))  > 0 
-       ORDER BY pricePerMonth ASC
+       ORDER BY distance ASC
        LIMIT $7 OFFSET $8;`,
       [search || null, minPrice || null, maxPrice || null, lng || null, lat || null, radius * 1000 || 5000, page || null, skip || null]
     );
