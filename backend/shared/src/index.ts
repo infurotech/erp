@@ -1,3 +1,5 @@
 export * from './database'
 export * from './caching'
 export * from './audit'
+export * from './audit-log'
+export * from './contexts'
