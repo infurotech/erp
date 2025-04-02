@@ -1,13 +1,12 @@
-import { Injectable, Scope } from "@nestjs/common";
+// import { Injectable } from "@nestjs/common";
+// import { InjectRepository } from "@nestjs/typeorm";
 
-import { JobItem } from "./entities/job-item.entity";
-import { CrudService, DatabaseService } from "@infuro/shared";
-import { InjectRepository } from "@nestjs/typeorm";
+// import { JobItem } from "./entities/job-item.entity";
+// import { CrudService } from "../../../../shared/src/crud/crud.service";
 
-@Injectable({ scope: Scope.REQUEST })
-export class JobItemService extends CrudService<JobItem> {
-
-  constructor(@InjectRepository(JobItem) repo,databaseService: DatabaseService) {
-    super(repo,databaseService);
-  }
-}
+// @Injectable()
+// export class JobItemService extends CrudService<JobItem> {
+//   constructor(@InjectRepository(JobItem) repo) {
+//     super(repo);
+//   }
+// }
