@@ -5,7 +5,6 @@ import { MenuItem } from 'primeng/api';
 import { CrudOptions } from './crud-options';
 import { ImportComponent } from './import/import.component';
 import { Router } from '@angular/router';
-import { ViewOptions } from './view/view.options';
 
 
 @Component({
@@ -56,10 +55,6 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   // tabMenuItems: any[] = [];
   tabMenuItems: MenuItem[] = [];  
   activeItem: any = null;
-
-  @Input()
-  viewOptions: ViewOptions;
-  openedItem: any = null; 
 
   activeFilters = {
     name: '',
@@ -147,8 +142,7 @@ initializeForm(): void {
     this.isDialogVisible = true;  // Show the dialog
   }
   click(event) {
-    //this.router.navigate([this.router.url, 'view', event.id])
-    this.openedItem = event;
+    this.onClick.emit(event);
   }
 
   // Submit handler for both adding and editing

@@ -1,0 +1,63 @@
+// .task-list {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 15px;
+//     margin: auto;
+//   }
+  
+//   .task-card {
+//     padding: 10px;
+//   }
+  
+//   .task-header {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     gap: 15px;
+//   }
+  
+//   .task-header .left {
+//     display: flex;
+//     align-items: center;
+//     gap: 10px;
+//   }
+  
+//   .task-info {
+//     display: flex;
+//     flex-direction: column;
+//   }
+  
+//   .task-title {
+//     font-weight: bold;
+//     font-size: 1rem;
+//   }
+  
+//   .task-content {
+//     padding-top: 10px;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 5px;
+//   }
+  
+//   .p-badge {
+//     font-size: 0.9rem;
+//     padding: 6px 10px;
+//   }
+  
+//   .edit-field {
+//     width: 100%;
+//   }
+  
+//   .task-date {
+//     font-size: 0.85rem;
+//     color: gray;
+//   }
+  
+//   .p-button-text {
+//     margin-left: 10px;
+//   }
+  
+::ng-deep .p-erp-card .p-card-body {
+    margin-bottom: 1rem;
+    
+}

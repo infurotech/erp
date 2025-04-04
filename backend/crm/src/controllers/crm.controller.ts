@@ -16,7 +16,13 @@ import { ContactService, AddressService,
 import { Lead } from "src/entities/lead.entity";
 
 // Contact Controller
-@Crud({ model: { type: Contact } })
+@Crud({ model: { type: Contact }, params: {
+    id: {
+      field: 'id',
+      type: 'uuid', // Ensure UUID support
+      primary: true,
+    },
+  }, })
 @Controller("contacts")
 export class ContactController {
     constructor(private readonly service: ContactService) {}

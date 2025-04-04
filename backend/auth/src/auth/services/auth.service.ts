@@ -25,13 +25,42 @@ export class AuthService extends CrudService<User> {
     if (!user || !bcrypt.compare(pass, user.password)) {
       throw new UnauthorizedException();
     }
+    return await this.generateAccessToken(user);
+  }
+
+  async loginByRefreshToken(refreshToken: string): Promise<any> {
+      const payload = await this.jwtService.verifyAsync(refreshToken, {
+        secret: this.configService.get<string>('JWT_SECRET') || 'secret007',
+      });
+      if(!payload) throw new UnauthorizedException();
+
+      const user = await this.findByUsername(payload.userId);
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+      return await this.generateAccessToken(user);
+  }
+
+  async generateAccessToken(user: any): Promise<any> {
     return {
-        token: await this.jwtService.signAsync({ sub: user.id }, { secret: this.configService.get<string>('JWT_SECRET') }),
-        user: { name: user.firstName, avatar: user.profileUrl }
+      token: await this.jwtService.signAsync({ sub: user.id }, { secret: this.configService.get<string>('JWT_SECRET') }),
+      user: { name: user.firstName, avatar: user.profileUrl }
     };
   }
+
+  async generateRefreshToken(userId: string): Promise<any> {
+    return this.jwtService.sign(
+      { userId },
+      { secret: this.configService.get<string>('JWT_SECRET') }
+    );
+  }
+
   async findByUsername(username: string): Promise<User | null> {
     var user = await this.repo.findOneBy({ email: username });
+    return user;
+  }
+  async findByUserId(userId: string): Promise<User | null> {
+    var user = await this.repo.findOneBy({ id: userId });
     return user;
   }
 }

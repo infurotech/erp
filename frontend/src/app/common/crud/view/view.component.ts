@@ -1,22 +1,21 @@
-import { AfterViewInit, Component, Input, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { ViewOptions } from './view.options';
 import { CrudField } from '../crud-field';
 
 @Component({
-  selector: 'crud-detail-view',
+  selector: 'app-detail-view',
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss'
 })
 export class ViewComponent implements OnInit, AfterViewInit{
 
   @Input() viewHeaderTemplate!: TemplateRef<any>;
-  @Input() options: ViewOptions;
+  @Input() viewOptions: ViewOptions;
   @Input() item: any;
   @Input() fields: CrudField[] = []; 
 
   @ViewChildren('tabContainers', { read: ViewContainerRef }) tabContainers!: QueryList<ViewContainerRef>;
   @ViewChildren('cardContainers', { read: ViewContainerRef }) cardContainers!: QueryList<ViewContainerRef>;
-
 
   actions = [
     {
@@ -35,32 +34,28 @@ export class ViewComponent implements OnInit, AfterViewInit{
 
   headers: string[]
 
-  /**
-   *
-   */
-  constructor() {
+  constructor(private cdr: ChangeDetectorRef) {
   }
   
   ngOnInit(): void {
-    console.log(this.item)
-    if(this.options){
-      if(this.options.actions){
-        this.options.actions.push(...[{
+    if(this.viewOptions){
+      if(this.viewOptions.actions){
+        this.viewOptions.actions.push(...[{
           label: 'More',
           icon: 'pi pi-fw pi-ellipsis-v',
           items: [...this.actions]
         }]);
-        this.actions = this.options.actions;
+        this.actions = this.viewOptions.actions;
       }
-      if(this.options.headerFields){
-        this.headers = this.options.headerFields;
+      if(this.viewOptions.headerFields){
+        this.headers = this.viewOptions.headerFields;
       }
-      if(this.options.tabs){
-        this.options.tabs.push(...this.tabs);
-        this.tabs = this.options.tabs;
+      if(this.viewOptions.tabs){
+        this.viewOptions.tabs.push(...this.tabs);
+        this.tabs = this.viewOptions.tabs;
       }
-      if(this.options.cards){
-        this.cards.push(...this.options.cards);
+      if(this.viewOptions.cards){
+        this.cards.push(...this.viewOptions.cards);
       }
     }
   }
@@ -69,11 +64,12 @@ export class ViewComponent implements OnInit, AfterViewInit{
     // Ensure ViewChild elements are available
     this.loadTabComponents();
     this.loadCardComponents();
+    this.cdr.detectChanges();
   }
 
   loadTabComponents() {
     this.tabContainers.forEach((container, index) => {
-      const componentType = this.options.tabs[index]?.component;
+      const componentType = this.viewOptions.tabs[index]?.component;
       if (componentType) {
         container.createComponent(componentType);
       }
@@ -82,7 +78,7 @@ export class ViewComponent implements OnInit, AfterViewInit{
 
   loadCardComponents() {
     this.cardContainers.forEach((container, index) => {
-      const componentType = this.options.cards[index]?.component;
+      const componentType = this.viewOptions.cards[index]?.component;
       if (componentType) {
         container.createComponent(componentType);
       }

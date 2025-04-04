@@ -20,6 +20,9 @@ import { EmailComponent } from './components/contacts/tabs/email/email.component
 import { DealsComponent } from './components/contacts/cards/deals/deals.component';
 import { TicketsComponent } from './components/contacts/cards/tickets/tickets.component';
 import { CompanyComponent } from './components/contacts/cards/company/company.component';
+import { ContactViewComponent } from './components/contacts/view/view.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommentsComponent } from './components/contacts/cards/comments/comments.component';
 
 
 @NgModule({
@@ -35,13 +38,17 @@ import { CompanyComponent } from './components/contacts/cards/company/company.co
     EmailComponent,
     DealsComponent,
     TicketsComponent,
-    CompanyComponent
+    CompanyComponent,
+    ContactViewComponent,
+    CommentsComponent
   ],
   imports: [
     CommonModule,
     PrimengImportsModule,
     CrudModule,
-    CRMRoutingModule
+    CRMRoutingModule,
+    FormsModule,           // ✅ Add this for `ngModel`
+    ReactiveFormsModule    // ✅ Add this for `formControl`
   ],
   providers:[
     CRMService, HostelService, BookingService

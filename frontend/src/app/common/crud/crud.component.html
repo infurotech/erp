@@ -1,4 +1,4 @@
-<div class="card" *ngIf="!openedItem">
+<div class="card">
   <!-- Top sectoins with actions -->
   <div class="surface-section mb-3">
     <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
@@ -132,6 +132,3 @@
     </div>
   </p-dialog>
 </div>
-<crud-detail-view [item]="openedItem" [fields]="fields" *ngIf="openedItem" 
-  [viewHeaderTemplate]="viewHeaderTemplate" [options]="viewOptions">
-</crud-detail-view>

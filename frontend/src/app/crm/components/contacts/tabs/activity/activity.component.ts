@@ -6,6 +6,9 @@ import { Component } from '@angular/core';
   styleUrl: './activity.component.scss'
 })
 export class ActivityComponent {
+  
+  constructor() {
+  }
 
   activities = [
     {

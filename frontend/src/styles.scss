@@ -8,7 +8,8 @@ $gutter: 1rem; //for primeflex grid system
 @import "../node_modules/primeflex/primeflex.scss";
 @import "../node_modules/primeicons/primeicons.css";
 @import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
-
+@import "../node_modules/quill/dist/quill.core.css";
+@import "../node_modules/quill/dist/quill.snow.css";
 
 /* Demos */
 @import "assets/demo/styles/flags/flags.css";
@@ -72,4 +73,8 @@ $gutter: 1rem; //for primeflex grid system
 .layout-topbar .layout-topbar-logo img {
     height: 3.5rem !important; 
     margin-right: 0.5rem;
+  }
+
+  .flex-col{
+    flex-direction: column !important;
   }

@@ -1,1 +1,115 @@
-<p>email works!</p>
+<div class="email-message" *ngFor="let email of emails">
+    <p-avatar [image]="email.avatar" shape="circle" size="large"></p-avatar>
+    <div class="message-content">
+        <div class="message-header flex justify-content-between">
+            <strong>{{ email.sender }}</strong> <span class="time">{{ email.datetime | date:'MMM d, y h:mm a' }}</span>
+        </div>
+        <p>{{ email.body }}</p>
+        <!-- <div class="message-actions">
+            <p-button label="Reply" icon="pi pi-reply" class="p-button-text" (click)="toggleReplyBox(email)"></p-button>
+        </div> -->
+
+        <!-- Replies Section -->
+        <div class="replies" *ngIf="email.replies.length > 0">
+            <div class="email-reply" *ngFor="let reply of email.replies">
+                <p-avatar [image]="reply.avatar" shape="circle" size="small"></p-avatar>
+                <div class="reply-content">
+                    <div class="reply-header">
+                        <strong>{{ reply.sender }}</strong> <span class="time">{{ reply.datetime | date:'MMM d, y h:mm
+                            a' }}</span>
+                    </div>
+                    <p>{{ reply.body }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="message-actions" *ngIf="!email.showReplyBox ">
+            <!-- Reply Button -->
+            <p-button label="Reply" outlined class="mr-2" (click)="toggleReplyBox(email, 'reply')">
+                <ng-template pTemplate="icon">
+                    <span class="custom-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M20 17V15.8C20 14.1198 20 13.2798 19.673 12.638C19.3854 12.0735 18.9265 11.6146 18.362 11.327C17.7202 11 16.8802 11 15.2 11H4M4 11L8 7M4 11L8 15"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                            </g>
+                        </svg>
+                    </span>
+                </ng-template>
+            </p-button>
+
+            <!-- Reply All Button -->
+            <p-button label="Reply All" outlined class="mr-2" (click)="toggleReplyBox(email, 'replyAll')">
+                <ng-template pTemplate="icon">
+                    <span class="custom-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <g id="SVGRepo_iconCarrier">
+                                <polyline points="7 17 2 12 7 7"></polyline>
+                                <polyline points="12 17 7 12 12 7"></polyline>
+                                <path d="M22 18v-2a4 4 0 00-4-4H7"></path>
+                            </g>
+                        </svg>
+                    </span>
+                </ng-template>
+            </p-button>
+
+            <!-- Forward Button -->
+            <p-button label="Forward" outlined (click)="toggleReplyBox(email, 'forward')">
+                <ng-template pTemplate="icon">
+                    <span class="custom-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M4 17V15.8C4 14.1198 4 13.2798 4.32698 12.638C4.6146 12.0735 5.07354 11.6146 5.63803 11.327C6.27976 11 7.11984 11 8.8 11H20M20 11L16 7M20 11L16 15"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                            </g>
+                        </svg>
+                    </span>
+                </ng-template>
+            </p-button>
+
+        </div>
+
+        <!-- Reply Input Box -->
+        <div class="reply-box flex-col card" *ngIf="email.showReplyBox">
+            <div class="flex flex-col gap-2">
+                <label for="name1">To</label>
+                <div class="flex items-center gap-2">
+                    <input pInputText id="name1" type="text" class="flex-grow" [style]="'flex-grow: 1;'" />
+                    <p-toggleButton onLabel="CC" offLabel="CC" (click)="showCC = !showCC" class="flex-shrink-0"
+                        outlined />
+                    <p-toggleButton onLabel="BCC" offLabel="BCC" (click)="showBCC = !showBCC" class="flex-shrink-0"
+                        outlined />
+                </div>
+            </div>
+            <div class="flex flex-col gap-2" *ngIf="showCC">
+                <label for="email1">CC</label>
+                <input pInputText id="email1" type="text" />
+            </div>
+            <div class="flex flex-col gap-2" *ngIf="showBCC">
+                <label for="age1">BCC</label>
+                <input pInputText id="age1" type="text" />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="age1">Subject</label>
+                <input pInputText id="age1" type="text" />
+            </div>
+            <p-editor [(ngModel)]="email.newReply" [style]="{ height: '500px' }"></p-editor>
+            <div class="flex justify-content-between">
+                <p-fileUpload mode="basic" chooseLabel="Attachment" chooseIcon="pi pi-paperclip" name="demo[]"
+                    url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" />
+                <div class="p-mt-2 p-d-flex p-jc-end">
+                    <p-button label="Cancel" icon="pi pi-times" class="p-button-text mr-2" outlined
+                        (click)="email.showReplyBox = false"></p-button>
+                    <p-button label="Send" icon="pi pi-send" class="p-button-primary p-ml-2"
+                        (click)="sendReply(email)"></p-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

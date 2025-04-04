@@ -2,7 +2,7 @@
     <div class="col-12">
         <app-crud [displayName]="'Contacts'" [data]="contacts" [options]="crudOptions"
              (onAction)="onAction($event)" (onFilterChange)="onFilterChange($event)" (onClick)="click($event)" (onClear)="onClear()"
-             (onBulkImport)="getBulkImport($event)" [viewOptions]="viewOptions">
+             (onBulkImport)="getBulkImport($event)">
             <ng-template #filterTemplate  let-onFilterChange="onFilterChange">
                 <p-dropdown styleClass="ml-2"
                     [(ngModel)]="selectedUser"
@@ -10,13 +10,6 @@
                     placeholder="Select user name"
                     (onChange)="onFilterChange('name', 'text', $event.value)">
                 </p-dropdown>
-            </ng-template>
-            <ng-template #viewHeaderTemplate let-contact>
-                <p-avatar class="contact-avatar" size="xlarge" shape="circle"></p-avatar>
-                <div>
-                    <h3 styleClass="mb-0" style="margin-bottom: 0px !important;">{{ contact.first_name }} {{ contact.last_name }}</h3>
-                    <label>{{ contact.job_title || '--'  }}</label>
-                </div>
             </ng-template>
         </app-crud>
     </div>

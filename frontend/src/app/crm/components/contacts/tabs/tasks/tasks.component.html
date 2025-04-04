@@ -1,1 +1,211 @@
-<p>tasks works!</p>
+<!-- <div class="task-list mt-0">
+    <p-card *ngFor="let task of tasks" class="p-3 p-erp-card">
+        <ng-template pTemplate="header">
+            <div class="flex justify-content-between align-items-center p-3">
+                <div class="flex align-items-center gap-3 p-card-title">
+                    <i class="pi pi-check-circle text-primary text-xl"></i> 
+                    <span class="font-semibold">Follow-up Email</span>
+                </div>
+                <span class="text-secondary"><i class="pi pi-clock"></i> 2 hours ago</span>
+            </div>
+        </ng-template>
+
+        <div class="p-0">
+            <p class="m-0 text-base text-gray-700">
+                Please find the attached contract for review. Let me know if any changes are required.
+            </p>
+        </div>
+
+        <div class="mt-3" *ngIf="true">
+            <div class="flex gap-2 flex-wrap">
+                <div class="attachment-item flex align-items-center gap-2 p-2 bg-gray-100 rounded-md">
+                    <i class="pi pi-paperclip text-sm text-gray-600"></i>
+                    <span class="text-sm text-gray-800">contract.pdf</span>
+                </div>
+                <div class="attachment-item flex align-items-center gap-2 p-2 bg-gray-100 rounded-md">
+                    <i class="pi pi-paperclip text-sm text-gray-600"></i>
+                    <span class="text-sm text-gray-800">invoice.jpg</span>
+                </div>
+            </div>
+        </div>
+
+        <ng-template pTemplate="footer">
+            <div class="flex justify-content-between align-items-center mt-2">
+                <div class="flex align-items-center gap-2">
+                    <p-avatar image="https://i.pravatar.cc/40" shape="circle" size="large"></p-avatar>
+                    <span class="text-base font-medium text-gray-800">John Doe</span>
+                </div>
+
+                <p-button [outlined]="true" icon="pi pi-ellipsis-v"></p-button>
+            </div>
+        </ng-template>
+    </p-card>
+</div> -->
+<ng-container *ngFor="let task of tasks">
+    <p-panel [toggleable]="true">
+        <ng-template pTemplate="header">
+            <div class="flex justify-content-between align-items-center">
+                <div class="flex gap-3 align-items-center">
+                    <div class="flex flex-col gap-2">
+                        <span><i class="pi pi-check-circle text-primary"></i><strong> {{ task.title }}</strong></span>
+                        <span class="text-secondary">
+                            <i class="pi pi-clock"></i> {{ task.timestamp }}
+                        </span>
+                        <p class="text-base text-gray-700">
+                            {{ task.description }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <!-- <ng-template pTemplate="icons">
+            <button class="p-panel-header-icon p-link mr-2" (click)="menu.toggle($event)">
+                <span class="pi pi-cog"></span>
+            </button>
+            <p-menu #menu id="config_menu" [model]="items" [popup]="true" />
+        </ng-template> -->
+        <!-- <ng-template pTemplate="footer">
+            <div class="flex flex-wrap align-items-center justify-content-between gap-3">
+                <div class="flex align-items-center gap-2">
+                    <p-button icon="pi pi-user" rounded="true" text="true" />
+                    <p-button icon="pi pi-bookmark" severity="secondary" rounded="true" text="true" />
+                </div>
+                <span class="p-text-secondary">
+                    Updated 2 hours ago
+                </span>
+            </div>
+        </ng-template> -->
+
+        <div class="p-0">
+            <div class="flex flex-wrap gap-6 mb-3">
+                <div class="flex flex-col grow basis-0 gap-2">
+                    <label for="">Assigned To</label>
+                    <p-dropdown></p-dropdown>
+                </div>
+                <div class="flex flex-col grow basis-0 gap-2">
+                    <label for="">Status</label>
+                    <p-dropdown></p-dropdown>
+                </div>
+                <div class="flex flex-col grow basis-0 gap-2">
+                    <label for="">Priority</label>
+                    <p-dropdown></p-dropdown>
+                </div>
+                <div class="flex flex-col grow basis-0 gap-2">
+                    <label for="">Type</label>
+                    <p-dropdown></p-dropdown>
+                </div>
+                <div class="flex flex-col grow basis-0 gap-2">
+                    <label for="">Due Date</label>
+                    <p-dropdown></p-dropdown>
+                </div>
+                <div class="flex flex-col grow basis-0 gap-2">
+                    <label for="">Reminder</label>
+                    <p-dropdown></p-dropdown>
+                </div>
+            </div>
+            <!-- <p class="m-0 text-base text-gray-700">
+                {{ task.description }}
+            </p> -->
+
+            <app-comments></app-comments>
+        </div>
+
+    </p-panel>
+
+    <!-- Task Card -->
+    <p-card class="p-erp-card mb-3">
+        <!-- 🔹 Header -->
+        <ng-template pTemplate="header">
+            <div class="flex justify-content-between align-items-center p-3">
+                <div class="flex gap-3 align-items-start">
+                    <i class="pi pi-check-circle text-primary mt-1"></i>
+                    <div class="flex flex-col">
+                        <strong>{{ task.title }}</strong>
+                        <p class="mt-1 text-base text-gray-700">
+                            {{ task.description }}
+                        </p>
+                    </div>
+                </div>
+                <span class="text-secondary"><i class="pi pi-clock"></i> {{ task.timestamp }}</span>
+            </div>
+        </ng-template>
+
+        <!-- 🔹 Body -->
+        <div class="p-0">
+            <div class="flex flex-wrap gap-6 mb-3">
+                <div class="flex flex-col grow basis-0 gap-2">
+                    <label for="">Assigned To</label>
+                    <p-dropdown></p-dropdown>
+                </div>
+                <div class="flex flex-col grow basis-0 gap-2">
+                    <label for="">Status</label>
+                    <p-dropdown></p-dropdown>
+                </div>
+                <div class="flex flex-col grow basis-0 gap-2">
+                    <label for="">Priority</label>
+                    <p-dropdown></p-dropdown>
+                </div>
+                <div class="flex flex-col grow basis-0 gap-2">
+                    <label for="">Type</label>
+                    <p-dropdown></p-dropdown>
+                </div>
+                <div class="flex flex-col grow basis-0 gap-2">
+                    <label for="">Due Date</label>
+                    <p-dropdown></p-dropdown>
+                </div>
+                <div class="flex flex-col grow basis-0 gap-2">
+                    <label for="">Reminder</label>
+                    <p-dropdown></p-dropdown>
+                </div>
+            </div>
+            <!-- <p class="m-0 text-base text-gray-700">
+                {{ task.description }}
+            </p> -->
+
+            <app-comments></app-comments>
+        </div>
+
+        <!-- 🔹 Attachments -->
+        <!-- <div class="mt-3" *ngIf="task.attachments?.length">
+            <div class="flex gap-2 flex-wrap">
+                <div *ngFor="let file of task.attachments"
+                    class="attachment-item flex align-items-center gap-2 p-2 bg-gray-100 rounded-md">
+                    <i class="pi pi-paperclip text-sm text-gray-600"></i>
+                    <span class="text-sm text-gray-800">{{ file.name }}</span>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- 🔹 Footer -->
+        <!-- <ng-template pTemplate="footer">
+        </ng-template> -->
+    </p-card>
+
+    <!-- <div class="comments-section surface-border ml-3" *ngIf="task.comments?.length">
+        <div *ngFor="let comment of task.comments" class="comment-item p-3 border-round bg-gray-100 mb-2">
+            <div class="flex align-items-center gap-2">
+                <p-avatar [image]="comment.avatar" shape="circle" size="small"></p-avatar>
+                <span class="text-sm font-semibold">{{ comment.user }}</span>
+                <span class="text-xs text-secondary">{{ comment.time }}</span>
+            </div>
+            <p class="m-0 text-sm text-gray-700">{{ comment.text }}</p>
+        </div>
+
+        <div class="w-full p-3 surface-100 border-round transition-all shadow-sm"
+            [ngClass]="{ 'border-primary shadow-2': isDragging, 'border-token-border-light': !isDragging }"
+            (drop)="onFileDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)">
+            <textarea rows="2" pTextArea placeholder="Write a comment or drop files here..."
+                class="w-full border-none p-2 resize-none">
+                        </textarea>
+
+            <div class="flex justify-content-between mt-2">
+                <input type="file" hidden #fileUploadInput (change)="attachFile($event)" multiple>
+                <p-button icon="pi pi-paperclip" class="p-button-rounded p-button-text p-button-sm" [rounded]="true"
+                    class="text-white" (click)="triggerFileUpload()">
+                </p-button>
+                <p-button icon="pi pi-send" [rounded]="true" [raised]="true" class="text-primary">
+                </p-button>
+            </div>
+        </div>
+    </div> -->
+</ng-container>
