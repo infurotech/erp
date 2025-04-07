@@ -18,7 +18,12 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@infuro/shared":["../shared/dist"]
+      "@infuro/shared": ["../shared/dist"]
     }
-  }
+  },
+  "include": [
+    "src/**/*.ts",    
+    "test/**/*.ts"    
+  ],
+  "exclude": ["node_modules"]
 }

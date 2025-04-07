@@ -8,7 +8,7 @@ import { CrudService, DatabaseService } from "@infuro/shared";
 import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable({ scope: Scope.REQUEST })
-@Injectable()
+// @Injectable()
 export class AuthService extends CrudService<User> {
 
   constructor(
@@ -17,10 +17,11 @@ export class AuthService extends CrudService<User> {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService
   ) {
-    super(repo, databaseService);
+    super(repo, databaseService,User);
   }
 
   async signIn(username: string, pass: string): Promise<any> {
+    console.log("SignIN Called");
     const user = await this.findByUsername(username);
     if (!user || !bcrypt.compare(pass, user.password)) {
       throw new UnauthorizedException();

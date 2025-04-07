@@ -8,6 +8,6 @@ import { Tenant } from "../entities/tenant.entity";
 export class TenantService extends CrudService<Tenant> {
 
   constructor(@InjectRepository(Tenant) repo,databaseService: DatabaseService) {
-    super(repo,databaseService);
+    super(repo,databaseService,Tenant);
   }
-}
+} 
