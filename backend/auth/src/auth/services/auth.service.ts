@@ -4,20 +4,18 @@ import { ConfigService } from '@nestjs/config';
 import { User } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
-import { CrudService, DatabaseService } from "@infuro/shared";
-import { InjectRepository } from "@nestjs/typeorm";
+import { CrudService, InjectTenantRepository } from "@infuro/shared";
 
 @Injectable({ scope: Scope.REQUEST })
 @Injectable()
 export class AuthService extends CrudService<User> {
 
   constructor(
-    @InjectRepository(User) repo,
-    databaseService: DatabaseService,
+    @InjectTenantRepository(User) repo,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService
   ) {
-    super(repo, databaseService);
+    super(repo);
   }
 
   async signIn(username: string, pass: string): Promise<any> {

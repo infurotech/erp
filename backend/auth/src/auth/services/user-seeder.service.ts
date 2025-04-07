@@ -4,14 +4,13 @@ import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
-import { DatabaseService } from '@infuro/shared';
+import {  InjectTenantRepository } from '@infuro/shared';
 
 @Injectable()
 export class UserSeederService implements OnModuleInit {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-    databaseService: DatabaseService,
+    @InjectTenantRepository(User)
+    private readonly userRepository: Repository<User>
   ) {}
 
 

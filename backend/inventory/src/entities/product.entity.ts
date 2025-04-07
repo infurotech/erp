@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, 
     ManyToMany, JoinTable, Index, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
-
     @Entity()
     export class StaffMember {
         @PrimaryGeneratedColumn("uuid")

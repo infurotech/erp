@@ -1,4 +1,5 @@
 export * from './database'
+export * from './tenant'
 export * from './caching'
 export * from './audit'
 export * from './auth/auth.guard'

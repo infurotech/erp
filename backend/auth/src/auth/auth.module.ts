@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Scope } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Repository, DataSource } from 'typeorm';
@@ -11,20 +11,27 @@ import { Tenant } from './entities/tenant.entity';
 import { User } from './entities/user.entity';
 import { AuthService } from './services/auth.service';
 import { TenantService } from './services/tenant.service';
-import { AuditService, DatabaseService } from '@infuro/shared';
+import { AuditService, TenantConnectionManager, TenantContextService, TenantOrmModule } from '@infuro/shared';
 import { AuthController } from './controllers/auth.controller';
 import { UserSeederService } from './services/user-seeder.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([App, Edition, Feature, Invite, Tenant, User])],
-  providers: [JwtService, AuthService, TenantService, Repository, {
-      provide: DatabaseService,
-      useFactory: (dataSource: DataSource) => new DatabaseService(dataSource),
-      inject: [DataSource],
+    TenantOrmModule.forFeature([App, Edition, Feature, Invite, Tenant, User])
+  ],
+  providers: [
+    JwtService,
+    TenantConnectionManager,
+    {
+      provide: TenantContextService,
+      scope: Scope.REQUEST,
+      useClass: TenantContextService,
     },
-    AuditService, UserSeederService],
-  exports: [AuthService, DatabaseService, TenantService],
+    AuthService,
+    AuditService,
+    UserSeederService
+  ],
+  exports: [AuthService],
   controllers: [AuthController],
 })
 export class AuthModule { }
