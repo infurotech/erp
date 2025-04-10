@@ -10,5 +10,30 @@
     "watch": "tsc --watch"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.14.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.782.0",
+    "@nestjs/cache-manager": "^3.0.1",
+    "@nestjs/common": "^11.0.13",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.0.13",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/mapped-types": "^2.1.0",
+    "@nestjs/passport": "^11.0.5",
+    "@nestjs/platform-express": "^11.0.13",
+    "@nestjs/typeorm": "^11.0.0",
+    "@nestjsx/crud": "^5.0.0-alpha.3",
+    "@nestjsx/crud-typeorm": "^5.0.0-alpha.3",
+    "cache-manager-redis-yet": "^5.1.5",
+    "express": "^5.1.0",
+    "multer": "^1.4.5-lts.2",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "rxjs": "^7.8.2",
+    "typeorm": "^0.3.22",
+    "winston": "^3.17.0"
+  }
 }

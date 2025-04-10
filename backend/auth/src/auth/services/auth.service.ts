@@ -1,25 +1,31 @@
-import { Injectable, Scope, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, Scope, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
 import { CrudService, InjectTenantRepository } from "@infuro/shared";
+import { DataSource, Repository } from 'typeorm';
+import { CONNECTION } from 'src/tenancy/tenancy.module';
 
 @Injectable({ scope: Scope.REQUEST })
 @Injectable()
-export class AuthService extends CrudService<User> {
-
+export class AuthService  {
+  private userRepository: Repository<User>;
   constructor(
-    @InjectTenantRepository(User) repo,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    @Inject(CONNECTION) private readonly connection: DataSource
+
   ) {
-    super(repo);
+   // console.log("connection",connection);
+    this.userRepository = connection.getRepository(User);
   }
 
   async signIn(username: string, pass: string): Promise<any> {
+    console.log("signin called")
     const user = await this.findByUsername(username);
+    console.log("user",user);
     if (!user || !bcrypt.compare(pass, user.password)) {
       throw new UnauthorizedException();
     }
@@ -54,11 +60,20 @@ export class AuthService extends CrudService<User> {
   }
 
   async findByUsername(username: string): Promise<User | null> {
-    var user = await this.repo.findOneBy({ email: username });
-    return user;
+    console.log("findByUsername called with username:", username);
+  
+    try {
+      const user = await this.userRepository.findOneBy({ email: username });
+      console.log("Found user:", user);
+      return user; 
+    } catch (error) {
+      console.error("Error occurred while fetching user:", error);
+      return null;
+    }
   }
+  
   async findByUserId(userId: string): Promise<User | null> {
-    var user = await this.repo.findOneBy({ id: userId });
+    var user = await this.userRepository.findOneBy({ id: userId });
     return user;
   }
 }

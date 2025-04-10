@@ -15,8 +15,8 @@ export function TenantRepositoryProvider<T>(entity: EntityTarget<T>): Provider {
         connManager: TenantConnectionManager
       ): Promise<Repository<T>> => {
         const tenantId = tenantContext.getTenantId();
-        const connection = connManager.getConnection(tenantId); // connection should be initialized already
-        return connection.getRepository<T>(entity);
+        const connection = await connManager.getConnection(tenantId); // connection should be initialized already
+        return  connection.getRepository<T>(entity);
       },
     };
   }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule, JwtService } from '@nestjs/jwt';
@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import * as dotenv from 'dotenv';
+import { TenancyMiddleware } from './tenancy/tenancy.middleware';
 dotenv.config();
 
 @Module({
@@ -30,4 +31,9 @@ dotenv.config();
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    // Apply the TenancyMiddleware globally to all routes
+    consumer.apply(TenancyMiddleware).forRoutes('*'); // '*' means all routes, change it if needed
+  }
+}

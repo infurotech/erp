@@ -20,8 +20,35 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@infuro/shared": "file:../shared",
+    "@nestjs/common": "^11.0.13",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.0.13",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/mapped-types": "^2.1.0",
+    "@nestjs/passport": "^11.0.5",
+    "@nestjs/platform-express": "^11.0.13",
+    "@nestjs/typeorm": "^11.0.0",
+    "@nestjsx/crud": "^5.0.0-alpha.3",
+    "@nestjsx/crud-typeorm": "^5.0.0-alpha.3",
+    "@types/body-parser": "^1.19.5",
+    "@types/express": "^5.0.1",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.14.0",
+    "@types/passport": "^1.0.17",
     "bcrypt": "^5.1.1",
+    "body-parser": "^2.2.0",
     "cookie-parser": "^1.4.7",
-    "pg": "^8.13.2"
+    "express": "^5.1.0",
+    "multer": "^1.4.5-lts.2",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.13.2",
+    "rxjs": "^7.8.2",
+    "typeorm": "^0.3.22",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0"
   }
 }

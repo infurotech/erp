@@ -10,4 +10,4 @@ export function InjectTenantRepository(entity: EntityTarget<any>): ParameterDeco
       Inject(token)(target, key, index);
     };
   }
-  
+   
