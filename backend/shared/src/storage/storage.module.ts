@@ -8,6 +8,7 @@ import { StorageConfig } from './storage.config';
   imports: [
     ConfigModule.forRoot({
       load: [StorageConfig],
+      isGlobal: true,
     }),
   ],
   controllers: [StorageController],

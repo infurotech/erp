@@ -7,7 +7,7 @@ import { Feature } from './entities/feature.entity';  // Your entities
 import {  Invite } from './entities/invite.entity';  // Your entities
 import { Tenant } from './entities/tenant.entity';  // Your entities
 import {  User } from './entities/user.entity';  
-import { TenancyModule } from '../tenancy/tenancy.module'; // Import TenancyModule
+import { TenancyModule } from '@infuro/shared'; // Import TenancyModule
 
 import { AuthController } from './controllers/auth.controller';
 import { JwtService } from '@nestjs/jwt';

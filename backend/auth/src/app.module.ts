@@ -1,12 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@infuro/shared';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import * as dotenv from 'dotenv';
-import { TenancyMiddleware } from './tenancy/tenancy.middleware';
+import { TenancyMiddleware } from '@infuro/shared';
 dotenv.config();
 
 @Module({

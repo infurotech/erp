@@ -1,34 +1,47 @@
-import { Injectable, Inject, Scope } from '@nestjs/common';
-import { EntityTarget, ObjectLiteral, Repository, DataSource } from 'typeorm';
-import { CONNECTION } from '../tenancy/tenancy.module'; // Token that provides tenant DataSource
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { EntityTarget, Repository} from 'typeorm';
 
-@Injectable({ scope: Scope.REQUEST })
-export class CrudService<T extends ObjectLiteral> {
-  constructor(
-    @Inject(CONNECTION) private readonly connection: DataSource
-  ) {}
-
-  private getRepository(entity: EntityTarget<T>): Repository<T> {
-    return this.connection.getRepository(entity);
+@Injectable()
+export class CrudService<T> extends TypeOrmCrudService<T> {
+  constructor(repo : Repository<T>) {
+    super(repo);
   }
 
-  async findAllWithPagination(entity: EntityTarget<T>, skip = 0, take = 10) {
-    return this.getRepository(entity).find({ skip, take });
+  /**
+   * Find all entities with pagination support
+   * @param skip Number of records to skip
+   * @param take Number of records to take
+   * @returns Paginated result
+   */
+  async findAllWithPagination(skip: number, take: number) {
+    return this.repo.find({
+      skip,
+      take,
+    });
   }
 
-  async findOneByField<K extends keyof T>(entity: EntityTarget<T>, field: K, value: T[K]) {
-    return this.getRepository(entity).findOneBy({ [field]: value } as any);
+  /**
+   * Soft delete an entity
+   * @param id The ID of the entity to soft delete
+   * @returns Result of the deletion
+   */
+  async softDelete(id: number | string) {
+    return this.repo.softDelete(id);
   }
 
-  async create(entity: EntityTarget<T>, data: Partial<T>) {
-    return this.getRepository(entity).save(data);
+  /**
+   * Restore a soft-deleted entity
+   * @param id The ID of the entity to restore
+   * @returns Result of the restoration
+   */
+  async restore(id: number | string) {
+    return this.repo.restore(id);
   }
 
-  async softDelete(entity: EntityTarget<T>, id: number | string) {
-    return this.getRepository(entity).softDelete(id);
-  }
-
-  async restore(entity: EntityTarget<T>, id: number | string) {
-    return this.getRepository(entity).restore(id);
+  async findById(id: string | number): Promise<T | null> {
+    return this.repo.findOne({
+      where: { id } as any,  // or use a generic `id` condition
+    });
   }
 }
