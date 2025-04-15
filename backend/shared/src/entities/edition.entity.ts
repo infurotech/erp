@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, OneToMany } from "typeorm";
 import { Tenant } from "./tenant.entity";
-import { Feature } from "./feature.entity";
 import { AuditedBaseEntity } from "../audit/audited.entity";
 
 @Entity()
