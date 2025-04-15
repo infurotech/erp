@@ -8,7 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import * as dotenv from 'dotenv';
 import { TenancyMiddleware } from '@infuro/shared';
 dotenv.config();
-
+ 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),

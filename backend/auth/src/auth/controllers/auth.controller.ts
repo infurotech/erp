@@ -11,9 +11,9 @@ export class AuthController {
     @Post('login')
     async login(@Body() signInDto: Record<string, any>, @Res() res: Response) {
         try {
-            console.log("login called");
+            
             const response = await this.authService.signIn(signInDto.email, signInDto.password);
-            console.log("response",response);
+           
             if (!response) throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
 
             // Generate refresh token
@@ -72,7 +72,7 @@ export class AuthController {
             });
 
             // Return user data
-            return res.json({ message: 'Token refresh successful!', user: response.user });
+            return res.json({ message: 'Token refresh successful!', user: response.user }); 
 
         } catch (error) {
             throw new HttpException('Invalid or expired refresh token', HttpStatus.UNAUTHORIZED);

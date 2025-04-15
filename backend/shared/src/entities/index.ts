@@ -1,6 +1,2 @@
-export * from './app.entity'
-export * from './edition.entity'
-export * from './feature.entity'
-export * from './invite.entity'
 export * from './tenant.entity'
 export * from './user.entity'

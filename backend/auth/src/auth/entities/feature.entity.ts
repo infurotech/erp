@@ -1,4 +1,4 @@
-import { Edition } from "./edition.entity";
+import { Edition } from "@infuro/shared";
 import { AuditedBaseEntity ,Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, ManyToOne} from "@infuro/shared";
 
 @Entity()

@@ -2,8 +2,7 @@ import { Inject, Injectable, Scope, UnauthorizedException } from '@nestjs/common
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
-// import { User } from '../entities/user.entity';
-import { CrudService,CONNECTION ,DataSource, Repository,User } from '@infuro/shared'; // Path to your CrudService
+import { CrudService,CONNECTION ,DataSource,User } from '@infuro/shared'; // Path to your CrudService
 
 @Injectable({ scope: Scope.REQUEST })
 export class AuthService extends CrudService<User> {
@@ -14,13 +13,17 @@ export class AuthService extends CrudService<User> {
   ) { 
     super(connection.getRepository(User));
   }  
-
+ 
 async signIn(username: string, pass: string): Promise<any> {
-  const user = await this.findByUsername(username);
-  if (!user || !(await bcrypt.compare(pass, user.password))) {
+try { const user = await this.findByUsername(username);
+  const isPasswordValid = user && await bcrypt.compare(pass, user.password);
+  if (!isPasswordValid) {
     throw new UnauthorizedException();
   }
   return this.generateAccessToken(user);
+}catch(error){
+  console.log("error",error);
+}
 }
 
 async findByUsername(username: string): Promise<User | null> {
@@ -28,14 +31,37 @@ async findByUsername(username: string): Promise<User | null> {
 }
 
 async generateAccessToken(user: User) {
-  return {
-    token: await this.jwtService.signAsync({ sub: user.id }),
-    user: { name: user.firstName, avatar: user.profileUrl },
-  };
+  try {
+     const token = await this.jwtService.signAsync(
+      { sub: user.id },
+      {
+        secret: this.configService.get('JWT_SECRET') || 'secret007',
+        expiresIn: '1h'
+      }
+    );
+ 
+    return {
+      token,
+      user: { name: user.firstName, avatar: user.profileUrl },
+    };
+  } catch (error) {
+    throw new Error(`Could not generate access token: ${error.message}`);
+  }
 }
 
 async generateRefreshToken(userId: string) {
-  return this.jwtService.sign({ userId });
+  try {
+      return this.jwtService.sign(
+          { userId },
+          {
+              secret: process.env.JWT_SECRET || 'secret007',
+              expiresIn: '7d'  
+          }
+      );
+  } catch (error) {
+      console.error("Error generating refresh token:", error);
+      throw new Error("Could not generate refresh token");
+  }
 }
 
 async loginByRefreshToken(refreshToken: string): Promise<any> {

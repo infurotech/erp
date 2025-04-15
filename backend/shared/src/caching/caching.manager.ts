@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { Inject } from '@nestjs/common';
 
 @Injectable()
 export class CachingManager {
@@ -8,14 +7,17 @@ export class CachingManager {
 
   async get<T>(key: string): Promise<T | null> {
     const value = await this.cache.get<T>(key);
-    return value || null;
+    console.log(`[CachingManager] GET ${key}:`, !!value);
+    return value ?? null;
   }
 
-  async set<T>(key: string, value: T, ttlInSeconds: any): Promise<void> {
-    await this.cache.set(key, value, ttlInSeconds);
+  async set<T>(key: string, value: T, ttl: number): Promise<void> {
+    console.log(`[CachingManager] SET ${key} with TTL ${ttl}`);
+    await this.cache.set(key, value, ttl );
   }
 
   async invalidate(key: string): Promise<void> {
+    console.log(`[CachingManager] DELETE ${key}`);
     await this.cache.del(key);
   }
 

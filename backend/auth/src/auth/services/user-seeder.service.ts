@@ -1,17 +1,16 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { InjectRepository } from '@infuro/shared';
-import { Repository } from '@infuro/shared';
-import { User } from '../entities/user.entity';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
-import {  InjectTenantRepository } from '@infuro/shared';
+import { CrudService,CONNECTION ,DataSource, Repository,User } from '@infuro/shared'; // Path to your CrudService
+
 
 @Injectable()
-export class UserSeederService implements OnModuleInit {
-  constructor(
-    @InjectTenantRepository(User)
-    private readonly userRepository: Repository<User>
-  ) {}
+export class UserSeederService extends CrudService<User> implements OnModuleInit {
+  constructor( 
+    @Inject(CONNECTION) connection: DataSource,
+  ) { 
+    super(connection.getRepository(User));
+  } 
 
 
   async onModuleInit() {
@@ -19,7 +18,7 @@ export class UserSeederService implements OnModuleInit {
   }
 
   private async createDefaultUser() {
-    const existingUser = await this.userRepository.findOne({ where: { email: 'admin@infurotech.com' } });
+    const existingUser = await this.repo.findOne({ where: { email: 'admin@infurotech.com' } });
 
     if (!existingUser) {
       console.log('🚀 Creating default admin user...');
@@ -27,7 +26,7 @@ export class UserSeederService implements OnModuleInit {
       const randomPassword = this.generateRandomPassword();
       const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
-      const user = this.userRepository.create({
+      const user = this.repo.create({
         email: 'admin@infurotech.com',
         password: hashedPassword,
         firstName: 'Admin',
@@ -42,7 +41,7 @@ export class UserSeederService implements OnModuleInit {
 
       console.log('Created admin user:', user.email, randomPassword)
 
-      await this.userRepository.save(user);
+      await this.repo.save(user);
       console.log('✅ Default admin user created!');
     } else {
       console.log('✅ Admin user already exists.');
