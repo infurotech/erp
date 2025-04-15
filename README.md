@@ -1,18 +1,62 @@
-# ERP Boilerplate (MEAN Stack)
+# Infuro ERP
 
-Welcome to the ERP Boilerplate! This project provides a scalable and modular foundation for building ERP using the MEAN stack (MongoDB, Express, Angular, NestJS). It includes PrimeNG for the UI and TypeORM for backend ORM. Additionally, it uses Yeoman generators to streamline code generation and customization.
+Welcome to **Infuro ERP** – an AI-native platform designed to accelerate the creation and management of modern ERP systems. Infuro ERP provides intelligent building blocks that simplify and streamline the development of ERP solutions of any scale. Each module is designed as a microservice, enabling seamless customization, extension, and independent deployment. Businesses can adapt these modules to fit their specific needs while benefiting from faster development, smarter automation, and continuous innovation powered by AI.
 
 ![CRM](./document/contacts.png)
 
-### Features
-* **MEAN Stack:** Fully integrated architecture.
-* **NestJS:** Modular and structured backend with TypeORM for database interaction.
-* **Angular + PrimeNG:** Responsive UI components for building professional-grade user interfaces.
-* **Code Generation:** Automated code scaffolding using Yeoman generators.
-* **Customizable Modules:** Easily add, edit, or remove modules with minimal effort.
-* **Authentication:** JWT-based user authentication and role management.
-* **Localization:** i18n support for multiple languages.
-* **Scalable Structure:** Clean separation of concerns for maintainable code.
+## ✨ Key Features
+
+- **📦 Full-Stack MEAN Integration**  
+  Built using PostgreSQL, Express.js, Angular, and NestJS for modern enterprise web applications. Uses TypeORM, allowing easy migration to any SQL database of choice.
+
+- **⚙️ Modular NestJS Backend**  
+  Structured backend architecture with support for modular business domains and services.
+
+- **🧩 Angular + PrimeNG UI**  
+  Elegant and dynamic user interfaces using Angular with PrimeNG components.
+
+- **🧪 Low-Code Friendly**  
+  Leverages LLMs (Large Language Models) for generating code, enabling rapid scaffolding of modules and features with minimal manual input.
+
+- **🔐 Secure Access & Authentication**  
+  Includes robust JWT-based authentication, role-based access control (RBAC), and supports enterprise-grade standards such as OAuth2, SAML, and OpenID Connect for seamless single sign-on (SSO) and identity federation.
+
+- **🛡️ Granular Access Management**  
+  Provides fine-grained access controls across organizations, departments, and teams, enabling secure data visibility and operation-level permissions based on hierarchy and roles.
+
+- **🌍 Internationalization (i18n)**  
+  Multi-language support through Angular's i18n and backend message management.
+
+- **🏢 Multitenancy Support**  
+  Built-in support for tenant-aware architecture to serve multiple customers from a single deployment using isolated data contexts.
+
+- **🎛️ Edition & Feature Management**  
+  Easily manage different editions (e.g., Free, Pro, Enterprise) and control feature availability per tenant or user role, enabling flexible licensing models and pay-per-feature configurations.
+
+- **📬 Event-Driven Architecture**  
+  Supports reactive business logic using event emitters and queues (e.g., Redis, RabbitMQ, Kafka), ideal for scaling and decoupling services.
+
+- **⚡ Caching, Queuing & Integrations**  
+  First-class support for distributed caching, message queuing, and integration frameworks to develop high-performance, loosely coupled microservices that scale easily and communicate reliably.
+
+- **🔄 Workflow Automation & Integration Ready**  
+  Built-in support for custom workflows, webhook triggers, and third-party integrations makes it easy to automate processes and connect with external systems like CRMs, payment gateways, and analytics platforms.
+
+- **✉️ Communication & Collaboration Tools**  
+  Native support for incoming/outgoing emails, chat messaging, and call handling to streamline customer interactions, internal collaboration, and support workflows.
+
+- **🧩 Customizable API-Driven Frontend**  
+  The frontend is fully driven by data and APIs, allowing organizations to adapt UI and behavior dynamically based on their business needs. Includes out-of-the-box support for a rich library of standard UI components.
+
+- **📄 Report & Document Generation**  
+  Generate customizable reports and professional documents (PDF, DOCX, HTML) based on dynamic data, templates, and user-defined formats—ideal for invoices, contracts, financials, and operational insights.
+
+- **🗂️ File Storage with Versioning**  
+  Secure file storage system with built-in version control, enabling teams to manage, retrieve, and audit document history effectively across modules.
+
+- **📁 Clean Project Structure**  
+  Organized file structure for better scalability and developer productivity.
+
 
 ### Prerequisites
 Ensure you have the following installed:
