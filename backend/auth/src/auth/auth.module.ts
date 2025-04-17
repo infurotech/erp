@@ -14,17 +14,18 @@ import { TenantService } from './services/tenant.service';
 import { AuditService, DatabaseService } from '@infuro/shared';
 import { AuthController } from './controllers/auth.controller';
 import { UserSeederService } from './services/user-seeder.service';
-
+import { TenantSeederService } from './services/tenant-seeder.service';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([App, Edition, Feature, Invite, Tenant, User])],
+    TypeOrmModule.forFeature([App, Edition, Feature, Invite, Tenant, User],)
+    ],
   providers: [JwtService, AuthService, TenantService, Repository, {
       provide: DatabaseService,
       useFactory: (dataSource: DataSource) => new DatabaseService(dataSource),
       inject: [DataSource],
     },
-    AuditService, UserSeederService],
+    AuditService, UserSeederService,TenantSeederService],
   exports: [AuthService, DatabaseService, TenantService],
-  controllers: [AuthController],
+  controllers: [AuthController], 
 })
 export class AuthModule { }

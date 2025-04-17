@@ -1,17 +1,19 @@
-import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
-import { TenantManager } from './tenant.manager';
-import { TenantTypeOrmProvider } from './tenant.typeorm';
-import { TenantMiddleware } from './tenant.middleware';
-import { CachingModule } from '@infuro/shared';
+import { Module, Scope } from "@nestjs/common";
+import { TenantService } from "./tenant.service";
 
 @Module({
-  imports: [CachingModule], // Ensure caching functionality is available
-  providers: [TenantManager, TenantTypeOrmProvider],
-  exports: [TenantManager, TenantTypeOrmProvider], // Export for use in other modules
+  providers: [
+    TenantService,
+    {
+      provide: "TENANT_CONNECTION",
+      scope: Scope.REQUEST,
+      useFactory: async (tenantService: TenantService, request: any) => {
+        const tenantName = request["user"]?.["name"];
+        return await tenantService.connectTenant(tenantName);
+      },
+      inject: [TenantService, "REQUEST"],
+    },
+  ],
+  exports: ["TENANT_CONNECTION", TenantService],
 })
-export class TenantModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    // Apply TenantMiddleware globally or on specific routes
-    consumer.apply(TenantMiddleware).forRoutes('*');
-  }
-}
+export class TenantModule {}

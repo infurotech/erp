@@ -1,14 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { DatabaseService } from './database.service';
-import { Repository} from 'typeorm';
+import { EntityTarget, ObjectLiteral, Repository} from 'typeorm';
 
 @Injectable()
-export class CrudService<T> extends TypeOrmCrudService<T> {
-  constructor(protected readonly repo : Repository<T>, private readonly databaseService: DatabaseService) {
-    super(repo);
+export class CrudService<T> extends TypeOrmCrudService<T> implements OnModuleInit   {
+  constructor(
+    repo : Repository<T>,
+    private readonly databaseService: DatabaseService,
+    private readonly entity: EntityTarget<T>) {
+      console.log('Constructor is called');
+      super(repo);
+      this.onModuleInit();
   }
-
+ 
+  async onModuleInit() {
+    try {
+      console.log('onModuleInit called');
+      this.repo = await this.databaseService.getRepository<T>("", this.entity);
+      (this as any).repository = this.repo;
+    } catch (error) {
+      console.error('Error in onModuleInit:', error);
+    }
+  }
   /**
    * Find all entities with pagination support
    * @param skip Number of records to skip
@@ -39,4 +53,11 @@ export class CrudService<T> extends TypeOrmCrudService<T> {
   async restore(id: number | string) {
     return this.repo.restore(id);
   }
+
+  // Example function to get repository dynamically from database service
+  async getRepositoryForTenant(tenantId: string, entity: EntityTarget<T>): Promise<Repository<T>> {
+    // Call the getRepository method of DatabaseService
+    return await this.databaseService.getRepository(tenantId, entity);
+  }
+
 }
