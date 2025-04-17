@@ -1,5 +1,4 @@
 <div class="card">
-
   <!-- Top sectoins with actions -->
   <div class="surface-section mb-3">
     <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
@@ -42,25 +41,21 @@
 
   <!-- Toolbar with filters and bulk operations -->
   <p-toolbar>
-      <app-filter
-        [fields]="options.fields"
-        [filterOptions]="contactsList"
-        [filterTemplate]="filterTemplate"
-        [isDeleteButtonVisible]="isDeleteButtonVisible"
-        (filterChange)="onFilterChangeEvent($event)"
-        (resetFilter)="resetFilter()"
-        (saveFilter)="saveFilter()"
-        (deleteData)="onDelete()">
-      </app-filter>
+    <app-filter [fields]="options.fields" [filterOptions]="contactsList" [filterTemplate]="filterTemplate"
+      [isDeleteButtonVisible]="isDeleteButtonVisible" (filterChange)="onFilterChangeEvent($event)"
+      (resetFilter)="resetFilter()" (saveFilter)="saveFilter()" (deleteData)="onDelete()">
+    </app-filter>
   </p-toolbar>
-  
+
   <!-- <p-tabView>
     <p-tabPanel header="All"> -->
   <!-- Data Table for Displaying Items -->
 
-  <crud-grid  *ngIf="gridView" [data]="data" [fields]="options.fields" (selectionChange)="onSelectionChange($event)" (tableHeaders)="onTableHeadersReceived($event)" (openDialog)="openDialogEvent($event)" (requestDelete)="confirmDelete($event)"></crud-grid>
+  <crud-grid *ngIf="gridView" [data]="data" [fields]="options.fields" (selectionChange)="onSelectionChange($event)"
+    (tableHeaders)="onTableHeadersReceived($event)" (openDialog)="openDialogEvent($event)" (onClick)="click($event)"
+    (requestDelete)="confirmDelete($event)"></crud-grid>
   <crud-board *ngIf="!gridView" [data]="data" [fields]="options.fields"></crud-board>
-  <crud-import [data]="data" [fields]="options.fields" (onImport)="onImport($event)"/>
+  <crud-import [data]="data" [fields]="options.fields" (onImport)="onImport($event)" />
   <!-- </p-tabPanel>
   </p-tabView> -->
 
@@ -68,68 +63,72 @@
 
   <!-- <p-dialog [(visible)]="isDialogVisible" [modal]="true" header="Product Details" class="p-fluid" [draggable]="false"
   [closable]="true" [style]="{'width': '50rem'}" (onHide)="resetForm()" [maximizable]="true"> -->
-  <p-dialog [(visible)]="isDialogVisible"  [modal]="true" [maximizable]="true" header="Details" class="p-fluid" [draggable]="false"
-        [style]="{'width': '50rem'}" >
+  <p-dialog [(visible)]="isDialogVisible" [modal]="true" [maximizable]="true" header="Details" class="p-fluid"
+    [draggable]="false" [style]="{'width': '50rem'}">
     <ng-template pTemplate="content">
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="field" *ngFor="let field of fields">
-          <div>  
-          <label for="{{field.field}}">{{ field.label }}</label>
-          <input *ngIf="field.type === 'number'" type="number" formControlName="{{ field.field }}" pInputText />
-          <input *ngIf="field.type === 'text'" formControlName="{{ field.field }}" pInputText [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"/>
-          <p-dropdown *ngIf="field.type === 'select'" formControlName="{{ field.field }}" [options]="field.options" optionLabel="label" optionValue="value" [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-dropdown>
-          <p-dropdown *ngIf="field.type === 'tag'" formControlName="{{ field.field }}" [options]="field.options" optionLabel="label" optionValue="value" [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-dropdown>
-          <p-calendar *ngIf="field.type === 'date'" formControlName="{{ field.field }}" [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-calendar>
-          <div *ngIf="form.get(field.field).touched && form.get(field.field).invalid">
-            <small *ngIf="form.get(field.field).hasError('required')" class="p-error">{{field.field}} is required.</small>
-            <small *ngIf="form.get(field.field).hasError('minlength')" class="p-error">
-              Minimum length is {{ field.minLength }} characters.
-            </small>
-            <small *ngIf="form.get(field.field).hasError('email')" class="p-error">{{field.field}} is Invalid.</small>
-            <small *ngIf="form.get(field.field).hasError('maxlength')" class="p-error">
-              Maximum length is {{ field.maxLength }} characters.
-            </small>
-            <small *ngIf="form.get(field.field).hasError('pattern')" class="p-error">
-              Invalid format.
-            </small>
+          <div>
+            <label for="{{field.field}}">{{ field.label }}</label>
+            <input *ngIf="field.type === 'number'" type="number" formControlName="{{ field.field }}" pInputText />
+            <input *ngIf="field.type === 'text'" formControlName="{{ field.field }}" pInputText
+              [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid" />
+            <p-dropdown *ngIf="field.type === 'select'" formControlName="{{ field.field }}" [options]="field.options"
+              optionLabel="label" optionValue="value"
+              [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-dropdown>
+            <p-dropdown *ngIf="field.type === 'tag'" formControlName="{{ field.field }}" [options]="field.options"
+              optionLabel="label" optionValue="value"
+              [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-dropdown>
+            <p-calendar *ngIf="field.type === 'date'" formControlName="{{ field.field }}"
+              [class.ng-dirty]="form.get(field.field).touched && form.get(field.field).invalid"></p-calendar>
+            <div *ngIf="form.get(field.field).touched && form.get(field.field).invalid">
+              <small *ngIf="form.get(field.field).hasError('required')" class="p-error">{{field.field}} is
+                required.</small>
+              <small *ngIf="form.get(field.field).hasError('minlength')" class="p-error">
+                Minimum length is {{ field.minLength }} characters.
+              </small>
+              <small *ngIf="form.get(field.field).hasError('email')" class="p-error">{{field.field}} is Invalid.</small>
+              <small *ngIf="form.get(field.field).hasError('maxlength')" class="p-error">
+                Maximum length is {{ field.maxLength }} characters.
+              </small>
+              <small *ngIf="form.get(field.field).hasError('pattern')" class="p-error">
+                Invalid format.
+              </small>
+            </div>
           </div>
         </div>
-        </div>
         <div class="col-6 flex gap-2 p-0">
-        <p-button *ngIf="isEditing === false" pRipple label="Save" icon="pi pi-check" type="submit"></p-button>
-        <p-button *ngIf="isEditing === true" pRipple label="Update" icon="pi pi-check" type="submit"></p-button>
-        <p-button pRipple label="Cancel" icon="pi pi-times" [outlined]="true"  (click)="resetForm()"></p-button>
+          <p-button *ngIf="isEditing === false" pRipple label="Save" icon="pi pi-check" type="submit"></p-button>
+          <p-button *ngIf="isEditing === true" pRipple label="Update" icon="pi pi-check" type="submit"></p-button>
+          <p-button pRipple label="Cancel" icon="pi pi-times" [outlined]="true" (click)="resetForm()"></p-button>
         </div>
       </form>
     </ng-template>
-</p-dialog>
-
-
+  </p-dialog>
   <!-- Confirm delete dialog -->
-  <p-dialog [(visible)]="confirmDeleteDialog" [draggable]="false" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+  <p-dialog [(visible)]="confirmDeleteDialog" [draggable]="false" header="Confirm" [modal]="true"
+    [style]="{width:'450px'}">
     <div class="flex align-items-center justify-content-center">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
       <span>{{"Are you sure you want to delete?"}}</span>
     </div>
     <ng-template pTemplate="footer">
-      <p-button pRipple icon="pi pi-times" label="No"
-        (click)="confirmDeleteDialog = false"></p-button>
+      <p-button pRipple icon="pi pi-times" label="No" (click)="confirmDeleteDialog = false"></p-button>
       <p-button pRipple icon="pi pi-check" label="Yes" (click)="confirmDelete()"></p-button>
     </ng-template>
   </p-dialog>
-
-  <p-dialog header="Save Filter" [(visible)]="showFilterDialog" [modal]="true" [draggable]="false" [style]="{width:'450px'}">
+  <p-dialog header="Save Filter" [(visible)]="showFilterDialog" [modal]="true" [draggable]="false"
+    [style]="{width:'450px'}">
     <div class="p-fluid">
       <p-panel>
-       <div class="mb-2">
-         <input  pInputText [(ngModel)]="newFilterName" placeholder="Enter Filter Name" class="w-full"/>
-       </div>
+        <div class="mb-2">
+          <input pInputText [(ngModel)]="newFilterName" placeholder="Enter Filter Name" class="w-full" />
+        </div>
       </p-panel>
-       <!-- Add New Filter Button -->
+      <!-- Add New Filter Button -->
       <div class="flex flex-column mt-2 col-6">
         <p-button pRipple label="Create Filter" (click)="onCreateCustomFilter()"></p-button>
       </div>
     </div>
   </p-dialog>
-  
 </div>

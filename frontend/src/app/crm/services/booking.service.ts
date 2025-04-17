@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class BookingService {
-  private apiUrl = '/api//booking';
+  private apiUrl = '/api/booking';
 
   constructor(private http: HttpClient) {}
 

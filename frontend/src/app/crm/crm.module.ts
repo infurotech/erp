@@ -6,27 +6,52 @@ import { CrudModule } from '../common/crud/crud.module';
 import { CRMRoutingModule } from './crm.routing';
 
 import { ContactComponent } from './components/contacts/contact.component';
-import { CustomerService } from './services/customer.service';
+import { CompaniesComponent } from './components/companies/companies.component';
 import { HostelComponent } from './components/hostel/hostel.component';
 import { HostelService } from './services/hostel.service';
 import { BookingService } from './services/booking.service';
 import { BookingComponent } from './components/booking/booking.component';
+import { LeadsComponent } from './components/leads/leads.component';
+import { CRMService } from './services/crm.service';
+import { ActivityComponent } from './components/contacts/tabs/activity/activity.component';
+import { TasksComponent } from './components/contacts/tabs/tasks/tasks.component';
+import { AppointmentComponent } from './components/contacts/tabs/appointment/appointment.component';
+import { EmailComponent } from './components/contacts/tabs/email/email.component';
+import { DealsComponent } from './components/contacts/cards/deals/deals.component';
+import { TicketsComponent } from './components/contacts/cards/tickets/tickets.component';
+import { CompanyComponent } from './components/contacts/cards/company/company.component';
+import { ContactViewComponent } from './components/contacts/view/view.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommentsComponent } from './components/contacts/cards/comments/comments.component';
 
 
 @NgModule({
   declarations: [
     ContactComponent,
+    CompaniesComponent,
+    LeadsComponent,
     HostelComponent,
-    BookingComponent
+    BookingComponent,
+    ActivityComponent,
+    TasksComponent,
+    AppointmentComponent,
+    EmailComponent,
+    DealsComponent,
+    TicketsComponent,
+    CompanyComponent,
+    ContactViewComponent,
+    CommentsComponent
   ],
   imports: [
     CommonModule,
     PrimengImportsModule,
     CrudModule,
-    CRMRoutingModule
+    CRMRoutingModule,
+    FormsModule,           // ✅ Add this for `ngModel`
+    ReactiveFormsModule    // ✅ Add this for `formControl`
   ],
   providers:[
-    CustomerService, HostelService, BookingService
+    CRMService, HostelService, BookingService
   ]
 })
 export class CRMModule { }

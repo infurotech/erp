@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AccountRoutingModule } from './account.routing';
-import { LoginService } from './services/login.service';
+import { AuthService } from '../shared/AuthService';
 
 @NgModule({
     imports: [
         CommonModule,
         AccountRoutingModule
     ],
-    providers:[LoginService]
+    providers:[AuthService]
 })
 export class AccountModule { }

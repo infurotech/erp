@@ -14,10 +14,10 @@ export const logger = winston.createLogger({
   ),
   transports: [
     new winston.transports.Console(),
-    new winston.transports.DailyRotateFile({
-      filename: 'logs/gateway-%DATE%.log',
-      datePattern: 'YYYY-MM-DD',
-      maxFiles: '14d',
-    }),
+    // new winston.transports.DailyRotateFile({
+    //   filename: 'logs/gateway-%DATE%.log',
+    //   datePattern: 'YYYY-MM-DD',
+    //   maxFiles: '14d',
+    // }),
   ],
 });

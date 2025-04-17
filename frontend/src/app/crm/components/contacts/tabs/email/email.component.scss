@@ -1,0 +1,107 @@
+.email-thread-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f7f9fc;
+    border: 1px solid #ddd;
+  }
+  
+  .email-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .message-content {
+    flex-grow: 1;
+  }
+  
+  .message-header {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .message-actions {
+    margin-top: 5px;
+  }
+  
+  .replies {
+    margin-top: 10px;
+    padding-left: 10px;
+    border-left: 2px solid #ddd;
+  }
+  
+  .email-reply {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%; /* ✅ Ensure it takes full width */
+  }
+  
+  .reply-content {
+    flex-grow: 1; /* ✅ Allows it to expand to full width */
+    background: #eef2f7;
+    padding: 8px;
+    border-radius: 6px;
+    width: 100%; /* ✅ Ensure it does not shrink */
+    max-width: calc(100% - 50px); /* ✅ Prevents it from being smaller than avatar */
+  }
+  
+  .reply-header {
+    font-size: 12px;
+    color: #555;
+    display: flex;
+    justify-content: space-between; /* ✅ Keeps sender & time on the same row */
+    width: 100%;
+  }
+  
+  .email-reply {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 5px 0;
+  }
+  
+//   .reply-content {
+//     background: #eef2f7;
+//     padding: 8px;
+//     border-radius: 6px;
+//   }
+  
+//   .reply-header {
+//     font-size: 12px;
+//     color: #555;
+//   }
+  
+  .reply-box {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .flex-col{
+    flex-direction: column;
+  }
+
+  .custom-icon {
+    display: flex; /* ✅ Ensures proper rendering inside PrimeNG buttons */
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem; /* ✅ Adjusts size */
+    height: 1.5rem;
+  }
+  
+  .custom-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: none; /* ✅ Ensures proper visibility */
+    stroke: currentColor; /* ✅ Inherits button color */
+  }
+  

@@ -7,6 +7,14 @@
             "^/api": ""
         }
     },
+    "/api/crm": {
+        "target": "http://localhost:3001/",
+        "secure": false,
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/api/crm": ""
+        }
+    },
     "/api": {
         "target": "http://localhost:3002/",
         "secure": false,

@@ -1,0 +1,11 @@
+<app-detail-view [item]="contact" [fields]="fields" [viewHeaderTemplate]="viewHeaderTemplate"
+    [viewOptions]="viewOptions">
+    <ng-template #viewHeaderTemplate let-contact>
+        <p-avatar class="contact-avatar" size="xlarge" shape="circle"></p-avatar>
+        <div>
+            <h3 styleClass="mb-0" style="margin-bottom: 0px !important;">
+                {{ contact?.first_name }} {{ contact?.last_name }}</h3>
+            <label>{{ contact?.job_title || '--' }}</label>
+        </div>
+    </ng-template>
+</app-detail-view>

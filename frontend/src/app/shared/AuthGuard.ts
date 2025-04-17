@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable, map, catchError, of, BehaviorSubject } from 'rxjs';
-import { LoginService } from '../account/services/login.service';
+import { AuthService } from './AuthService';
 
 
 @Injectable({
@@ -9,9 +9,7 @@ import { LoginService } from '../account/services/login.service';
 })
 export class AuthGuard implements CanActivate {
     private userSubject = new BehaviorSubject<any>(null); // Stores user info in memory
-
-
-    constructor(private router: Router, private loginService: LoginService) { }
+    constructor(private router: Router, private loginService: AuthService) { }
 
     canActivate(
         route: ActivatedRouteSnapshot,

@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
-import { DatabaseService } from './database.service';
-import { Repository} from 'typeorm';
+import { EntityTarget, Repository} from 'typeorm';
 
 @Injectable()
 export class CrudService<T> extends TypeOrmCrudService<T> {
-  constructor(protected readonly repo : Repository<T>, private readonly databaseService: DatabaseService) {
+  constructor(repo : Repository<T>) {
     super(repo);
   }
 
@@ -38,5 +37,11 @@ export class CrudService<T> extends TypeOrmCrudService<T> {
    */
   async restore(id: number | string) {
     return this.repo.restore(id);
+  }
+
+  async findById(id: string | number): Promise<T | null> {
+    return this.repo.findOne({
+      where: { id } as any,  // or use a generic `id` condition
+    });
   }
 }

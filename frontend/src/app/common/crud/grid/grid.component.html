@@ -22,7 +22,7 @@
             <td style="width: 3rem">
                 <p-tableCheckbox [value]="item"></p-tableCheckbox>
             </td>
-            <td *ngFor="let field of fields">
+            <td *ngFor="let field of fields" (click)="click(item)" style="cursor: pointer;">
                 <ng-container *ngIf="field.type != 'tag'">{{ item[field.field] }}</ng-container>
                 <p-tag *ngIf="field.type === 'tag'" [value]="getTagLabel(field, item[field.field])"
                     [severity]="getTagSeverity(field, item[field.field])" />

@@ -8,7 +8,7 @@ import { CookieService } from 'ngx-cookie-service';
 @Injectable({
   providedIn: 'root',
 })
-export class LoginService {
+export class AuthService {
 
   private apiUrl = '/api/auth'; private
   userSubject = new BehaviorSubject<any>(null); // Stores user info in memory
@@ -17,11 +17,18 @@ export class LoginService {
 
   login(credentials: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials, { withCredentials: true });
+  } 
+  
+  logout(): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/logout`, { withCredentials: true });
   }
 
+  refreshToken(): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/refresh`, { withCredentials: true });
+  }
+  
   isUserAuthenticated() {
     const token = this.getCookie('session_token');
-    console.log('token', token);
     if (token) {
       try {
         const decodedUser = jwtDecode(token);

@@ -1,0 +1,54 @@
+<div>
+    <div class="card mb-3">
+        <!-- Profile Section -->
+        <div class="header"  *ngIf="item">
+            <div class="flex mb-4 gap-6 header-items" *ngIf="headers">
+                <ng-container *ngIf="viewHeaderTemplate">
+                    <ng-container *ngTemplateOutlet="viewHeaderTemplate; context: { $implicit : item }"></ng-container>
+                </ng-container>
+                <div class="heaer-item" *ngFor="let header of headers">
+                    <h6 class="header-label">{{ getField(header).label }}</h6>
+                    <p *ngIf="getField(header).type != 'tag'" class="header-value">{{ item[header] || '--'}}</p>
+                    <p-tag *ngIf="getField(header).type == 'tag'" [value]="getTagLabel(getField(header), item[header])"
+                        [severity]="getTagSeverity(getField(header), item[header])" />
+                </div>
+            </div>
+            <div class="flex mb-4 gap-6 header-items" *ngIf="!headers">
+                <div class="heaer-item" *ngFor="let field of fields">
+                    <h6 class="header-label">{{ field.label }}</h6>
+                    <p *ngIf="field.type != 'tag'" class="header-value">{{ item[field.name] || '--'}}</p>
+                    <p-tag *ngIf="field.type == 'tag'" [value]="getTagLabel(field, item[field.field])"
+                        [severity]="getTagSeverity(field, item[field.field])" />
+                </div>
+            </div>
+        </div>
+        <p-menubar [model]="actions">
+            <ng-template #end>
+                <p-iconfield>
+                    <p-inputicon class="pi pi-search" />
+                    <input type="text" pInputText placeholder="Search" />
+                </p-iconfield>
+            </ng-template>
+        </p-menubar>
+    </div>
+    <div class="grid">
+        <div class="col-9">
+            <div class="card">
+                <p-tabView>
+                    <p-tabPanel *ngFor="let tab of tabs" [header]="tab.header">
+                        <ng-container #tabContainers></ng-container>
+                    </p-tabPanel>
+                    <p-tabPanel header="Notes">No notes available.</p-tabPanel>
+                    <p-tabPanel header="History">No notes available.</p-tabPanel>
+                </p-tabView>
+            </div>
+        </div>
+        <div class="col-3 right-sidebar">
+            <p-panel header="Details"></p-panel>
+            <p-panel header="Attachments"><a href="#">+ Add</a></p-panel>
+            <p-panel *ngFor="let card of cards" [header]="card.header">
+                <ng-container #cardContainers></ng-container>
+            </p-panel>
+        </div>
+    </div>
+</div>

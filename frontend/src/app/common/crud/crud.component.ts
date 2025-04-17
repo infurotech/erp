@@ -1,9 +1,10 @@
-import { Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ContentChild, EventEmitter, input, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CrudField } from './crud-field';
 import { MenuItem } from 'primeng/api';
 import { CrudOptions } from './crud-options';
 import { ImportComponent } from './import/import.component';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -20,8 +21,11 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
   @Input() filteredFields: Array<CrudField> = [];  // Field definitions
   @Output() onAction = new EventEmitter<any>();
   @Output() onFilterChange = new EventEmitter<any[]>();
-  @Output() onClear = new EventEmitter<any[]>();
+  @Output() onClear = new EventEmitter<any[]>();  
+  @Output() onClick = new EventEmitter<any>();
+
   @ContentChild('filterTemplate', { static: false }) filterTemplate!: TemplateRef<any>;
+  @ContentChild('viewHeaderTemplate', { static: false }) viewHeaderTemplate!: TemplateRef<any>;
 
   selectedRows: any[] = [];
   initialData: T[] = [];  
@@ -60,11 +64,10 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
     search: ''
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+      private router: Router) {
     this.form = this.fb.group({});
   }
- 
-
  
   ngOnInit(): void {
     this.filteredFields = this.options.fields.filter(field => !field.key && field.filter === true).slice(0, 2);  
@@ -85,11 +88,6 @@ export class CrudComponent<T extends Record<string, any>> implements OnInit {
         }
       }
     ]
-
-    // As of now we don't have any api so getting contacts data via loop. 
-    // this.data.forEach(item => {
-    //    this.contactsList.push(item['phone'])
-    // })
   }
   
  // Initialize the form based on fields configuration
@@ -143,13 +141,15 @@ initializeForm(): void {
     this.initializeForm(); 
     this.isDialogVisible = true;  // Show the dialog
   }
+  click(event) {
+    this.onClick.emit(event);
+  }
 
   // Submit handler for both adding and editing
   onSubmit(): void {
     if (this.form.invalid) {
       return;
     }
-
     if (this.isEditing) {
       this.updateItem();
     } else {
