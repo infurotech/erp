@@ -1,4 +1,4 @@
-import { Tenant } from "./tenant.entity";
+import { Tenant } from "@infuro/shared";
 import { Feature } from "./feature.entity";
 import { AuditedBaseEntity ,Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, OneToMany} from "@infuro/shared";
 

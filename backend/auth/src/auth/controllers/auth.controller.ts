@@ -24,7 +24,7 @@ export class AuthController {
                 //httpOnly: true,  // Prevent XSS attacks
                 secure: process.env.NODE_ENV === 'production', // Use secure cookie in production
                 sameSite: 'strict',
-                maxAge: parseFloat(this.configService.get<string>('JWT_REFRESH_SECRET_AGE') || '604800000') // 7 days expiration
+                maxAge: parseFloat(this.configService.get<string>('JWT_SECRET_AGE') || '604800000') // 7 days expiration
             });
 
             // Set HTTP-Only Cookie for Refresh Token
@@ -32,7 +32,7 @@ export class AuthController {
                 // httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
-                maxAge: parseFloat(this.configService.get<string>('JWT_SECRET_AGE') || '604800000') // 7 days expiration
+                maxAge: parseFloat(this.configService.get<string>('JWT_REFRESH_SECRET_AGE') || '604800000') // 7 days expiration
             });
 
             // Return user data
@@ -41,7 +41,17 @@ export class AuthController {
             throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
         }
     }
-
+    @Post('signup')
+    async signup(@Body() signInDto: Record<string, any>, @Res() res: Response) {
+        try {
+            
+            const response = await this.authService.createUser(signInDto.email, signInDto.password);
+            // Return user data
+            return res.json({ message: `Sign up successful! for User ${signInDto.email}` });
+        } catch (error) {
+            throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+        }
+    }
     @Post('refresh')
     async refresh(@Req() req: Request, @Res() res: Response) {
         try {
@@ -60,7 +70,7 @@ export class AuthController {
                 //httpOnly: true,  // Prevent XSS attacks
                 secure: process.env.NODE_ENV === 'production', // Use secure cookie in production
                 sameSite: 'strict',
-                maxAge: parseFloat(this.configService.get<string>('JWT_REFRESH_SECRET_AGE') || '604800000') // 7 days expiration
+                maxAge: parseFloat(this.configService.get<string>('JWT_SECRET_AGE') || '604800000') // 7 days expiration
             });
 
             // Set HTTP-Only Cookie for Refresh Token
@@ -68,7 +78,7 @@ export class AuthController {
                 // httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
-                maxAge: parseFloat(this.configService.get<string>('JWT_SECRET_AGE') || '604800000') // 7 days expiration
+                maxAge: parseFloat(this.configService.get<string>('JWT_REFRESH_SECRET_AGE') || '604800000') // 7 days expiration
             });
 
             // Return user data

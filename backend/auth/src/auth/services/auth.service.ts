@@ -49,6 +49,23 @@ async generateAccessToken(user: User) {
   }
 }
 
+async createUser(email:string,randomPassword:string){
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+  
+        const user = this.create({
+          email: `${email}`,
+          password: hashedPassword,
+          firstName: 'Admin',
+          middleName: '',
+          lastName: '',
+          phone: '000000000',
+          profileUrl: 'admin',
+          failedAttempts: 0,
+          locked: false,
+          deleted: false
+        },'user.Created');
+}
+
 async generateRefreshToken(userId: string) {
   try {
       return this.jwtService.sign(

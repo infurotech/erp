@@ -1,13 +1,16 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class CachingManager {
-  constructor(@Inject('CACHE_MANAGER') private readonly cache: Cache) {}
+  constructor(@Inject(CACHE_MANAGER) private readonly cache: Cache) {
+    console.log('[CachingManager] Constructor cache defined:', !!cache);
+  }
 
   async get<T>(key: string): Promise<T | null> {
     const value = await this.cache.get<T>(key);
-    console.log(`[CachingManager] GET ${key}:`, !!value);
+    console.log(`[CachingManager] GET ${key}:`, value);
     return value ?? null;
   }
 

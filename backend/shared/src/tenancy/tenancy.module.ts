@@ -4,6 +4,8 @@ import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
 export const CONNECTION = Symbol('CONNECTION');
 import { getTenantConnection } from "./tenancy.utils";
+import { CachingManager } from '../caching/caching.manager'; // adjust path if needed
+import { CachingModule } from '../caching/caching.module'; // ✅ Import this
 
 /**
  * Note that because of Scope Hierarchy, all injectors of this
@@ -15,11 +17,11 @@ import { getTenantConnection } from "./tenancy.utils";
 const connectionFactory = {
   provide: CONNECTION,
   scope: Scope.REQUEST,
-  useFactory: async (request: Request) => {
+  useFactory: async (request: Request,cachingManager: CachingManager) => {
     const { tenantId } = request as Request & { tenantId?: string };
     
     if (tenantId) {
-      const connection = await getTenantConnection(tenantId);
+      const connection = await getTenantConnection(tenantId,cachingManager);
       
       const queryRunner =  connection.createQueryRunner();
       await queryRunner.connect();
@@ -29,11 +31,12 @@ const connectionFactory = {
 
     return null;
   },
-  inject: [REQUEST],
+  inject: [REQUEST, CachingManager], // 🧠 FIX HERE
 };
 
 @Global()
 @Module({
+  imports: [CachingModule], // ✅ This line is important
   providers: [connectionFactory],
   exports: [CONNECTION],
 })

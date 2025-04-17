@@ -6,7 +6,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import * as dotenv from 'dotenv';
-import { TenancyMiddleware } from '@infuro/shared';
+import { TenancyMiddleware  } from '@infuro/shared';
+import { UserCreatedListener } from './listeners/user-created.listener';
 dotenv.config();
  
 @Module({
@@ -26,7 +27,8 @@ dotenv.config();
       secret: process.env.JWT_SECRET || 'secret007',
       signOptions: { expiresIn: '1h' },
     }),
-    AuthModule
+    AuthModule,
+    UserCreatedListener
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -3,18 +3,17 @@ import { tenantConfig,publicConfig } from "./public-orm.config";  // Tenant DB c
 import { Tenant } from '../entities/tenant.entity';
 import * as crypto from 'crypto';
 import * as dotenv from 'dotenv';
-import { getCacheManager } from '../caching/cache-context'; // adjust path accordingly
+import { CachingManager } from "src/caching/caching.manager";
 
 dotenv.config();
 const MAX_CONNECTION_POOL_SIZE = process.env.MAX_CONNECTION_POOL_SIZE;
 export const tenantConnections: { [connectionName: string]: DataSource } = {};
 
 
-export async function getTenantConnection(tenantId: string): Promise<DataSource> {
+export async function getTenantConnection(tenantId: string, cache: CachingManager): Promise<DataSource> {
   const connectionName = `tenant_${tenantId}`;
   console.log(`[getTenantConnection] Invoked for: ${connectionName}`);
 
-  const cache = await getCacheManager();
   console.log(`[getTenantConnection] Cache manager initialized`);
 
   const cachedConnectionUrl = await cache.get<string>(connectionName);
@@ -48,7 +47,7 @@ export async function getTenantConnection(tenantId: string): Promise<DataSource>
 
     connectionUrl = tenant.connectionString;
     connectionUrl = decrypt(connectionUrl); // Optional decryption
-    console.log(`[getTenantConnection] Got connection string: ${connectionUrl}`);
+    console.log(`[getTenantConnection] Got connection string`);
   } catch (error) {
     console.error("Error fetching tenant details:", error);
     throw new Error("Unable to fetch tenant database information.");

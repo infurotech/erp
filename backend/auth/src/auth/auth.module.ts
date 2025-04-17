@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './services/auth.service';
-import { AuditService,TenancyModule } from '@infuro/shared';  // Import TenantOrmModule
+import { TenancyModule  } from '@infuro/shared';  // Import TenantOrmModule
 
 import { AuthController } from './controllers/auth.controller';
 import { JwtService } from '@nestjs/jwt';
@@ -12,8 +12,7 @@ import { UserSeederService } from './services/user-seeder.service';
   ],
   providers: [
     JwtService,
-       AuthService,  
-    AuditService,
+       AuthService,
     UserSeederService
   ],
   controllers: [AuthController],  // Your controller

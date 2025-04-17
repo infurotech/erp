@@ -27,6 +27,7 @@
     "body-parser": "^2.2.0",
     "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
+    "kafkajs": "^2.2.4",
     "pg": "^8.13.2"
   },
   "devDependencies": {
