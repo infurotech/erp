@@ -1,6 +1,6 @@
-import { Tenant } from "@infuro/shared";
-import { Feature } from "./feature.entity";
-import { AuditedBaseEntity ,Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, OneToMany} from "@infuro/shared";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, OneToMany } from "typeorm";
+import { Tenant } from "./tenant.entity";
+import { AuditedBaseEntity } from "../audit/audited.entity";
 
 @Entity()
 export class Edition extends AuditedBaseEntity {

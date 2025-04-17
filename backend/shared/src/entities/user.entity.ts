@@ -1,4 +1,4 @@
-import { AuditedBaseEntity } from "@infuro/shared";
+import { AuditedBaseEntity } from"../audit/audited.entity";
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
 
 @Entity()

@@ -1,30 +1,19 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
-import { CachingManager } from './caching.manager';
-import { redisStore } from 'cache-manager-redis-yet';
+import * as memoryStore from 'cache-manager-memory-store'; // ✅
 
+import { CachingManager } from './caching.manager';
+
+@Global()
 @Module({
   imports: [
-    /// In memory cache
-    CacheModule.register() 
-    /// Redis cache
-    // CacheModule.registerAsync({
-    //   useFactory: async () => {
-    //     const store = await redisStore({
-    //       socket: {
-    //         host: 'localhost',
-    //         port: 6379,
-    //       },
-    //     });
-
-    //     return {
-    //       store: store as CacheStore,
-    //       ttl: 3 * 60000, // 3 minutes (milliseconds)
-    //     };
-    //   },
-    // }),
+    CacheModule.register({
+      store: memoryStore, // ✅ Shared memory store
+      ttl: 60 * 60,       // 1 hour
+      max: 100,
+    }),
   ],
   providers: [CachingManager],
-  exports: [CachingManager,CacheModule],
+  exports: [CachingManager, CacheModule],
 })
 export class CachingModule {}

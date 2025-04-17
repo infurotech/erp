@@ -1,7 +1,8 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory } from '@infuro/shared';
 import { AppModule } from './app.module';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
+import { startKafkaConsumer } from './kafka/kafka.consumer'; // Adjust path as needed
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,5 +16,6 @@ async function bootstrap() {
   app.use(bodyParser.json({limit: '50mb'}));
   app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
   await app.listen(process.env.PORT ?? 3000);
+  await startKafkaConsumer();
 }
 bootstrap();
